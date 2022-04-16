@@ -1,5 +1,1 @@
-﻿  gamecode.cpp
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(20,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(313,95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(313,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe
+﻿  Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

@@ -303,15 +303,14 @@ ErrorType Game::StartOfGame()
 	
 	if (!om.getCreatingMap())
 	{
-		Spaceship* pShip = new Spaceship();
-		pShip->Initialise(Vector2D(0, 0));
-		om.AddObject(pShip);
+		GameObject* pShip = om.Create(L"Spaceship");
+		pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0));
 	
 		for (int i = 0; i < 6; i++)
 		{
-			Asteroid* pAsteroid = new Asteroid();
-			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900));
-			om.AddObject(pAsteroid);
+			GameObject* pAsteroid = om.Create(L"Asteroid");
+			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0));
+			//om.AddObject(pAsteroid);
 		}
 	}
 	else // Creating map

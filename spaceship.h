@@ -9,8 +9,8 @@ class Spaceship: public GameObject
 		Vector2D velocity;
 		SoundIndex shootSound;
 		SoundIndex thrustSound;
-		float shootDelay;
+		double shootDelay;
 	public:
-		void Initialise(Vector2D startingPosition);
+		void Initialise(Vector2D startingPosition, Vector2D velocity);
 		void Update(double frameTime);
 };

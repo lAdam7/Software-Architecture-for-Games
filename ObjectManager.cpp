@@ -1,8 +1,39 @@
 #include "ObjectManager.h"
+#include "spaceship.h"
+#include "Bullet.h"
+#include "Asteroid.h"
 
 void ObjectManager::AddObject(GameObject* pNewObject)
 {
-	pObjectList.push_back(pNewObject);
+	if (pNewObject != nullptr)
+	{
+		pObjectList.push_back(pNewObject);
+	}
+}
+
+GameObject* ObjectManager::Create(std::wstring name)
+{
+	GameObject* pNewObject = nullptr;
+	if (name == L"Bullet")
+	{
+		pNewObject = new Bullet();
+	}
+	else if (name == L"Spaceship")
+	{
+		pNewObject = new Spaceship();
+	}
+	else if (name == L"Asteroid")
+	{
+		pNewObject = new Asteroid();
+	}
+	else
+	{
+		ErrorLogger::Write(L"Could not create item: ");
+		ErrorLogger::Writeln(name.c_str());
+	}
+	AddObject(pNewObject);
+
+	return pNewObject;
 }
 
 void ObjectManager::UpdateAll(double frameTime)

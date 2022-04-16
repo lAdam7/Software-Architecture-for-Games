@@ -4,7 +4,7 @@
 #include "ObjectManager.h"
 #include "gamecode.h"
 
-void Spaceship::Initialise(Vector2D startingPosition)
+void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity)
 {
 	position = startingPosition;
 	angle = 0;
@@ -74,11 +74,12 @@ void Spaceship::Update(double frameTime)
 		{
 			shootDelay = 0.5;
 
-			Bullet* pBullet = new Bullet();
+			//Bullet* pBullet = new Bullet();
+			GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
 			Vector2D velocity;
 			velocity.setBearing(angle, 10.0f);
 			pBullet->Initialise(position, velocity);
-			Game::instance.GetObjectManager().AddObject(pBullet);
+			//Game::instance.GetObjectManager().AddObject(pBullet);
 
 			MySoundEngine* pSE = MySoundEngine::GetInstance();
 			pSE->Play(shootSound);

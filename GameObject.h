@@ -20,4 +20,6 @@ class GameObject
 		bool CanDelete() const;
 		void Deactivate();
 		void DeleteObject();
+
+		virtual void Initialise(Vector2D startingPosition, Vector2D velocity) = 0;
 };

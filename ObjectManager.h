@@ -14,6 +14,8 @@ class ObjectManager
 		void DeleteAll();
 		void DeleteAllInactive();
 		void DeleteAllMarked();
+		GameObject* Create(std::wstring name);
+
 		void setCreatingMap(bool creating);
 		bool getCreatingMap();
 };

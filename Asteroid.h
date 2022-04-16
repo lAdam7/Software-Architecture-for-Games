@@ -8,6 +8,6 @@ class Asteroid : public GameObject
 private:
 	
 public:
-	void Initialise(Vector2D startingPosition);
+	void Initialise(Vector2D startingPosition, Vector2D velocity);
 	void Update(double frameTime);
 };

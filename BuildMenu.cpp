@@ -74,14 +74,13 @@ void BuildMenu::buildInterface()
 		if (bmOptionSelected == 0)   // Place X
 		{
 			
-			Spaceship* pShip = new Spaceship();
-			pShip->Initialise(Vector2D(0, 0));
+			//Spaceship* pShip = new Spaceship();
+			//pShip->Initialise(Vector2D(0, 0));
 				//om.AddObject(pShip);
 			
-			Game::instance.GetObjectManager().AddObject(pShip);
-			placingObj = pShip;
-			//placingObj = new Spaceship();
-			//placingObj->Initalise(Vector2D(0, 0));
+			//Game::instance.GetObjectManager().AddObject(pShip);
+			//placingObj = pShip;
+
 		}
 
 		if (bmOptionSelected == 1)	// Cancel

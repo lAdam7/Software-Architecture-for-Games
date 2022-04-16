@@ -1,7 +1,7 @@
 #include "Asteroid.h";
 #include "myinputs.h"
 
-void Asteroid::Initialise(Vector2D startingPosition)
+void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity)
 {
 	position = startingPosition;
 	angle = 0;
