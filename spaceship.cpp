@@ -12,15 +12,16 @@ IShape2D& Spaceship::GetShape()
 	return m_collisionShape;
 }
 
-void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity)
+void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	position = startingPosition;
 	angle = 0;
 	shootDelay = 0.05;
 
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
-	shootSound = pSE->LoadWav(L"shoot.wav");
-	thrustSound = pSE->LoadWav(L"thrustloop2.wav");
+	//MySoundEngine* pSE = MySoundEngine::GetInstance();
+	//shootSound = pSE->LoadWav(L"shoot.wav");
+	//thrustSound = pSE->LoadWav(L"thrustloop2.wav");
+	pSoundFX = pSound;
 
 	LoadImg(L"ship.bmp");
 
@@ -91,28 +92,20 @@ void Spaceship::Update(double frameTime)
 		{
 			shootDelay = 0.5;
 
-			//Bullet* pBullet = new Bullet();
 			GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
 			Vector2D velocity;
 			velocity.setBearing(angle, 10.0f);
-			pBullet->Initialise(position, velocity);
-			//Game::instance.GetObjectManager().AddObject(pBullet);
-
-			MySoundEngine* pSE = MySoundEngine::GetInstance();
-			pSE->Play(shootSound);
+			pBullet->Initialise(position, velocity, pSoundFX);
 		}
 		
 	}
 	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_S))
 	{
-		MySoundEngine* pSE = MySoundEngine::GetInstance();
-		pSE->Play(thrustSound, true);
+		pSoundFX->StartEngineSound();
 	}
 	else
 	{
-		MySoundEngine* pSE = MySoundEngine::GetInstance();
-		pSE->Play(thrustSound, false);
-		pSE->Stop(thrustSound);
+		pSoundFX->StopEngineSound();
 	}
 	//position = position + velocity * frameTime;
 };

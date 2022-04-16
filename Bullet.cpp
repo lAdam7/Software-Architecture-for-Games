@@ -17,14 +17,14 @@ void Bullet::HandleCollision(GameObject& other)
 	}
 }
 
-void Bullet::Initialise(Vector2D startingPosition, Vector2D vel)
+void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound)
 {
 	velocity = vel;
 	position = startingPosition;
 	angle = 0;
 	timer = 2;
 
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
+	pSound->PlayShot();
 
 	LoadImg(L"bullet.bmp");
 

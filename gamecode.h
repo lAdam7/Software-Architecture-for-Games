@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "ObjectManager.h"
 #include "BuildMenu.h"
+#include "SoundFX.h"
 
 
 // This is a hack for reading keyboard in situations where you don't want to
@@ -40,6 +41,8 @@ private:
 	void ChangeState(GameState newState);  // Use to change the state of the game to one of the states above
 
 	ObjectManager om;
+	SoundFX* pSoundFX;
+
 	BuildMenu bm;
 
 	int m_menuOption;              // Tracks the currently selected menu option, during main or pause menu
@@ -91,6 +94,11 @@ public:
 	ErrorType EndOfGame();
 
 	ObjectManager& GetObjectManager();
+
+	SoundFX* getSoundFX()
+	{
+		return pSoundFX;
+	}
 };
 
 

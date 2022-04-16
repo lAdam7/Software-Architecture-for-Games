@@ -35,6 +35,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="objecttypes.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="SoundFX.h" />
     <ClInclude Include="spaceship.h" />
     <ClInclude Include="vector2D.h" />
   </ItemGroup>
@@ -53,6 +54,7 @@
     <ClCompile Include="mysoundengine.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="SoundFX.cpp" />
     <ClCompile Include="spaceship.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wincode.cpp" />

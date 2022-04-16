@@ -301,15 +301,19 @@ ErrorType Game::StartOfGame()
    // Code to set up your game *********************************************
    // **********************************************************************
 	
+	pSoundFX = new SoundFX();
+	pSoundFX->LoadSounds();
+	
+
 	if (!om.getCreatingMap())
 	{
 		GameObject* pShip = om.Create(L"Spaceship");
-		pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0));
+		pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 	
 		for (int i = 0; i < 6; i++)
 		{
 			GameObject* pAsteroid = om.Create(L"Asteroid");
-			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0));
+			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0), pSoundFX);
 		}
 	}
 	else // Creating map
@@ -403,6 +407,9 @@ ErrorType Game::EndOfGame()
    // Add code here to tidy up ********************************************
    // *********************************************************************
 	om.DeleteAll();
+
+	delete pSoundFX;
+	pSoundFX = nullptr;
 	
 
 	return SUCCESS;

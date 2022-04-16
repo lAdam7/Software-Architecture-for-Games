@@ -1,7 +1,5 @@
 ﻿  Explosion.cpp
 C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(18,12): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(32,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(41,13): warning C4305: '=': truncation from 'double' to 'float'
-  ObjectManager.cpp
-  Generating Code...
+C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(33,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(42,13): warning C4305: '=': truncation from 'double' to 'float'
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe
