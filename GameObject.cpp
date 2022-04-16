@@ -25,6 +25,11 @@ bool GameObject::IsActive() const
 	return (m_activity == Activity::ACTIVE);
 }
 
+bool GameObject::IsCollidable() const
+{
+	return collidable;
+}
+
 bool GameObject::CanDelete() const
 {
 	return (m_activity == Activity::CAN_DELETE);

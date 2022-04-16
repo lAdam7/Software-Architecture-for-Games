@@ -4,6 +4,7 @@
 #include "ObjectManager.h"
 #include "gamecode.h"
 #include <typeinfo>
+#include "Asteroid.h"
 
 IShape2D& Spaceship::GetShape()
 {
@@ -23,12 +24,16 @@ void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity)
 
 	LoadImg(L"ship.bmp");
 
+	collidable = true;
 	m_activity = ACTIVE;
 };
 
 void Spaceship::HandleCollision(GameObject& other)
 {
-	//if (typeid(other) == typeid(Asteroid))
+	if (typeid(other) == typeid(Asteroid))
+	{
+		DeleteObject();
+	}
 }
 
 void Spaceship::Update(double frameTime)

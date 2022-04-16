@@ -7,6 +7,7 @@ class GameObject
 	private:
 		PictureIndex image;
 	protected:
+		bool collidable;
 		Vector2D position;
 		float angle;
 		enum Activity { ACTIVE, INACTIVE, CAN_DELETE };
@@ -20,6 +21,7 @@ class GameObject
 		bool CanDelete() const;
 		void Deactivate();
 		void DeleteObject();
+		bool IsCollidable() const;
 
 		virtual void Initialise(Vector2D startingPosition, Vector2D velocity) = 0;
 		virtual IShape2D& GetShape() = 0;

@@ -1,6 +1,7 @@
 #include "Asteroid.h";
 #include "myinputs.h"
 #include "Bullet.h"
+#include "gamecode.h"
 
 IShape2D& Asteroid::GetShape()
 {
@@ -12,6 +13,11 @@ void Asteroid::HandleCollision(GameObject& other)
 {
 	if (typeid(other) == typeid(Bullet))
 	{
+		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
+		pExplosion->Initialise(position, Vector2D(0, 0));
+		//Vector2D velocity;
+		//velocity.setBearing(angle, 10.0f);
+		//pBullet->Initialise(position, velocity);
 		DeleteObject();
 	}
 }
@@ -25,6 +31,7 @@ void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity)
 
 	LoadImg(images[rand()%4]);
 	
+	collidable = true;
 	m_activity = ACTIVE;
 };
 

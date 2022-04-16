@@ -2,6 +2,7 @@
 #include "spaceship.h"
 #include "Bullet.h"
 #include "Asteroid.h"
+#include "Explosion.h"
 
 void ObjectManager::AddObject(GameObject* pNewObject)
 {
@@ -25,6 +26,10 @@ GameObject* ObjectManager::Create(std::wstring name)
 	else if (name == L"Asteroid")
 	{
 		pNewObject = new Asteroid();
+	}
+	else if (name == L"Explosion")
+	{
+		pNewObject = new Explosion();
 	}
 	else
 	{
@@ -104,16 +109,22 @@ void ObjectManager::CheckAllCollisions()
 
 	for (it1 = pObjectList.begin(); it1 != pObjectList.end(); it1++)
 	{
-		for (it2 = next(it1); it2 != pObjectList.end(); it2++)
+		if ((*it1)->IsCollidable())
 		{
-			if ((*it1) && (*it2) &&
-				(*it1)->IsActive() && (*it2)->IsActive() &&
-				(*it1)->GetShape().Intersects((*it2)->GetShape()))
+			for (it2 = next(it1); it2 != pObjectList.end(); it2++)
 			{
-				(*it1)->HandleCollision(**it2);
-				(*it2)->HandleCollision(**it1);
-			}
+				if ((*it2)->IsCollidable())
+				{
+					if ((*it1) && (*it2) &&
+						(*it1)->IsActive() && (*it2)->IsActive() &&
+						(*it1)->GetShape().Intersects((*it2)->GetShape()))
+					{
+						(*it1)->HandleCollision(**it2);
+						(*it2)->HandleCollision(**it1);
+					}
+				}
 
+			}
 		}
 	}
 

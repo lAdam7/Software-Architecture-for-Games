@@ -28,6 +28,7 @@ void Bullet::Initialise(Vector2D startingPosition, Vector2D vel)
 
 	LoadImg(L"bullet.bmp");
 
+	collidable = true;
 	m_activity = ACTIVE;
 };
 
