@@ -14,6 +14,7 @@ class ObjectManager
 		void DeleteAll();
 		void DeleteAllInactive();
 		void DeleteAllMarked();
+		void CheckAllCollisions();
 		GameObject* Create(std::wstring name);
 
 		void setCreatingMap(bool creating);

@@ -96,3 +96,25 @@ bool ObjectManager::getCreatingMap()
 {
 	return creatingMap;
 }
+
+void ObjectManager::CheckAllCollisions()
+{
+	std::list<GameObject*>::iterator it1;
+	std::list<GameObject*>::iterator it2;
+
+	for (it1 = pObjectList.begin(); it1 != pObjectList.end(); it1++)
+	{
+		for (it2 = next(it1); it2 != pObjectList.end(); it2++)
+		{
+			if ((*it1) && (*it2) &&
+				(*it1)->IsActive() && (*it2)->IsActive() &&
+				(*it1)->GetShape().Intersects((*it2)->GetShape()))
+			{
+				(*it1)->HandleCollision(**it2);
+				(*it2)->HandleCollision(**it1);
+			}
+
+		}
+	}
+
+}

@@ -1,1 +1,7 @@
-﻿  Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe
+﻿  Asteroid.cpp
+C:\Users\Adam\source\repos\Game\Game\Asteroid.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Bullet.cpp
+C:\Users\Adam\source\repos\Game\Game\Bullet.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\Adam\source\repos\Game\Game\Bullet.cpp(38,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

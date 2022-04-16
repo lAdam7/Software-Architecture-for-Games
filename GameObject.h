@@ -22,4 +22,7 @@ class GameObject
 		void DeleteObject();
 
 		virtual void Initialise(Vector2D startingPosition, Vector2D velocity) = 0;
+		virtual IShape2D& GetShape() = 0;
+
+		virtual void HandleCollision(GameObject& other) = 0;
 };

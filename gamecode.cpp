@@ -310,7 +310,6 @@ ErrorType Game::StartOfGame()
 		{
 			GameObject* pAsteroid = om.Create(L"Asteroid");
 			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0));
-			//om.AddObject(pAsteroid);
 		}
 	}
 	else // Creating map
@@ -365,6 +364,7 @@ ErrorType Game::Update()
 
 	gt.mark();
 
+	om.CheckAllCollisions();
 	om.DeleteAllMarked();
 
 	om.UpdateAll(gt.mdFrameTime);

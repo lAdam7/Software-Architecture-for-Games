@@ -3,6 +3,13 @@
 #include "Bullet.h"
 #include "ObjectManager.h"
 #include "gamecode.h"
+#include <typeinfo>
+
+IShape2D& Spaceship::GetShape()
+{
+	m_collisionShape.PlaceAt(position, 32);
+	return m_collisionShape;
+}
 
 void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity)
 {
@@ -18,6 +25,11 @@ void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity)
 
 	m_activity = ACTIVE;
 };
+
+void Spaceship::HandleCollision(GameObject& other)
+{
+	//if (typeid(other) == typeid(Asteroid))
+}
 
 void Spaceship::Update(double frameTime)
 {

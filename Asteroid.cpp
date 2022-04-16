@@ -1,5 +1,20 @@
 #include "Asteroid.h";
 #include "myinputs.h"
+#include "Bullet.h"
+
+IShape2D& Asteroid::GetShape()
+{
+	m_collisionShape.PlaceAt(position, 70);
+	return m_collisionShape;
+}
+
+void Asteroid::HandleCollision(GameObject& other)
+{
+	if (typeid(other) == typeid(Bullet))
+	{
+		DeleteObject();
+	}
+}
 
 void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity)
 {
