@@ -16,7 +16,7 @@ void Spaceship::Initialise(Vector2D startingPosition)
 
 	LoadImg(L"ship.bmp");
 
-	active = true;
+	m_activity = ACTIVE;
 };
 
 void Spaceship::Update(double frameTime)

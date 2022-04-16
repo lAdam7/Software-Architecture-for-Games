@@ -22,10 +22,20 @@ void GameObject::Render()
 
 bool GameObject::IsActive() const
 {
-	return active;
+	return (m_activity == Activity::ACTIVE);
+}
+
+bool GameObject::CanDelete() const
+{
+	return (m_activity == Activity::CAN_DELETE);
 }
 
 void GameObject::Deactivate()
 {
-	active = false;
+	m_activity = INACTIVE;
+}
+
+void GameObject::DeleteObject()
+{
+	m_activity = CAN_DELETE;
 }

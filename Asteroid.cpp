@@ -10,7 +10,7 @@ void Asteroid::Initialise(Vector2D startingPosition)
 
 	LoadImg(images[rand()%4]);
 	
-	active = true;
+	m_activity = ACTIVE;
 };
 
 void Asteroid::Update(double frameTime)

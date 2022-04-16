@@ -12,7 +12,7 @@ void Bullet::Initialise(Vector2D startingPosition, Vector2D vel)
 
 	LoadImg(L"bullet.bmp");
 
-	active = true;
+	m_activity = ACTIVE;
 };
 
 void Bullet::Update(double frameTime)
@@ -23,6 +23,6 @@ void Bullet::Update(double frameTime)
 
 	if (timer < 0)
 	{
-		active = false;
+		DeleteObject();
 	}
 };

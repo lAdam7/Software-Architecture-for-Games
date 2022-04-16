@@ -4,18 +4,20 @@
 
 class GameObject
 {
-
+	private:
+		PictureIndex image;
 	protected:
 		Vector2D position;
 		float angle;
-		bool active;
+		enum Activity { ACTIVE, INACTIVE, CAN_DELETE };
+		Activity m_activity;
 		void LoadImg(const wchar_t* filename);
-	private:
-		PictureIndex image;
 	public:
 		virtual ~GameObject();
 		void Render();
 		virtual void Update(double frameTime) = 0;
 		bool IsActive() const;
+		bool CanDelete() const;
 		void Deactivate();
+		void DeleteObject();
 };

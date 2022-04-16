@@ -363,7 +363,10 @@ ErrorType Game::Update()
 		
 	}
 
+
 	gt.mark();
+
+	om.DeleteAllMarked();
 
 	om.UpdateAll(gt.mdFrameTime);
 	om.RenderAll();

@@ -14,6 +14,7 @@ void ObjectManager::UpdateAll(double frameTime)
 
 void ObjectManager::RenderAll()
 {
+	MyDrawEngine::GetInstance()->WriteInt(50, 50, pObjectList.size(), MyDrawEngine::GREEN);
 	for (auto const& i : pObjectList) {
 		i->Render();
 	}
@@ -34,6 +35,19 @@ void ObjectManager::DeleteAllInactive()
 	for (GameObject*& obj : pObjectList)
 	{
 		if (!obj->IsActive())
+		{
+			delete obj;
+			obj = nullptr;
+		}
+	}
+	pObjectList.remove(nullptr);
+}
+
+void ObjectManager::DeleteAllMarked()
+{
+	for (GameObject*& obj : pObjectList)
+	{
+		if (obj->CanDelete())
 		{
 			delete obj;
 			obj = nullptr;

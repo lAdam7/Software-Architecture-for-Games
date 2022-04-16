@@ -13,6 +13,7 @@ class ObjectManager
 		void RenderAll();
 		void DeleteAll();
 		void DeleteAllInactive();
+		void DeleteAllMarked();
 		void setCreatingMap(bool creating);
 		bool getCreatingMap();
 };
