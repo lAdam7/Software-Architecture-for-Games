@@ -96,7 +96,7 @@ void Camera::Reset()
 // Places the centre of the camera to the specified position
 void Camera::PlaceAt(Vector2D worldPosition)
 {
-	m_worldPosition = worldPosition;
+	m_worldPosition = Vector2D(worldPosition.XValue, -worldPosition.YValue);
 }
 
 // Sets the camera zoom

@@ -33,12 +33,16 @@ void Spaceship::HandleCollision(GameObject& other)
 {
 	if (typeid(other) == typeid(Asteroid))
 	{
+		pSoundFX->StopEngineSound();
 		DeleteObject();
 	}
 }
 
 void Spaceship::Update(double frameTime)
 {
+	MyDrawEngine* test = MyDrawEngine::GetInstance();
+	test->theCamera.PlaceAt(position);
+
 	shootDelay = shootDelay - frameTime;
 	//POINT p;
 	//GetCursorPos(&p);
