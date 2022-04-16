@@ -1,0 +1,6 @@
+﻿  BuildMenu.cpp
+C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(26,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(26,144): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(28,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(28,116): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe
