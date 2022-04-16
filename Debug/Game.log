@@ -1,6 +1,23 @@
-﻿  BuildMenu.cpp
+﻿  Asteroid.cpp
+C:\Users\Adam\source\repos\Game\Game\Asteroid.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  BuildMenu.cpp
 C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(26,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(26,144): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(28,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\Adam\source\repos\Game\Game\BuildMenu.cpp(28,116): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Bullet.cpp
+C:\Users\Adam\source\repos\Game\Game\Bullet.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\Adam\source\repos\Game\Game\Bullet.cpp(22,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  GameObject.cpp
+  ObjectManager.cpp
+  gamecode.cpp
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(20,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(313,95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(313,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  spaceship.cpp
+C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(11,19): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(24,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  wincode.cpp
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

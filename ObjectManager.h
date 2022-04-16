@@ -12,6 +12,7 @@ class ObjectManager
 		void UpdateAll(double frameTime);
 		void RenderAll();
 		void DeleteAll();
+		void DeleteAllInactive();
 		void setCreatingMap(bool creating);
 		bool getCreatingMap();
 };

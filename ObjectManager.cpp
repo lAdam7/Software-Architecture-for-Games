@@ -29,6 +29,19 @@ void ObjectManager::DeleteAll()
 	pObjectList.clear();
 }
 
+void ObjectManager::DeleteAllInactive()
+{
+	for (GameObject*& obj : pObjectList)
+	{
+		if (!obj->IsActive())
+		{
+			delete obj;
+			obj = nullptr;
+		}
+	}
+	pObjectList.remove(nullptr);
+}
+
 void ObjectManager::setCreatingMap(bool creating)
 {
 	creatingMap = creating;

@@ -1,5 +1,10 @@
 #include "GameObject.h"
 
+GameObject::~GameObject()
+{
+
+}
+
 void GameObject::LoadImg(const wchar_t* filename)
 {
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
@@ -8,9 +13,19 @@ void GameObject::LoadImg(const wchar_t* filename)
 
 void GameObject::Render()
 {
-	if (active)
+	if (IsActive())
 	{
 		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
 		pDE->DrawAt(position, image, 1, angle);
 	}
 };
+
+bool GameObject::IsActive() const
+{
+	return active;
+}
+
+void GameObject::Deactivate()
+{
+	active = false;
+}

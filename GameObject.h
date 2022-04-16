@@ -4,6 +4,7 @@
 
 class GameObject
 {
+
 	protected:
 		Vector2D position;
 		float angle;
@@ -12,6 +13,9 @@ class GameObject
 	private:
 		PictureIndex image;
 	public:
+		virtual ~GameObject();
 		void Render();
 		virtual void Update(double frameTime) = 0;
+		bool IsActive() const;
+		void Deactivate();
 };
