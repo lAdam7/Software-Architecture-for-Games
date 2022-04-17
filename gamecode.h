@@ -94,11 +94,6 @@ public:
 	ErrorType EndOfGame();
 
 	ObjectManager& GetObjectManager();
-
-	SoundFX* getSoundFX()
-	{
-		return pSoundFX;
-	}
 };
 
 

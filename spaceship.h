@@ -1,6 +1,4 @@
 #pragma once
-#include "mydrawengine.h"
-#include "mysoundengine.h"
 #include "GameObject.h"
 
 class Spaceship: public GameObject

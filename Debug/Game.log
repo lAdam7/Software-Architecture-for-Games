@@ -1,2 +1,7 @@
-﻿  mydrawengine.cpp
+﻿  Explosion.cpp
+C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(17,12): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(29,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\Explosion.cpp(38,13): warning C4305: '=': truncation from 'double' to 'float'
+  ObjectManager.cpp
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

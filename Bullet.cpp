@@ -1,7 +1,5 @@
 #include "bullet.h";
-#include "myinputs.h"
 #include "Asteroid.h"
-#include <typeinfo>
 
 IShape2D& Bullet::GetShape()
 {

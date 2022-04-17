@@ -1,9 +1,7 @@
-#include "spaceship.h";
-#include "myinputs.h"
-#include "Bullet.h"
-#include "ObjectManager.h"
 #include "gamecode.h"
-#include <typeinfo>
+#include "myinputs.h"
+
+#include "spaceship.h"
 #include "Asteroid.h"
 
 IShape2D& Spaceship::GetShape()
@@ -18,9 +16,6 @@ void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX
 	angle = 0;
 	shootDelay = 0.05;
 
-	//MySoundEngine* pSE = MySoundEngine::GetInstance();
-	//shootSound = pSE->LoadWav(L"shoot.wav");
-	//thrustSound = pSE->LoadWav(L"thrustloop2.wav");
 	pSoundFX = pSound;
 
 	LoadImg(L"ship.bmp");
@@ -44,18 +39,6 @@ void Spaceship::Update(double frameTime)
 	test->theCamera.PlaceAt(position);
 
 	shootDelay = shootDelay - frameTime;
-	//POINT p;
-	//GetCursorPos(&p);
-	//ScreenToClient(GetForegroundWindow(), &p);
-	
-		//cursor position now in p.x and p.y
-	//position = Vector2D(p.x, p.y);
-	
-	
-	//	position = Vector2D(GetCursorPos(&p).x, 500);
-	
-	//velocity.setBearing(angle, 4.0f);
-	//position = position + velocity;
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
@@ -73,19 +56,11 @@ void Spaceship::Update(double frameTime)
 	}
 	if (pInputs->KeyPressed(DIK_W))
 	{
-		//velocity.setBearing(angle, positionAmount);
-		//Vector2D friction = -0.5 * velocity;
-		//velocity = velocity + friction * frameTime;
-
-		//Vector2D acceleration(0, 30);
-		//velocity = velocity + acceleration * frameTime;
 		velocity.setBearing(angle, positionAmount);
 		position = position + velocity;
 	}
 	if (pInputs->KeyPressed(DIK_S))
 	{
-		//Vector2D acceleration(0, -30);
-		//velocity = velocity + acceleration;
 		velocity.setBearing(angle, -positionAmount);
 		position = position + velocity;
 	}
@@ -111,5 +86,4 @@ void Spaceship::Update(double frameTime)
 	{
 		pSoundFX->StopEngineSound();
 	}
-	//position = position + velocity * frameTime;
 };

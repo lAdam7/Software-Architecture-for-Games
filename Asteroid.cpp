@@ -1,7 +1,8 @@
-#include "Asteroid.h";
-#include "myinputs.h"
-#include "Bullet.h"
 #include "gamecode.h"
+#include "myinputs.h"
+
+#include "Asteroid.h"
+#include "Bullet.h"
 
 IShape2D& Asteroid::GetShape()
 {
@@ -15,9 +16,6 @@ void Asteroid::HandleCollision(GameObject& other)
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
 		pExplosion->Initialise(position, Vector2D(0, 0), pSoundFX);
-		//Vector2D velocity;
-		//velocity.setBearing(angle, 10.0f);
-		//pBullet->Initialise(position, velocity);
 		DeleteObject();
 	}
 }
