@@ -21,7 +21,7 @@ void Explosion::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX
 	currentImage = 0;
 
 	collidable = false;
-	m_activity = ACTIVE;
+	m_activity = Activity::ACTIVE;
 };
 
 void Explosion::Update(double frameTime)
@@ -40,7 +40,7 @@ void Explosion::Update(double frameTime)
 		currentImage = currentImage + 1;
 		if (currentImage == EXPLOSIONIMAGES-1)
 		{
-			m_activity = CAN_DELETE;
+			m_activity = Activity::CAN_DELETE;
 		}
 	}
 };

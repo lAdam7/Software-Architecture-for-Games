@@ -11,7 +11,7 @@ class GameObject
 		bool collidable;
 		Vector2D position;
 		float angle;
-		enum Activity { ACTIVE, INACTIVE, CAN_DELETE };
+		enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
 		Activity m_activity;
 		void LoadImg(const wchar_t* filename);
 	public:
@@ -20,6 +20,7 @@ class GameObject
 		virtual void Update(double frameTime) = 0;
 		bool IsActive() const;
 		bool CanDelete() const;
+		void Activate();
 		void Deactivate();
 		void DeleteObject();
 		bool IsCollidable() const;

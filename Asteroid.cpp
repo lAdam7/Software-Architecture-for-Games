@@ -32,7 +32,7 @@ void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX*
 	LoadImg(images[rand()%4]);
 	
 	collidable = true;
-	m_activity = ACTIVE;
+	m_activity = Activity::ACTIVE;
 };
 
 void Asteroid::Update(double frameTime)

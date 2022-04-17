@@ -27,7 +27,7 @@ void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound
 	LoadImg(L"bullet.bmp");
 
 	collidable = true;
-	m_activity = ACTIVE;
+	m_activity = Activity::ACTIVE;
 };
 
 void Bullet::Update(double frameTime)

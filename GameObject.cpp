@@ -35,12 +35,17 @@ bool GameObject::CanDelete() const
 	return (m_activity == Activity::CAN_DELETE);
 }
 
+void GameObject::Activate()
+{
+	m_activity = Activity::ACTIVE;
+}
+
 void GameObject::Deactivate()
 {
-	m_activity = INACTIVE;
+	m_activity = Activity::INACTIVE;
 }
 
 void GameObject::DeleteObject()
 {
-	m_activity = CAN_DELETE;
+	m_activity = Activity::CAN_DELETE;
 }

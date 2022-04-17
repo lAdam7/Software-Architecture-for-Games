@@ -21,7 +21,7 @@ void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX
 	LoadImg(L"ship.bmp");
 
 	collidable = true;
-	m_activity = ACTIVE;
+	m_activity = Activity::ACTIVE;
 };
 
 void Spaceship::HandleCollision(GameObject& other)
