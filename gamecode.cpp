@@ -319,7 +319,9 @@ ErrorType Game::StartOfGame()
 	for (int i = 0; i < 6; i++)
 	{
 		GameObject* pAsteroid = om.Create(L"Asteroid");
-		pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0), pSoundFX);
+		int xPos = (rand() % (900 - -900 + 1) + -900);
+		int yPos = (rand() % (900 - -900 + 1) + -900);
+		pAsteroid->Initialise(Vector2D((float) xPos, (float) yPos), Vector2D(0, 0), pSoundFX);
 	}
 	
 

@@ -17,8 +17,8 @@ IShape2D& Spaceship::GetShape()
 void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	Gun::SetBulletDelay(0.1f);
-	Gun::SetClipSize(100);
-	Gun::SetReloadTime(8.0f);
+	Gun::SetClipSize(12);
+	Gun::SetReloadTime(3.0f);
 
 	GameObject::SetPosition(startingPosition);
 	GameObject::SetAngle(0);
@@ -68,7 +68,7 @@ void Spaceship::HandleMessage(Message& msg)
 
 void Spaceship::Update(double frameTime)
 {
-	Gun::Update(frameTime);
+	Gun::Update((float) frameTime);
 	timer = timer - frameTime;
 
 	if (currentImage < IDLEIMAGES)

@@ -44,7 +44,15 @@ void Gun::Update(float frameTime)
 	}
 	
 	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-	mDE->WriteInt(Vector2D(50, 50), GetClipSizeCounter(), MyDrawEngine::CYAN);
+	Vector2D topRightPosition = mDE->GetViewport().GetTopRight();
+	Vector2D ammoPosition = Vector2D(topRightPosition.XValue - 100, topRightPosition.YValue - 300);
+
+	float percentage = 100 - ((GetClipSizeCounter() / (float) GetClipSize()) * 100);
+	Rectangle2D rectangle;
+	rectangle.PlaceAt(ammoPosition + Vector2D(-150 + (percentage*2), -60), ammoPosition + Vector2D(50, -45));
+	mDE->FillRect(rectangle, MyDrawEngine::CYAN, 0.0f);
+	
+	mDE->WriteInt(ammoPosition, GetClipSizeCounter(), MyDrawEngine::CYAN);
 }
 
 void Gun::SetBulletDelay(float delay)
