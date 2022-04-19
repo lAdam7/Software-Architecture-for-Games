@@ -20,15 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
-    <ClInclude Include="BuildMenu.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="Feet.h" />
     <ClInclude Include="gamecode.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="gametimer.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="mydrawengine.h" />
     <ClInclude Include="myinputs.h" />
     <ClInclude Include="mysoundengine.h" />
@@ -37,18 +39,21 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="SoundFX.h" />
     <ClInclude Include="spaceship.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="vector2D.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
-    <ClCompile Include="BuildMenu.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="Feet.cpp" />
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="gametimer.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="mydrawengine.cpp" />
     <ClCompile Include="myinputs.cpp" />
     <ClCompile Include="mysoundengine.cpp" />
@@ -56,7 +61,9 @@
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="SoundFX.cpp" />
     <ClCompile Include="spaceship.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="vector2D.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="wincode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,4 +1,4 @@
-#include "bullet.h";
+#include "bullet.h"
 #include "Asteroid.h"
 
 IShape2D& Bullet::GetShape()
@@ -15,13 +15,17 @@ void Bullet::HandleCollision(GameObject& other)
 	}
 }
 
+void Bullet::HandleMessage(Message& msg)
+{
+
+}
+
 void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound)
 {
 	velocity = vel;
-	position = startingPosition;
+	position = startingPosition + velocity;
 	angle = 0;
 	timer = 2;
-
 	pSound->PlayShot();
 
 	LoadImg(L"bullet.bmp");

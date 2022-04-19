@@ -16,7 +16,7 @@ void GameObject::Render()
 	if (IsActive())
 	{
 		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-		pDE->DrawAt(position, image, 1, angle);
+		pDE->DrawAt(position, image, scale, angle, opacity);
 	}
 };
 
@@ -48,4 +48,14 @@ void GameObject::Deactivate()
 void GameObject::DeleteObject()
 {
 	m_activity = Activity::CAN_DELETE;
+}
+
+Vector2D GameObject::GetPosition()
+{
+	return position;
+}
+
+float GameObject::GetAngle()
+{
+	return angle;
 }

@@ -3,6 +3,9 @@
 #include "Bullet.h"
 #include "Asteroid.h"
 #include "Explosion.h"
+#include "Wall.h"
+#include "Feet.h"
+
 
 void ObjectManager::AddObject(GameObject* pNewObject)
 {
@@ -30,6 +33,14 @@ GameObject* ObjectManager::Create(std::wstring name)
 	else if (name == L"Explosion")
 	{
 		pNewObject = new Explosion();
+	}
+	else if (name == L"Wall")
+	{
+		pNewObject = new Wall();
+	}
+	else if (name == L"Feet")
+	{
+		pNewObject = new Feet();
 	}
 	else
 	{
@@ -92,14 +103,18 @@ void ObjectManager::DeleteAllMarked()
 	pObjectList.remove(nullptr);
 }
 
-void ObjectManager::setCreatingMap(bool creating)
+void ObjectManager::DrawHitbox(IShape2D& shape)
 {
-	creatingMap = creating;
-}
-
-bool ObjectManager::getCreatingMap()
-{
-	return creatingMap;
+	if (typeid(shape) == typeid(Circle2D))
+	{
+		Circle2D circle = dynamic_cast<Circle2D&>(shape);
+		MyDrawEngine::GetInstance()->FillCircle(circle.GetCentre(), circle.GetRadius(), MyDrawEngine::CYAN);
+	}
+	else if (typeid(shape) == typeid(Rectangle2D))
+	{
+		Rectangle2D rectangle = dynamic_cast<Rectangle2D&>(shape);
+		MyDrawEngine::GetInstance()->FillRect(rectangle, MyDrawEngine::CYAN);
+	}
 }
 
 void ObjectManager::CheckAllCollisions()
@@ -111,6 +126,11 @@ void ObjectManager::CheckAllCollisions()
 	{
 		if ((*it1)->IsCollidable())
 		{
+			if (ShowHitbox)
+			{
+				DrawHitbox((*it1)->GetShape());
+			}
+				
 			for (it2 = next(it1); it2 != pObjectList.end(); it2++)
 			{
 				if ((*it2)->IsCollidable())
@@ -129,3 +149,14 @@ void ObjectManager::CheckAllCollisions()
 	}
 
 }
+
+void ObjectManager::TransmitMessage(Message msg)
+{
+	for (GameObject* pNext : pObjectList)
+	{
+		if (pNext)
+		{
+			pNext->HandleMessage(msg);
+		}			
+	}
+};

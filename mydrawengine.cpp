@@ -522,7 +522,7 @@ ErrorType MyDrawEngine::ReloadPicture(PictureIndex pic)
 ErrorType MyDrawEngine::ClearBackBuffer()
 {
 	//Clear
-	HRESULT err = m_lpD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, BLUE,0,0);
+	HRESULT err = m_lpD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, BLACK,0,0);
 
 	if(FAILED(err))
 	{

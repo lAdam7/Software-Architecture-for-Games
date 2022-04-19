@@ -8,7 +8,7 @@ private:
 	static const int EXPLOSIONIMAGES = 8;
 	const wchar_t* images[EXPLOSIONIMAGES] = { L"explosion1.bmp", L"explosion2.bmp", L"explosion3.bmp", L"explosion4.bmp", L"explosion5.bmp", L"explosion6.bmp", L"explosion7.bmp", L"explosion8.bmp" };
 	int currentImage;
-	float timer;
+	double timer;
 	SoundFX* pSoundFX;
 public:
 	void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX);
@@ -16,4 +16,5 @@ public:
 
 	IShape2D& GetShape();
 	void HandleCollision(GameObject& other);
+	void HandleMessage(Message& msg);
 };

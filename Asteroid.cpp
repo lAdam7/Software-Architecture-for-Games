@@ -20,6 +20,16 @@ void Asteroid::HandleCollision(GameObject& other)
 	}
 }
 
+void Asteroid::HandleMessage(Message& msg)
+{
+	if (msg.type == EventType::OBJECT_DESTROYED)
+	{
+		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
+		pExplosion->Initialise(position, Vector2D(0, 0), pSoundFX);
+		DeleteObject();
+	}
+}
+
 void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	position = startingPosition;
@@ -37,5 +47,4 @@ void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX*
 
 void Asteroid::Update(double frameTime)
 {
-
 };

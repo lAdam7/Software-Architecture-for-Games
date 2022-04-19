@@ -57,5 +57,7 @@ public:
 
 	// Sets the camera zoom
 	void SetZoom(float zoom);
+
+	Vector2D GetCameraPosition();
 };
 

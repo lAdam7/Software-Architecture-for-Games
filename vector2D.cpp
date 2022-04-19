@@ -1,5 +1,6 @@
 #include "vector2D.h"
 #include "math.h"
+#include <cstdlib>
 
 // Modified 04/11/2018
 // Changed rotatedBy to use angles clockwise

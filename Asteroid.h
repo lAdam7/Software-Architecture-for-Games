@@ -11,4 +11,5 @@ public:
 	void Update(double frameTime);
 	IShape2D& GetShape();
 	void HandleCollision(GameObject& other);
+	void HandleMessage(Message& msg);
 };

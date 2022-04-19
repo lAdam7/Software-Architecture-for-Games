@@ -1,7 +1,9 @@
 #pragma once
 #include "mydrawengine.h"
-#include "mysoundengine.h"
 #include "SoundFX.h"
+#include "Message.h"
+
+struct Message;
 
 class GameObject
 {
@@ -11,6 +13,8 @@ class GameObject
 		bool collidable;
 		Vector2D position;
 		float angle;
+		float opacity;
+		float scale = 1;
 		enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
 		Activity m_activity;
 		void LoadImg(const wchar_t* filename);
@@ -25,8 +29,13 @@ class GameObject
 		void DeleteObject();
 		bool IsCollidable() const;
 
+		Vector2D GetPosition();
+		float GetAngle();
+
 		virtual void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX) = 0;
 		virtual IShape2D& GetShape() = 0;
 
 		virtual void HandleCollision(GameObject& other) = 0;
+
+		virtual void HandleMessage(Message& msg) = 0;
 };

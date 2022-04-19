@@ -11,6 +11,11 @@ void Explosion::HandleCollision(GameObject& other)
 	
 }
 
+void Explosion::HandleMessage(Message& msg)
+{
+
+}
+
 void Explosion::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	position = startingPosition;

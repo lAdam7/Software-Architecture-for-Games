@@ -99,6 +99,11 @@ void Camera::PlaceAt(Vector2D worldPosition)
 	m_worldPosition = Vector2D(worldPosition.XValue, -worldPosition.YValue);
 }
 
+Vector2D Camera::GetCameraPosition()
+{
+	return m_worldPosition;
+}
+
 // Sets the camera zoom
 void Camera::SetZoom(float zoom)
 {

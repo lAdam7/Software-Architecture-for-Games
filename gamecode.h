@@ -13,8 +13,8 @@
 #include "mysoundengine.h"
 #include "GameObject.h"
 #include "ObjectManager.h"
-#include "BuildMenu.h"
 #include "SoundFX.h"
+#include "Mouse.h"
 
 
 // This is a hack for reading keyboard in situations where you don't want to
@@ -42,8 +42,9 @@ private:
 
 	ObjectManager om;
 	SoundFX* pSoundFX;
+	Mouse* pMouse;
 
-	BuildMenu bm;
+	//BuildMenu bm;
 
 	int m_menuOption;              // Tracks the currently selected menu option, during main or pause menu
 	Game();                        // Constructor

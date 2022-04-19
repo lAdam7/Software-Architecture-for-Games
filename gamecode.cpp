@@ -13,6 +13,7 @@
 #include "Asteroid.h"
 
 
+
 Game::Game()
 {
    // No-op
@@ -227,7 +228,7 @@ ErrorType Game::MainMenu()
 	MyDrawEngine::GetInstance()->WriteText(450,220, L"Main menu", MyDrawEngine::WHITE);
 
 	const int NUMOPTIONS = 3;
-	wchar_t options[NUMOPTIONS][15] = {L"Start game", L"Map Creator", L"Exit"};
+	wchar_t options[NUMOPTIONS][15] = {L"Start game", L"Test", L"Exit"};
 
    // Display the options
 	for(int i=0;i<NUMOPTIONS;i++)
@@ -244,6 +245,7 @@ ErrorType Game::MainMenu()
 	MyInputs* pInputs = MyInputs::GetInstance();
 
 	pInputs->SampleKeyboard();
+	
 	if(pInputs->NewKeyPressed(DIK_UP))
 	{
 		m_menuOption--;
@@ -266,15 +268,12 @@ ErrorType Game::MainMenu()
 	{
 		if(m_menuOption == 0)          // Play
 		{  
-			om.setCreatingMap(false);
 			StartOfGame();             // Initialise the game
 			ChangeState(RUNNING);      // Run it
 		}
 		
 		if (m_menuOption == 1)		   // map creator
 		{
-			bm.setPlacing(true);
-			om.setCreatingMap(true);
 			StartOfGame();
 			ChangeState(RUNNING);
 		}
@@ -303,23 +302,27 @@ ErrorType Game::StartOfGame()
 	
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
+
+	//GameObject* pWall = om.Create(L"Wall");
+	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
+	
+	//GameObject* pShip = om.Create(L"Spaceship");
+	//pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
+
+
+	GameObject* pFeet = om.Create(L"Feet");
+	pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
+
+	pMouse = new Mouse();
+	pMouse->StartUp();
+	
+	for (int i = 0; i < 6; i++)
+	{
+		GameObject* pAsteroid = om.Create(L"Asteroid");
+		pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0), pSoundFX);
+	}
 	
 
-	if (!om.getCreatingMap())
-	{
-		GameObject* pShip = om.Create(L"Spaceship");
-		pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
-	
-		for (int i = 0; i < 6; i++)
-		{
-			GameObject* pAsteroid = om.Create(L"Asteroid");
-			pAsteroid->Initialise(Vector2D(rand() % (900 - -900 + 1) + -900, rand() % (900 - -900 + 1) + -900), Vector2D(0, 0), pSoundFX);
-		}
-	}
-	else // Creating map
-	{
-	
-	}
 	
 
 	gt.mark();
@@ -350,46 +353,22 @@ ErrorType Game::Update()
 
    // Your code goes here *************************************************
    // *********************************************************************
-	if (om.getCreatingMap())
-	{
-		if (bm.getPlacing())
-		{
-			bm.buildInterface();
-		}
-		else
-		{
-			om.setCreatingMap(false);
-			EndOfGame();           // Clear up the game
-			ChangeState(MENU);     // Go back to the menu
-		}
-		
-	}
 
 
 	gt.mark();
 
+
+	//MyInputs* pInputs = MyInputs::GetInstance();
+	//pInputs->SampleMouse();
+
+	//MyDrawEngine::GetInstance()->WriteInt(100, 50, pInputs->GetMouseDX(), MyDrawEngine::GREEN);
+	
 	om.CheckAllCollisions();
 	om.DeleteAllMarked();
 
 	om.UpdateAll(gt.mdFrameTime);
 	om.RenderAll();
-
-	//pGameObject->Update(gt.mdFrameTime);
-	//pGameObject->Render();
-
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	pAsterioids[i]->Update(gt.mdFrameTime);
-	//}
-
-
-
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	pAsterioids[i]->Render();
-	//}
-
-
+	pMouse->UpdateMouse();
 
    // *********************************************************************
    // *********************************************************************
@@ -410,6 +389,9 @@ ErrorType Game::EndOfGame()
 
 	delete pSoundFX;
 	pSoundFX = nullptr;
+
+	delete pMouse;
+	pMouse = nullptr;
 	
 
 	return SUCCESS;
