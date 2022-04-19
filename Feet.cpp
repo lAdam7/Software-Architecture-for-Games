@@ -5,16 +5,15 @@
 
 IShape2D& Feet::GetShape()
 {
-	m_collisionShape.PlaceAt(position, 32);
+	m_collisionShape.PlaceAt(GetPosition(), 32);
 	return m_collisionShape;
 }
 
 void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
-	position = startingPosition;
-	angle = 0;
-
-	scale = 0.25f;
+	SetPosition(startingPosition);
+	SetAngle(0);
+	SetScale(0.25f);
 
 	timer = .1;
 	currentImage = 0;
@@ -23,11 +22,11 @@ void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 
 	LoadImg(L"idle_0.png");
 
-	collidable = false;
-	m_activity = Activity::ACTIVE;
+	CanCollide(false);
+	Activate();
 
 	mainCharacter = Game::instance.GetObjectManager().Create(L"Spaceship");
-	mainCharacter->Initialise(position, Vector2D(0, 0), pSoundFX);
+	mainCharacter->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
 };
 
 void Feet::HandleCollision(GameObject& other)
@@ -42,8 +41,8 @@ void Feet::HandleMessage(Message& msg)
 
 void Feet::Update(double frameTime)
 {
-	position = mainCharacter->GetPosition();
-	angle = mainCharacter->GetAngle();
+	SetPosition(mainCharacter->GetPosition());
+	SetAngle(mainCharacter->GetAngle());
 
 	timer = timer - frameTime;
 

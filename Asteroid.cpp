@@ -6,7 +6,7 @@
 
 IShape2D& Asteroid::GetShape()
 {
-	m_collisionShape.PlaceAt(position, 70);
+	m_collisionShape.PlaceAt(GetPosition(), 70);
 	return m_collisionShape;
 }
 
@@ -15,7 +15,7 @@ void Asteroid::HandleCollision(GameObject& other)
 	if (typeid(other) == typeid(Bullet))
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
-		pExplosion->Initialise(position, Vector2D(0, 0), pSoundFX);
+		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
 		DeleteObject();
 	}
 }
@@ -25,15 +25,15 @@ void Asteroid::HandleMessage(Message& msg)
 	if (msg.type == EventType::OBJECT_DESTROYED) // shapeship destroyed
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
-		pExplosion->Initialise(position, Vector2D(0, 0), pSoundFX);
+		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
 		DeleteObject();
 	}
 }
 
 void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
-	position = startingPosition;
-	angle = 0;
+	SetPosition(startingPosition);
+	SetAngle(0);
 
 	pSoundFX = pSound;
 
@@ -42,8 +42,8 @@ void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX*
 	LoadImg(images[rand()%4]);
 	
 	ReceiveMessages(true);
-	collidable = true;
-	m_activity = Activity::ACTIVE;
+	CanCollide(true);
+	Activate();
 };
 
 void Asteroid::Update(double frameTime)

@@ -14,25 +14,8 @@ void Mouse::UpdateMouse()
 	pInputs->SampleMouse();
 	pInputs->SampleJoystick();
 
-	float xAxis;
-	if (pInputs->JoystickIsAvailable())
-	{
-		xAxis = pInputs->GetJoystickX()*0.06;
-	}
-	else
-	{
-		xAxis = pInputs->GetMouseDX();
-	}
-	float yAxis;
-	if (pInputs->JoystickIsAvailable())
-	{
-		yAxis = pInputs->GetJoystickY()*0.06;
-	}
-	else
-	{
-		yAxis = pInputs->GetMouseDY();
-	}
-
+	int xAxis = pInputs->GetMouseDX();
+	int yAxis = pInputs->GetMouseDY();
 
 	if (xAxis - tolerance > 0 && mouseX < (widthRadius - 50))
 	{

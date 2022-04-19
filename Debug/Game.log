@@ -1,2 +1,5 @@
-﻿  Asteroid.cpp
+﻿  Gun.cpp
+  spaceship.cpp
+C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(71,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

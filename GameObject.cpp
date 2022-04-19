@@ -36,6 +36,11 @@ bool GameObject::IsCollidable() const
 	return collidable;
 }
 
+void GameObject::CanCollide(bool collide)
+{
+	collidable = collide;
+}
+
 bool GameObject::CanDelete() const
 {
 	return (m_activity == Activity::CAN_DELETE);
@@ -61,12 +66,42 @@ Vector2D GameObject::GetPosition()
 	return position;
 }
 
+void GameObject::SetPosition(Vector2D pos)
+{
+	position = pos;
+}
+
 float GameObject::GetAngle()
 {
 	return angle;
 }
 
-bool GameObject::CanReceiveMessages()
+void GameObject::SetAngle(float ang)
+{
+	angle = ang;
+}
+
+float GameObject::GetOpacity()
+{
+	return opacity;
+}
+
+void GameObject::SetOpacity(float opac)
+{
+	opacity = opac;
+}
+
+float GameObject::GetScale()
+{
+	return scale;
+}
+
+void GameObject::SetScale(float size)
+{
+	scale = size;
+}
+
+bool GameObject::CanReceiveMessages() const
 {
 	return receiveMessages;
 }

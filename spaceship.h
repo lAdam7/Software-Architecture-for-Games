@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "Gun.h"
 
-class Spaceship: public GameObject
+class Spaceship: public GameObject, public Gun
 {
 	private:
 		Vector2D velocity;

@@ -4,37 +4,33 @@
 #include "Message.h"
 
 struct Message;
+enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
 
 class GameObject
 {
 	private:
 		PictureIndex image;
-	protected:
-		bool collidable;
+		Activity m_activity;
 		Vector2D position;
 		float angle;
 		float opacity;
 		float scale;
-		enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
-		Activity m_activity;
-		void LoadImg(const wchar_t* filename);
+		bool collidable;
 		bool receiveMessages;
+	protected:
+
+		void SetAngle(float angle);
+		void SetPosition(Vector2D position);
+		void SetOpacity(float opacity);
+		void SetScale(float scale);
+		void CanCollide(bool collide);
+
+		void ReceiveMessages(bool receive);
+
+		void LoadImg(const wchar_t* filename);
 	public:
 		GameObject();
 		virtual ~GameObject();
-		void Render();
-		virtual void Update(double frameTime) = 0;
-		bool IsActive() const;
-		bool CanDelete() const;
-		void Activate();
-		void Deactivate();
-		void DeleteObject();
-		bool IsCollidable() const;
-
-		Vector2D GetPosition();
-		float GetAngle();
-		void ReceiveMessages(bool receive);
-		bool CanReceiveMessages();
 
 		virtual void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX) = 0;
 		virtual IShape2D& GetShape() = 0;
@@ -42,4 +38,22 @@ class GameObject
 		virtual void HandleCollision(GameObject& other) = 0;
 
 		virtual void HandleMessage(Message& msg) = 0;
+
+		void Render();
+		virtual void Update(double frameTime) = 0;
+
+		bool IsActive() const;
+		bool CanDelete() const;
+		void Activate();
+		void Deactivate();
+		void DeleteObject();
+
+		Vector2D GetPosition();
+		float GetAngle();
+		float GetOpacity();
+		float GetScale();
+
+		bool IsCollidable() const;
+
+		bool CanReceiveMessages() const;
 };

@@ -3,7 +3,7 @@
 
 IShape2D& Bullet::GetShape()
 {
-	m_collisionShape.PlaceAt(position, 32);
+	m_collisionShape.PlaceAt(GetPosition(), 32);
 	return m_collisionShape;
 }
 
@@ -23,20 +23,20 @@ void Bullet::HandleMessage(Message& msg)
 void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound)
 {
 	velocity = vel;
-	position = startingPosition + velocity;
-	angle = 0;
+	SetPosition(startingPosition + velocity);
+	SetAngle(0);
 	timer = 2;
 	pSound->PlayShot();
 
 	LoadImg(L"bullet.bmp");
 
-	collidable = true;
-	m_activity = Activity::ACTIVE;
+	CanCollide(true);
+	Activate();
 };
 
 void Bullet::Update(double frameTime)
 {
-	position = position + velocity;
+	SetPosition(GetPosition() + velocity);
 
 	timer = timer - frameTime;
 

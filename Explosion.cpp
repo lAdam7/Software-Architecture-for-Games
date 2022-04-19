@@ -2,7 +2,7 @@
 
 IShape2D& Explosion::GetShape()
 {
-	m_collisionShape.PlaceAt(position, 1);
+	m_collisionShape.PlaceAt(GetPosition(), 1);
 	return m_collisionShape;
 }
 
@@ -18,15 +18,15 @@ void Explosion::HandleMessage(Message& msg)
 
 void Explosion::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
-	position = startingPosition;
+	SetPosition(startingPosition);
 	timer = .1;
 	
 	pSoundFX = pSound;
 
 	currentImage = 0;
 
-	collidable = false;
-	m_activity = Activity::ACTIVE;
+	CanCollide(false);
+	Activate();
 };
 
 void Explosion::Update(double frameTime)
@@ -45,7 +45,7 @@ void Explosion::Update(double frameTime)
 		currentImage = currentImage + 1;
 		if (currentImage == EXPLOSIONIMAGES-1)
 		{
-			m_activity = Activity::CAN_DELETE;
+			DeleteObject();
 		}
 	}
 };

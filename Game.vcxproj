@@ -29,6 +29,7 @@
     <ClInclude Include="gamecode.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="gametimer.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="mydrawengine.h" />
@@ -53,6 +54,7 @@
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="gametimer.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="mydrawengine.cpp" />
     <ClCompile Include="myinputs.cpp" />

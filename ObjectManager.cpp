@@ -6,12 +6,17 @@
 #include "Wall.h"
 #include "Feet.h"
 
-
-void ObjectManager::AddObject(GameObject* pNewObject)
+void ObjectManager::DrawHitbox(IShape2D& shape)
 {
-	if (pNewObject != nullptr)
+	if (typeid(shape) == typeid(Circle2D))
 	{
-		pObjectList.push_back(pNewObject);
+		Circle2D circle = dynamic_cast<Circle2D&>(shape);
+		MyDrawEngine::GetInstance()->FillCircle(circle.GetCentre(), circle.GetRadius(), MyDrawEngine::CYAN);
+	}
+	else if (typeid(shape) == typeid(Rectangle2D))
+	{
+		Rectangle2D rectangle = dynamic_cast<Rectangle2D&>(shape);
+		MyDrawEngine::GetInstance()->FillRect(rectangle, MyDrawEngine::CYAN);
 	}
 }
 
@@ -52,6 +57,28 @@ GameObject* ObjectManager::Create(std::wstring name)
 	return pNewObject;
 }
 
+void ObjectManager::AddObject(GameObject* pNewObject)
+{
+	if (pNewObject != nullptr)
+	{
+		pObjectList.push_back(pNewObject);
+	}
+}
+
+void ObjectManager::TransmitMessage(Message msg)
+{
+	for (GameObject* pNext : pObjectList)
+	{
+		if (pNext && pNext->CanReceiveMessages())
+		{
+			pNext->HandleMessage(msg);
+		}
+	}
+}
+
+
+
+
 void ObjectManager::UpdateAll(double frameTime)
 {
 	for (auto const& i : pObjectList) {
@@ -66,6 +93,9 @@ void ObjectManager::RenderAll()
 		i->Render();
 	}
 }
+
+
+
 
 void ObjectManager::DeleteAll()
 {
@@ -103,19 +133,8 @@ void ObjectManager::DeleteAllMarked()
 	pObjectList.remove(nullptr);
 }
 
-void ObjectManager::DrawHitbox(IShape2D& shape)
-{
-	if (typeid(shape) == typeid(Circle2D))
-	{
-		Circle2D circle = dynamic_cast<Circle2D&>(shape);
-		MyDrawEngine::GetInstance()->FillCircle(circle.GetCentre(), circle.GetRadius(), MyDrawEngine::CYAN);
-	}
-	else if (typeid(shape) == typeid(Rectangle2D))
-	{
-		Rectangle2D rectangle = dynamic_cast<Rectangle2D&>(shape);
-		MyDrawEngine::GetInstance()->FillRect(rectangle, MyDrawEngine::CYAN);
-	}
-}
+
+
 
 void ObjectManager::CheckAllCollisions()
 {
@@ -147,16 +166,4 @@ void ObjectManager::CheckAllCollisions()
 			}
 		}
 	}
-
 }
-
-void ObjectManager::TransmitMessage(Message msg)
-{
-	for (GameObject* pNext : pObjectList)
-	{
-		if (pNext && pNext->CanReceiveMessages())
-		{
-			pNext->HandleMessage(msg);
-		}			
-	}
-};

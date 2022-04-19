@@ -8,32 +8,36 @@
 IShape2D& Spaceship::GetShape()
 {
 	Vector2D offset;
-	offset.setBearing(angle, -45.0f);
+	offset.setBearing(GameObject::GetAngle(), -45.0f);
 
-	m_collisionShape.PlaceAt(position + offset, 40);
+	m_collisionShape.PlaceAt(GameObject::GetPosition() + offset, 40);
 	return m_collisionShape;
 }
 
 void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
-	position = startingPosition;
-	angle = 0.0f;
+	Gun::SetBulletDelay(0.1f);
+	Gun::SetClipSize(100);
+	Gun::SetReloadTime(8.0f);
+
+	GameObject::SetPosition(startingPosition);
+	GameObject::SetAngle(0);
+	GameObject::SetScale(0.4f);
 	shootDelay = 0.05;
 
-	scale = 0.4f;
 
 	timer = .1;
 	currentImage = 0;
 
 	pSoundFX = pSound;
 
-	LoadImg(L"ship.bmp");
+	GameObject::LoadImg(L"ship.bmp");
 
 	//GameObject* pFeet = Game::instance.GetObjectManager().Create(L"Feet");
 	//pFeet->Initialise(position, Vector2D(0, 0), pSoundFX);
 
-	collidable = true;
-	m_activity = Activity::ACTIVE;
+	GameObject::CanCollide(true);
+	GameObject::Activate();
 };
 
 void Spaceship::HandleCollision(GameObject& other)
@@ -49,7 +53,7 @@ void Spaceship::HandleCollision(GameObject& other)
 
 		Game::instance.GetObjectManager().TransmitMessage(msg);
 		
-		DeleteObject();
+		GameObject::DeleteObject();
 	}
 	else if (typeid(other) == typeid(Wall))
 	{
@@ -64,11 +68,12 @@ void Spaceship::HandleMessage(Message& msg)
 
 void Spaceship::Update(double frameTime)
 {
+	Gun::Update(frameTime);
 	timer = timer - frameTime;
 
 	if (currentImage < IDLEIMAGES)
 	{
-		LoadImg(idleImages[currentImage]);
+		GameObject::LoadImg(idleImages[currentImage]);
 	}
 
 	if (timer < 0)
@@ -86,7 +91,7 @@ void Spaceship::Update(double frameTime)
 
 
 	MyDrawEngine* test = MyDrawEngine::GetInstance();
-	test->theCamera.PlaceAt(position);
+	test->theCamera.PlaceAt(GameObject::GetPosition());
 
 	shootDelay = shootDelay - frameTime;
 
@@ -102,51 +107,47 @@ void Spaceship::Update(double frameTime)
 		
 	if (pInputs->KeyPressed(DIK_LEFT))
 	{
-		angle = angle - rotationAmount;
+		GameObject::SetAngle(GameObject::GetAngle() - rotationAmount);
 	}
 	if (pInputs->KeyPressed(DIK_RIGHT))
 	{
-		angle = angle + rotationAmount;
+		GameObject::SetAngle(GameObject::GetAngle() + rotationAmount);
 	}
-	MyDrawEngine* testEngine = MyDrawEngine::GetInstance();
-	testEngine->WriteInt(300, 50, 5, MyDrawEngine::CYAN);
+	
 	if ( (pInputs->KeyPressed(DIK_W)) )
 	{
-		//velocity.setBearing(angle, positionAmount);
-		position = position + Vector2D(0, 3.0f) + velocity;
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, 3.0f) + velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_S)) )
 	{
-		//velocity.setBearing(angle, -positionAmount);
-		//position = position + velocity;
-
-		position = position + Vector2D(0, -3.0f) + velocity;
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -3.0f) + velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_A)) )
 	{
-		position = position + Vector2D(-3.0f, 0) + velocity;
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-3.0f, 0) + velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_D)) )
 	{
-		position = position + Vector2D(3.0f, 0) + velocity;
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(3.0f, 0) + velocity);
 	}
 	if (pInputs->KeyPressed(DIK_SPACE))
 	{
-
+		Gun::Fire(GameObject::GetPosition(), GameObject::GetAngle(), pSoundFX);
+		/*
 		if (shootDelay < 0)
 		{
 			shootDelay = 0.05;
 
 			GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
 			Vector2D velocity;
-			velocity.setBearing(angle, 10.0f); //10.0 before
+			velocity.setBearing(GameObject::GetAngle(), 10.0f); //10.0 before
 
 			Vector2D startingAngle;
-			startingAngle.setBearing(angle + 0.55f, 50.0f);
+			startingAngle.setBearing(GameObject::GetAngle() + 0.55f, 50.0f);
 
-			pBullet->Initialise(position + startingAngle, velocity, pSoundFX);
+			pBullet->Initialise(GameObject::GetPosition() + startingAngle, velocity, pSoundFX);
 		}
-		
+		*/
 	}
 	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_S))
 	{

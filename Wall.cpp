@@ -11,16 +11,16 @@ IShape2D& Wall::GetShape()
 
 void Wall::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
-	position = startingPosition;
-	angle = 0;
-	scale = 4;
+	SetPosition(startingPosition);
+	SetAngle(0);
+	SetScale(4.0f);
 
 	pSoundFX = pSound;
 
 	LoadImg(L"crate1.bmp");
 
-	collidable = true;
-	m_activity = Activity::ACTIVE;
+	CanCollide(true);
+	Activate();
 };
 
 void Wall::HandleCollision(GameObject& other)
