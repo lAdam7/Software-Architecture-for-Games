@@ -5,6 +5,7 @@
 #include "Explosion.h"
 #include "Wall.h"
 #include "Feet.h"
+#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
 {
@@ -46,6 +47,10 @@ GameObject* ObjectManager::Create(std::wstring name)
 	else if (name == L"Feet")
 	{
 		pNewObject = new Feet();
+	}
+	else if (name == L"Mouse")
+	{
+		pNewObject = new Mouse();
 	}
 	else
 	{

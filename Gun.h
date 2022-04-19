@@ -13,6 +13,7 @@ private:
 
 	float reloadTime;
 	float reloadTimeCounter;
+	bool reloading = false;
 public:
 	void SetBulletDelay(float delay);
 	void ResetBulletDelay();

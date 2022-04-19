@@ -22,7 +22,7 @@ void Asteroid::HandleCollision(GameObject& other)
 
 void Asteroid::HandleMessage(Message& msg)
 {
-	if (msg.type == EventType::OBJECT_DESTROYED) // shapeship destroyed
+	if (msg.type == EventType::CHARACTER_DIED) // shapeship destroyed
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
 		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);

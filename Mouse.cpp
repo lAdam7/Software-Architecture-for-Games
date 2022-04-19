@@ -2,17 +2,21 @@
 #include "myinputs.h"
 #include "mydrawengine.h"
 
-void Mouse::StartUp()
+void Mouse::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	Rectangle2D test = MyDrawEngine::GetInstance()->GetViewport();
 	widthRadius = test.GetTopRight().XValue;
-}
 
-void Mouse::UpdateMouse()
+	LoadImg(L"ship.bmp");
+
+	GameObject::Activate();
+
+};
+
+void Mouse::Update(double frameTime)
 {
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleMouse();
-	pInputs->SampleJoystick();
 
 	int xAxis = pInputs->GetMouseDX();
 	int yAxis = pInputs->GetMouseDY();
@@ -23,7 +27,7 @@ void Mouse::UpdateMouse()
 		if (mouseX > (widthRadius - 50))
 			mouseX = widthRadius - 50;
 	}
-	else if (xAxis + tolerance < 0 && mouseX > (-widthRadius + 50))
+	else if (xAxis + tolerance < 0 && mouseX >(-widthRadius + 50))
 	{
 		mouseX = mouseX - (-xAxis * sensitivity);
 		if (mouseX < (-widthRadius + 50))
@@ -38,20 +42,31 @@ void Mouse::UpdateMouse()
 	}
 	else if (yAxis - tolerance > 0 && mouseY > -950)
 	{
-		mouseY = mouseY - (yAxis *sensitivity);
+		mouseY = mouseY - (yAxis * sensitivity);
 		if (mouseY < -950)
 			mouseY = -950;
 	}
-	
+
 	Vector2D cameraPos = MyDrawEngine::GetInstance()->theCamera.GetCameraPosition();
 
-	//MyDrawEngine::GetInstance()->FillCircle(Vector2D( cameraPos.XValue + mouseX, -cameraPos.YValue + mouseY), 7.0f, MyDrawEngine::YELLOW);
+	SetPosition(Vector2D(cameraPos.XValue + mouseX, -cameraPos.YValue + mouseY));
+}
 
-	//MyDrawEngine::GetInstance()->WriteInt(100, 50, mouseX, MyDrawEngine::GREEN);
-	//MyDrawEngine::GetInstance()->WriteInt(150, 50, mouseY, MyDrawEngine::GREEN);
+IShape2D& Mouse::GetShape()
+{
+	Vector2D offset;
+	offset.setBearing(GameObject::GetAngle(), -45.0f);
 
+	m_collisionShape.PlaceAt(GameObject::GetPosition() + offset, 40);
+	return m_collisionShape;
+}
 
-	//MyDrawEngine::GetInstance()->WriteInt(250, 50, pInputs->GetJoystickX(), MyDrawEngine::GREEN);
+void Mouse::HandleCollision(GameObject& other)
+{
 	
-	//MyDrawEngine::GetInstance()->WriteInt(250, 50, test.GetBottomLeft().XValue, MyDrawEngine::GREEN);
+}
+
+void Mouse::HandleMessage(Message& msg)
+{
+
 }

@@ -306,15 +306,16 @@ ErrorType Game::StartOfGame()
 	//GameObject* pWall = om.Create(L"Wall");
 	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
-	//GameObject* pShip = om.Create(L"Spaceship");
-	//pShip->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
 
 	GameObject* pFeet = om.Create(L"Feet");
 	pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
-	pMouse = new Mouse();
-	pMouse->StartUp();
+	//GameObject* pMouse = om.Create(L"Mouse");
+	//pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
+
+	//pMouse = new Mouse();
+	//pMouse->StartUp();
 	
 	for (int i = 0; i < 6; i++)
 	{
@@ -370,7 +371,6 @@ ErrorType Game::Update()
 
 	om.UpdateAll(gt.mdFrameTime);
 	om.RenderAll();
-	pMouse->UpdateMouse();
 
    // *********************************************************************
    // *********************************************************************
@@ -392,8 +392,6 @@ ErrorType Game::EndOfGame()
 	delete pSoundFX;
 	pSoundFX = nullptr;
 
-	delete pMouse;
-	pMouse = nullptr;
 	
 
 	return SUCCESS;

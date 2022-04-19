@@ -2,7 +2,7 @@
 
 class GameObject;
 
-enum class EventType { OBJECT_DESTROYED, EXPLOSION, BULLET_FIRED };
+enum class EventType { CHARACTER_DIED, OBJECT_DESTROYED, EXPLOSION, BULLET_FIRED };
 struct Message
 {
 	EventType type;

@@ -22,6 +22,7 @@ void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 
 	LoadImg(L"idle_0.png");
 
+	ReceiveMessages(true);
 	CanCollide(false);
 	Activate();
 
@@ -36,7 +37,10 @@ void Feet::HandleCollision(GameObject& other)
 
 void Feet::HandleMessage(Message& msg)
 {
-
+	if (msg.type == EventType::CHARACTER_DIED) // shapeship destroyed
+	{
+		DeleteObject();
+	}
 }
 
 void Feet::Update(double frameTime)

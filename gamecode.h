@@ -42,7 +42,6 @@ private:
 
 	ObjectManager om;
 	SoundFX* pSoundFX;
-	Mouse* pMouse;
 
 	//BuildMenu bm;
 

@@ -47,10 +47,9 @@ void Spaceship::HandleCollision(GameObject& other)
 		pSoundFX->StopEngineSound();
 		
 		Message msg;
-		msg.type = EventType::OBJECT_DESTROYED;
+		msg.type = EventType::CHARACTER_DIED;
 		msg.location = Vector2D(0, 0);
 		msg.pSource = this;
-
 		Game::instance.GetObjectManager().TransmitMessage(msg);
 		
 		GameObject::DeleteObject();
