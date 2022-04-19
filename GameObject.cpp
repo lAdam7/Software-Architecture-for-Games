@@ -1,5 +1,11 @@
 #include "GameObject.h"
 
+GameObject::GameObject()
+{
+	scale = 1;
+	receiveMessages = false;
+}
+
 GameObject::~GameObject()
 {
 
@@ -58,4 +64,14 @@ Vector2D GameObject::GetPosition()
 float GameObject::GetAngle()
 {
 	return angle;
+}
+
+bool GameObject::CanReceiveMessages()
+{
+	return receiveMessages;
+}
+
+void GameObject::ReceiveMessages(bool receive)
+{
+	receiveMessages = receive;
 }

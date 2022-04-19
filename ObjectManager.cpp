@@ -154,7 +154,7 @@ void ObjectManager::TransmitMessage(Message msg)
 {
 	for (GameObject* pNext : pObjectList)
 	{
-		if (pNext)
+		if (pNext && pNext->CanReceiveMessages())
 		{
 			pNext->HandleMessage(msg);
 		}			
