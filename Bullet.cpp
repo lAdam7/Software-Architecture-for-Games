@@ -22,10 +22,10 @@ void Bullet::HandleMessage(Message& msg)
 
 void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound)
 {
-	velocity = vel;
-	SetPosition(startingPosition + velocity);
+	m_velocity = vel;
+	SetPosition(startingPosition + m_velocity);
 	SetAngle(0);
-	timer = 2;
+	m_timer = 2;
 	pSound->PlayShot();
 
 	LoadImg(L"bullet.bmp");
@@ -36,11 +36,11 @@ void Bullet::Initialise(Vector2D startingPosition, Vector2D vel, SoundFX* pSound
 
 void Bullet::Update(double frameTime)
 {
-	SetPosition(GetPosition() + velocity);
+	SetPosition(GetPosition() + m_velocity);
 
-	timer = timer - frameTime;
+	m_timer = m_timer - frameTime;
 
-	if (timer < 0)
+	if (m_timer < 0)
 	{
 		DeleteObject();
 	}

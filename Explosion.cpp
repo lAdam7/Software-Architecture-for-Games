@@ -19,11 +19,11 @@ void Explosion::HandleMessage(Message& msg)
 void Explosion::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	SetPosition(startingPosition);
-	timer = .1;
+	m_timer = .1;
 	
-	pSoundFX = pSound;
+	m_pSoundFX = pSound;
 
-	currentImage = 0;
+	m_currentImage = 0;
 
 	CanCollide(false);
 	Activate();
@@ -31,19 +31,19 @@ void Explosion::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX
 
 void Explosion::Update(double frameTime)
 {
-	timer = timer - frameTime;
+	m_timer = m_timer - frameTime;
 
-	if (currentImage < EXPLOSIONIMAGES)
+	if (m_currentImage < EXPLOSIONIMAGES)
 	{
-		LoadImg(images[currentImage]);
+		LoadImg(m_images[m_currentImage]);
 	}
 
-	if (timer < 0)
+	if (m_timer < 0)
 	{
-		timer = .1;
-		pSoundFX->PlayExplosion();
-		currentImage = currentImage + 1;
-		if (currentImage == EXPLOSIONIMAGES-1)
+		m_timer = .1;
+		m_pSoundFX->PlayExplosion();
+		m_currentImage = m_currentImage + 1;
+		if (m_currentImage == EXPLOSIONIMAGES-1)
 		{
 			DeleteObject();
 		}

@@ -311,8 +311,8 @@ ErrorType Game::StartOfGame()
 	GameObject* pFeet = om.Create(L"Feet");
 	pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
-	//GameObject* pMouse = om.Create(L"Mouse");
-	//pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
+	GameObject* pMouse = om.Create(L"Mouse");
+	pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
 
 	//pMouse = new Mouse();
 	//pMouse->StartUp();

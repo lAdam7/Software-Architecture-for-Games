@@ -5,7 +5,7 @@ class Wall : public GameObject
 {
 private:
 	Rectangle2D m_collisionShape;
-	SoundFX* pSoundFX;
+	SoundFX* m_pSoundFX;
 public:
 	void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX);
 	void Update(double frameTime);

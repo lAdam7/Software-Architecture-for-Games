@@ -5,15 +5,15 @@
 class Gun
 {
 private:
-	float bulletDelay;
-	float bulletDelayCounter;
+	float m_bulletDelay;
+	float m_bulletDelayCounter;
 
-	int clipSize;
-	int clipSizeCounter;
+	int m_clipSize;
+	int m_clipSizeCounter;
 
-	float reloadTime;
-	float reloadTimeCounter;
-	bool reloading = false;
+	float m_reloadTime;
+	float m_reloadTimeCounter;
+	bool m_reloading = false;
 public:
 	void SetBulletDelay(float delay);
 	void ResetBulletDelay();

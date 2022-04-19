@@ -81,10 +81,10 @@
     <ClInclude Include="Feet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Gun.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gun.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,10 +149,10 @@
     <ClCompile Include="Feet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
+    <ClCompile Include="Gun.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gun.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

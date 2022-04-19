@@ -15,7 +15,7 @@ void Wall::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 	SetAngle(0);
 	SetScale(4.0f);
 
-	pSoundFX = pSound;
+	m_pSoundFX = pSound;
 
 	LoadImg(L"crate1.bmp");
 

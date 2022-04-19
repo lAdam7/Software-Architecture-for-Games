@@ -22,6 +22,7 @@
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
     <ClInclude Include="Explosion.h" />
@@ -40,7 +41,6 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="SoundFX.h" />
     <ClInclude Include="spaceship.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="vector2D.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
@@ -48,6 +48,7 @@
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Feet.cpp" />
@@ -63,7 +64,6 @@
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="SoundFX.cpp" />
     <ClCompile Include="spaceship.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="wincode.cpp" />

@@ -1,9 +1,6 @@
 #include "Gun.h"
 #include "gamecode.h"
 #include "myinputs.h"
-
-
-
 #include "mydrawengine.h"
 
 void Gun::Fire(Vector2D pos, float rotation, SoundFX* pSoundFX)
@@ -60,56 +57,56 @@ void Gun::Update(float frameTime)
 
 void Gun::SetBulletDelay(float delay)
 {
-	bulletDelay = delay;
+	m_bulletDelay = delay;
 	ResetBulletDelay();
 }
 
 void Gun::ResetBulletDelay()
 {
-	bulletDelayCounter = bulletDelay;
+	m_bulletDelayCounter = m_bulletDelay;
 }
 
 void Gun::DecreaseBulletDelay(float frameTime)
 {
-	bulletDelayCounter = bulletDelayCounter - frameTime;
+	m_bulletDelayCounter = m_bulletDelayCounter - frameTime;
 }
 
 void Gun::SetClipSize(int size)
 {
-	clipSize = size;
+	m_clipSize = size;
 	ResetClipSize();
 }
 
 void Gun::SetClipSizeCounter(int size)
 {
-	clipSizeCounter = size;
+	m_clipSizeCounter = size;
 }
 
 void Gun::ResetClipSize()
 {
-	clipSizeCounter = clipSize;
+	m_clipSizeCounter = m_clipSize;
 }
 
 void Gun::BulletFired()
 {
-	clipSizeCounter = clipSizeCounter - 1;
+	m_clipSizeCounter = m_clipSizeCounter - 1;
 }
 
 void Gun::SetReloadTime(float time)
 {
-	reloadTime = time;
+	m_reloadTime = time;
 	ResetReloadTime();
 }
 
 void Gun::ResetReloadTime()
 {
-	reloadTimeCounter = reloadTime;
+	m_reloadTimeCounter = m_reloadTime;
 }
 
 void Gun::DecreaseReloadTime(float frameTime)
 {
-	reloadTimeCounter = reloadTimeCounter - frameTime;
-	if (reloadTimeCounter < 0)
+	m_reloadTimeCounter = m_reloadTimeCounter - frameTime;
+	if (m_reloadTimeCounter < 0)
 	{
 		ResetClipSize();
 		ResetReloadTime();
@@ -118,35 +115,35 @@ void Gun::DecreaseReloadTime(float frameTime)
 
 float Gun::GetBulletDelay()
 {
-	return bulletDelay;
+	return m_bulletDelay;
 }
 
 float Gun::GetBulletDelayCounter()
 {
-	return bulletDelayCounter;
+	return m_bulletDelayCounter;
 }
 
 int Gun::GetClipSize()
 {
-	return clipSize;
+	return m_clipSize;
 }
 
 int Gun::GetClipSizeCounter()
 {
-	return clipSizeCounter;
+	return m_clipSizeCounter;
 }
 
 float Gun::GetReloadTime()
 {
-	return reloadTime;
+	return m_reloadTime;
 }
 
 float Gun::GetReloadTimeCounter()
 {
-	return reloadTimeCounter;
+	return m_reloadTimeCounter;
 }
 
 bool Gun::CanShoot() const
 {
-	return (clipSizeCounter > 0);
+	return (m_clipSizeCounter > 0);
 }

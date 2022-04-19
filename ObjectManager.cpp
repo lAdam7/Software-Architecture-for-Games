@@ -66,13 +66,13 @@ void ObjectManager::AddObject(GameObject* pNewObject)
 {
 	if (pNewObject != nullptr)
 	{
-		pObjectList.push_back(pNewObject);
+		m_pObjectList.push_back(pNewObject);
 	}
 }
 
 void ObjectManager::TransmitMessage(Message msg)
 {
-	for (GameObject* pNext : pObjectList)
+	for (GameObject* pNext : m_pObjectList)
 	{
 		if (pNext && pNext->CanReceiveMessages())
 		{
@@ -86,15 +86,15 @@ void ObjectManager::TransmitMessage(Message msg)
 
 void ObjectManager::UpdateAll(double frameTime)
 {
-	for (auto const& i : pObjectList) {
+	for (auto const& i : m_pObjectList) {
 		i->Update(frameTime);
 	}
 }
 
 void ObjectManager::RenderAll()
 {
-	MyDrawEngine::GetInstance()->WriteInt(50, 50, pObjectList.size(), MyDrawEngine::GREEN);
-	for (auto const& i : pObjectList) {
+	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
+	for (auto const& i : m_pObjectList) {
 		i->Render();
 	}
 }
@@ -104,17 +104,17 @@ void ObjectManager::RenderAll()
 
 void ObjectManager::DeleteAll()
 {
-	for (GameObject* obj : pObjectList)
+	for (GameObject* obj : m_pObjectList)
 	{
 		delete obj;
 		obj = nullptr;
 	}
-	pObjectList.clear();
+	m_pObjectList.clear();
 }
 
 void ObjectManager::DeleteAllInactive()
 {
-	for (GameObject*& obj : pObjectList)
+	for (GameObject*& obj : m_pObjectList)
 	{
 		if (!obj->IsActive())
 		{
@@ -122,12 +122,12 @@ void ObjectManager::DeleteAllInactive()
 			obj = nullptr;
 		}
 	}
-	pObjectList.remove(nullptr);
+	m_pObjectList.remove(nullptr);
 }
 
 void ObjectManager::DeleteAllMarked()
 {
-	for (GameObject*& obj : pObjectList)
+	for (GameObject*& obj : m_pObjectList)
 	{
 		if (obj->CanDelete())
 		{
@@ -135,7 +135,7 @@ void ObjectManager::DeleteAllMarked()
 			obj = nullptr;
 		}
 	}
-	pObjectList.remove(nullptr);
+	m_pObjectList.remove(nullptr);
 }
 
 
@@ -146,16 +146,16 @@ void ObjectManager::CheckAllCollisions()
 	std::list<GameObject*>::iterator it1;
 	std::list<GameObject*>::iterator it2;
 
-	for (it1 = pObjectList.begin(); it1 != pObjectList.end(); it1++)
+	for (it1 = m_pObjectList.begin(); it1 != m_pObjectList.end(); it1++)
 	{
 		if ((*it1)->IsCollidable())
 		{
-			if (ShowHitbox)
+			if (SHOWHITBOX)
 			{
 				DrawHitbox((*it1)->GetShape());
 			}
 				
-			for (it2 = next(it1); it2 != pObjectList.end(); it2++)
+			for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
 			{
 				if ((*it2)->IsCollidable())
 				{

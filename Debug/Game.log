@@ -1,2 +1,27 @@
-﻿  Feet.cpp
+﻿  Asteroid.cpp
+  Bullet.cpp
+  camera.cpp
+  Enemy.cpp
+  ErrorLogger.cpp
+  Explosion.cpp
+  Feet.cpp
+  gamecode.cpp
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(21,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
+  GameObject.cpp
+  gametimer.cpp
+  Gun.cpp
+  Mouse.cpp
+  mydrawengine.cpp
+  myinputs.cpp
+  mysoundengine.cpp
+  ObjectManager.cpp
+  Shapes.cpp
+  SoundFX.cpp
+  spaceship.cpp
+  vector2D.cpp
+  Generating Code...
+  Compiling...
+  Wall.cpp
+  wincode.cpp
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

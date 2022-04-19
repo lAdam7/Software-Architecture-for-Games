@@ -15,7 +15,7 @@ void Asteroid::HandleCollision(GameObject& other)
 	if (typeid(other) == typeid(Bullet))
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
-		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
+		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), m_pSoundFX);
 		DeleteObject();
 	}
 }
@@ -25,7 +25,7 @@ void Asteroid::HandleMessage(Message& msg)
 	if (msg.type == EventType::CHARACTER_DIED) // shapeship destroyed
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion");
-		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
+		pExplosion->Initialise(GetPosition(), Vector2D(0, 0), m_pSoundFX);
 		DeleteObject();
 	}
 }
@@ -35,7 +35,7 @@ void Asteroid::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX*
 	SetPosition(startingPosition);
 	SetAngle(0);
 
-	pSoundFX = pSound;
+	m_pSoundFX = pSound;
 
 	const wchar_t* images[4] = { L"rock1.bmp", L"rock2.bmp", L"rock3.bmp", L"rock4.bmp"};
 

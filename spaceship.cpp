@@ -23,13 +23,13 @@ void Spaceship::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX
 	GameObject::SetPosition(startingPosition);
 	GameObject::SetAngle(0);
 	GameObject::SetScale(0.4f);
-	shootDelay = 0.05;
+	m_shootDelay = 0.05;
 
 
-	timer = .1;
-	currentImage = 0;
+	m_timer = .1;
+	m_currentImage = 0;
 
-	pSoundFX = pSound;
+	m_pSoundFX = pSound;
 
 	GameObject::LoadImg(L"ship.bmp");
 
@@ -44,7 +44,7 @@ void Spaceship::HandleCollision(GameObject& other)
 {
 	if (typeid(other) == typeid(Asteroid))
 	{
-		pSoundFX->StopEngineSound();
+		m_pSoundFX->StopEngineSound();
 		
 		Message msg;
 		msg.type = EventType::CHARACTER_DIED;
@@ -68,20 +68,20 @@ void Spaceship::HandleMessage(Message& msg)
 void Spaceship::Update(double frameTime)
 {
 	Gun::Update((float) frameTime);
-	timer = timer - frameTime;
+	m_timer = m_timer - frameTime;
 
-	if (currentImage < IDLEIMAGES)
+	if (m_currentImage < IDLEIMAGES)
 	{
-		GameObject::LoadImg(idleImages[currentImage]);
+		GameObject::LoadImg(m_idleImages[m_currentImage]);
 	}
 
-	if (timer < 0)
+	if (m_timer < 0)
 	{
-		timer = .1;
-		currentImage = currentImage + 1;
-		if (currentImage == IDLEIMAGES - 1)
+		m_timer = .1;
+		m_currentImage = m_currentImage + 1;
+		if (m_currentImage == IDLEIMAGES - 1)
 		{
-			currentImage = 0;
+			m_currentImage = 0;
 		}
 	}
 
@@ -92,7 +92,7 @@ void Spaceship::Update(double frameTime)
 	MyDrawEngine* test = MyDrawEngine::GetInstance();
 	test->theCamera.PlaceAt(GameObject::GetPosition());
 
-	shootDelay = shootDelay - frameTime;
+	m_shootDelay = m_shootDelay - frameTime;
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
@@ -115,23 +115,23 @@ void Spaceship::Update(double frameTime)
 	
 	if ( (pInputs->KeyPressed(DIK_W)) )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, 3.0f) + velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, 3.0f) + m_velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_S)) )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -3.0f) + velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -3.0f) + m_velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_A)) )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-3.0f, 0) + velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-3.0f, 0) + m_velocity);
 	}
 	if ( (pInputs->KeyPressed(DIK_D)) )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(3.0f, 0) + velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(3.0f, 0) + m_velocity);
 	}
 	if (pInputs->KeyPressed(DIK_SPACE))
 	{
-		Gun::Fire(GameObject::GetPosition(), GameObject::GetAngle(), pSoundFX);
+		Gun::Fire(GameObject::GetPosition(), GameObject::GetAngle(), m_pSoundFX);
 		/*
 		if (shootDelay < 0)
 		{

@@ -15,10 +15,10 @@ void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 	SetAngle(0);
 	SetScale(0.25f);
 
-	timer = .1;
-	currentImage = 0;
+	m_timer = .1;
+	m_currentImage = 0;
 
-	pSoundFX = pSound;
+	m_pSoundFX = pSound;
 
 	LoadImg(L"idle_0.png");
 
@@ -26,8 +26,8 @@ void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 	CanCollide(false);
 	Activate();
 
-	mainCharacter = Game::instance.GetObjectManager().Create(L"Spaceship");
-	mainCharacter->Initialise(GetPosition(), Vector2D(0, 0), pSoundFX);
+	m_mainCharacter = Game::instance.GetObjectManager().Create(L"Spaceship");
+	m_mainCharacter->Initialise(GetPosition(), Vector2D(0, 0), m_pSoundFX);
 };
 
 void Feet::HandleCollision(GameObject& other)
@@ -45,23 +45,23 @@ void Feet::HandleMessage(Message& msg)
 
 void Feet::Update(double frameTime)
 {
-	SetPosition(mainCharacter->GetPosition());
-	SetAngle(mainCharacter->GetAngle());
+	SetPosition(m_mainCharacter->GetPosition());
+	SetAngle(m_mainCharacter->GetAngle());
 
-	timer = timer - frameTime;
+	m_timer = m_timer - frameTime;
 
-	if (currentImage < IDLEIMAGES)
+	if (m_currentImage < IDLEIMAGES)
 	{
-		LoadImg(idleImages[currentImage]);
+		LoadImg(m_idleImages[m_currentImage]);
 	}
 
-	if (timer < 0)
+	if (m_timer < 0)
 	{
-		timer = .1;
-		currentImage = currentImage + 1;
-		if (currentImage == IDLEIMAGES - 1)
+		m_timer = .1;
+		m_currentImage = m_currentImage + 1;
+		if (m_currentImage == IDLEIMAGES - 1)
 		{
-			currentImage = 0;
+			m_currentImage = 0;
 		}
 	}
 };
