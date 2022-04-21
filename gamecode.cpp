@@ -303,8 +303,8 @@ ErrorType Game::StartOfGame()
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
 
-	//GameObject* pWall = om.Create(L"Wall");
-	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
+	GameObject* pWall = om.Create(L"Wall");
+	pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
 
 

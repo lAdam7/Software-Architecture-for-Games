@@ -5,7 +5,7 @@
 
 IShape2D& Wall::GetShape()
 {
-	m_collisionShape.PlaceAt(Vector2D(0, 0), Vector2D(250, 250));
+	m_collisionShape.PlaceAt(GetPosition() + Vector2D(-100, -70), GetPosition() + Vector2D(80, 70));
 	return m_collisionShape;
 }
 
@@ -35,7 +35,23 @@ void Wall::HandleMessage(Message& msg)
 
 void Wall::Update(double frameTime)
 {
-	m_collisionShape.PlaceAt(Vector2D(30, 0), Vector2D(280, 250));
-	MyDrawEngine* engine = MyDrawEngine::GetInstance();
-	engine->FillRect(m_collisionShape , MyDrawEngine::RED, 0.0f);
-};
+	//m_collisionShape.PlaceAt(Vector2D(30, 0), Vector2D(280, 250));
+	//MyDrawEngine* engine = MyDrawEngine::GetInstance();
+	//engine->FillRect(m_collisionShape , MyDrawEngine::RED, 0.0f);
+}
+
+Vector2D Wall::GetEdge(GameObject* other)
+{
+	Vector2D edges = Vector2D(0, 0);
+
+	if (other->GetPosition().XValue < GetPosition().XValue)
+		edges.XValue--;
+	if (other->GetPosition().XValue > GetPosition().XValue)
+		edges.XValue++;
+	if (other->GetPosition().YValue > GetPosition().YValue)
+		edges.YValue++;
+	if (other->GetPosition().YValue < GetPosition().YValue)
+		edges.YValue--;
+
+	return edges;
+}

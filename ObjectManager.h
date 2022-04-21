@@ -6,7 +6,7 @@ class ObjectManager
 {		
 	private:
 		std::list<GameObject*> m_pObjectList;
-		const bool SHOWHITBOX = false;
+		const bool SHOWHITBOX = true;
 		void DrawHitbox(IShape2D& shape);
 		void AddObject(GameObject* pNewObject);
 	public:

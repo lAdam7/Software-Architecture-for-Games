@@ -21,6 +21,11 @@ class Spaceship: public GameObject, public Gun
 	
 		int m_currentImage;
 		double m_timer;
+
+		bool m_moveRight;
+		bool m_moveLeft;
+		bool m_moveTop;
+		bool m_moveBottom;
 	public:
 		void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX);
 		void Update(double frameTime);

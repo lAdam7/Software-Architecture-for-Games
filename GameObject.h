@@ -11,14 +11,14 @@ class GameObject
 	private:
 		PictureIndex image;
 		Activity m_activity;
-		Vector2D position;
+		
 		float angle;
 		float opacity;
 		float scale;
 		bool collidable;
 		bool receiveMessages;
 	protected:
-
+		Vector2D position; // TODO move private
 		void SetAngle(float angle);
 		void SetPosition(Vector2D position);
 		void SetOpacity(float opacity);

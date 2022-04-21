@@ -56,7 +56,24 @@ void Spaceship::HandleCollision(GameObject& other)
 	}
 	else if (typeid(other) == typeid(Wall))
 	{
+		Wall wall = dynamic_cast<Wall&>(other);
+		Vector2D edgeTouching = wall.GetEdge(this);
 
+		if (edgeTouching.XValue == -1)
+			//position.XValue = other.GetPosition().XValue - 138;
+			m_moveRight = true;
+		if (edgeTouching.XValue == 1)
+			//position.XValue = other.GetPosition().XValue + 138;
+			m_moveLeft = true;
+		if (edgeTouching.YValue == -1)
+			//position.YValue = other.GetPosition().YValue - 138;
+			m_moveTop = true;
+		if (edgeTouching.YValue == 1)
+			m_moveBottom = true;
+			//position.YValue = other.GetPosition().YValue + 138;
+
+			
+		
 	}
 }
 
@@ -103,7 +120,7 @@ void Spaceship::Update(double frameTime)
 
 	const float positionAmount = 4.0f;
 	const float rotationAmount = 0.03f;
-		
+	
 	if (pInputs->KeyPressed(DIK_LEFT))
 	{
 		GameObject::SetAngle(GameObject::GetAngle() - rotationAmount);
@@ -113,19 +130,19 @@ void Spaceship::Update(double frameTime)
 		GameObject::SetAngle(GameObject::GetAngle() + rotationAmount);
 	}
 	
-	if ( (pInputs->KeyPressed(DIK_W)) )
+	if ( pInputs->KeyPressed(DIK_W) && !m_moveTop )
 	{
 		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, 3.0f) + m_velocity);
 	}
-	if ( (pInputs->KeyPressed(DIK_S)) )
+	if ( pInputs->KeyPressed(DIK_S) && !m_moveBottom )
 	{
 		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -3.0f) + m_velocity);
 	}
-	if ( (pInputs->KeyPressed(DIK_A)) )
+	if ( pInputs->KeyPressed(DIK_A) && !m_moveLeft )
 	{
 		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-3.0f, 0) + m_velocity);
 	}
-	if ( (pInputs->KeyPressed(DIK_D)) )
+	if ( pInputs->KeyPressed(DIK_D) && !m_moveRight )
 	{
 		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(3.0f, 0) + m_velocity);
 	}
@@ -156,4 +173,9 @@ void Spaceship::Update(double frameTime)
 	{
 		//pSoundFX->StopEngineSound();
 	}	
+
+	m_moveRight = false;
+	m_moveLeft = false;
+	m_moveTop = false;
+	m_moveBottom = false;
 };
