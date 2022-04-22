@@ -6,7 +6,7 @@ class ObjectManager
 {		
 	private:
 		std::list<GameObject*> m_pObjectList;
-		const bool SHOWHITBOX = true;
+		const bool SHOWHITBOX = false;
 		void DrawHitbox(IShape2D& shape);
 		void AddObject(GameObject* pNewObject);
 	public:
@@ -14,7 +14,7 @@ class ObjectManager
 		void TransmitMessage(Message msg);
 
 		void UpdateAll(double frameTime);
-		void RenderAll();
+		void RenderAll(double frameTime);
 
 		void DeleteAll();
 		void DeleteAllInactive();

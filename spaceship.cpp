@@ -119,32 +119,32 @@ void Spaceship::Update(double frameTime)
 		pInputs->SampleJoystick();
 
 	const float positionAmount = 4.0f;
-	const float rotationAmount = 0.03f;
+	const float rotationAmount = 5.0f;
 	
 	if (pInputs->KeyPressed(DIK_LEFT))
 	{
-		GameObject::SetAngle(GameObject::GetAngle() - rotationAmount);
+		GameObject::SetAngle(GameObject::GetAngle() - rotationAmount * frameTime);
 	}
 	if (pInputs->KeyPressed(DIK_RIGHT))
 	{
-		GameObject::SetAngle(GameObject::GetAngle() + rotationAmount);
+		GameObject::SetAngle(GameObject::GetAngle() + rotationAmount * frameTime);
 	}
 	
 	if ( pInputs->KeyPressed(DIK_W) && !m_moveTop )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, 3.0f) + m_velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, positionAmount) + m_velocity * frameTime);
 	}
 	if ( pInputs->KeyPressed(DIK_S) && !m_moveBottom )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -3.0f) + m_velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(0, -positionAmount) + m_velocity * frameTime);
 	}
 	if ( pInputs->KeyPressed(DIK_A) && !m_moveLeft )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-3.0f, 0) + m_velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(-positionAmount, 0) + m_velocity * frameTime);
 	}
 	if ( pInputs->KeyPressed(DIK_D) && !m_moveRight )
 	{
-		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(3.0f, 0) + m_velocity);
+		GameObject::SetPosition(GameObject::GetPosition() + Vector2D(positionAmount, 0) + m_velocity * frameTime);
 	}
 	if (pInputs->KeyPressed(DIK_SPACE))
 	{

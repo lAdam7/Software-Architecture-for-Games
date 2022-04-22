@@ -19,11 +19,11 @@ class GameObject
 		bool receiveMessages;
 	protected:
 		Vector2D position; // TODO move private
-		void SetAngle(float angle);
+		
 		void SetPosition(Vector2D position);
 		void SetOpacity(float opacity);
 		void SetScale(float scale);
-		void CanCollide(bool collide);
+		
 
 		void ReceiveMessages(bool receive);
 
@@ -32,6 +32,8 @@ class GameObject
 		GameObject();
 		virtual ~GameObject();
 
+		void CanCollide(bool collide);
+		void SetAngle(float angle);
 		virtual void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX) = 0;
 		virtual IShape2D& GetShape() = 0;
 

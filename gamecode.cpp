@@ -12,7 +12,7 @@
 #include "spaceship.h"
 #include "Asteroid.h"
 
-
+#include "Wall.h"
 
 Game::Game()
 {
@@ -303,10 +303,87 @@ ErrorType Game::StartOfGame()
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
 
-	GameObject* pWall = om.Create(L"Wall");
-	pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
+	//GameObject* pWall = om.Create(L"Wall");
+	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
+	for (int a = 0; a < 20; a++)
+	{
 
+
+
+		for (int x = 0; x < 7; x++)
+		{
+			for (int y = 0; y < 7; y++)
+			{
+				GameObject* pWall = om.Create(L"Wall");
+
+				Wall& wall = dynamic_cast<Wall&>(*pWall);
+				wall.SetImageQuick(L"floor_1.png");
+
+				pWall->Initialise(Vector2D(256 * x, 256 * y), Vector2D(0, 0), pSoundFX);
+			}
+		}
+
+		for (int x = 0; x < 7; x++)
+		{
+			GameObject* pWall = om.Create(L"Wall");
+
+			Wall& wall = dynamic_cast<Wall&>(*pWall);
+			wall.CanCollide(true);
+			wall.SetImageQuick(L"wall_2.png");
+
+			pWall->Initialise(Vector2D(256 * x, 1792), Vector2D(0, 0), pSoundFX);
+		}
+
+		for (int x = 0; x < 7; x++)
+		{
+			GameObject* pWall = om.Create(L"Wall");
+
+			Wall& wall = dynamic_cast<Wall&>(*pWall);
+			wall.CanCollide(true);
+			wall.SetImageQuick(L"wall_1.png");
+
+			pWall->Initialise(Vector2D(256 * x, 2048), Vector2D(0, 0), pSoundFX);
+		}
+
+		for (int y = 0; y < 9; y++)
+		{
+			GameObject* pWall = om.Create(L"Wall");
+
+			Wall& wall = dynamic_cast<Wall&>(*pWall);
+
+			wall.CanCollide(true);
+			wall.SetAngle(3.141592653589793238f);
+			wall.SetImageQuick(L"side_1.png");
+			pWall->Initialise(Vector2D(-256, 256 * y), Vector2D(0, 0), pSoundFX);
+		}
+
+		for (int y = 0; y < 9; y++)
+		{
+			GameObject* pWall = om.Create(L"Wall");
+
+			Wall& wall = dynamic_cast<Wall&>(*pWall);
+
+			wall.CanCollide(true);
+			wall.SetImageQuick(L"side_1.png");
+			pWall->Initialise(Vector2D(1792, 256 * y), Vector2D(0, 0), pSoundFX);
+		}
+
+		for (int x = 0; x < 7; x++)
+		{
+			GameObject* pWall = om.Create(L"Wall");
+
+			Wall& wall = dynamic_cast<Wall&>(*pWall);
+
+			wall.CanCollide(true);
+			wall.SetAngle(3.141592653589793238f * .5);
+			wall.SetImageQuick(L"side_1.png");
+			pWall->Initialise(Vector2D(256 * x, -258), Vector2D(0, 0), pSoundFX);
+		}
+
+
+
+	}
 
 	GameObject* pFeet = om.Create(L"Feet");
 	pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
@@ -366,11 +443,11 @@ ErrorType Game::Update()
 
 	//MyDrawEngine::GetInstance()->WriteInt(100, 50, pInputs->GetMouseDX(), MyDrawEngine::GREEN);
 	
-	om.CheckAllCollisions();
-	om.DeleteAllMarked();
+	//om.CheckAllCollisions();
+	//om.DeleteAllMarked();
 
-	om.UpdateAll(gt.mdFrameTime);
-	om.RenderAll();
+	//om.UpdateAll(gt.mdFrameTime);
+	om.RenderAll(gt.mdFrameTime);
 
    // *********************************************************************
    // *********************************************************************

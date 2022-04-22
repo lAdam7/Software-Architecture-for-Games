@@ -5,23 +5,27 @@
 
 IShape2D& Wall::GetShape()
 {
-	m_collisionShape.PlaceAt(GetPosition() + Vector2D(-100, -70), GetPosition() + Vector2D(80, 70));
+	m_collisionShape.PlaceAt(GetPosition() + Vector2D(-128, -128), GetPosition() + Vector2D(128, 128));
 	return m_collisionShape;
 }
 
 void Wall::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	SetPosition(startingPosition);
-	SetAngle(0);
-	SetScale(4.0f);
+	//SetAngle(0);
 
 	m_pSoundFX = pSound;
 
-	LoadImg(L"crate1.bmp");
+	//LoadImg(filename);
 
-	CanCollide(true);
+	//CanCollide(true);
 	Activate();
 };
+
+void Wall::SetImageQuick(const wchar_t* filename)
+{
+	LoadImg(filename);
+}
 
 void Wall::HandleCollision(GameObject& other)
 {

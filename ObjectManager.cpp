@@ -91,11 +91,12 @@ void ObjectManager::UpdateAll(double frameTime)
 	}
 }
 
-void ObjectManager::RenderAll()
+void ObjectManager::RenderAll(double frameTime)
 {
 	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
 	for (auto const& i : m_pObjectList) {
 		i->Render();
+		i->Update(frameTime);
 	}
 }
 
