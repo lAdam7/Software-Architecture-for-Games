@@ -24,6 +24,8 @@
     <ClInclude Include="BulletPhysicsComponent.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="EnemyGameObject.h" />
+    <ClInclude Include="EnemyPhysicsComponent.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
     <ClInclude Include="Gun.h" />
@@ -49,6 +51,8 @@
     <ClCompile Include="BulletPhysicsComponent.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="EnemyGameObject.cpp" />
+    <ClCompile Include="EnemyPhysicsComponent.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="InputComponent.cpp" />

@@ -14,11 +14,8 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::Update(GameObject* pObject)
 {
-	if (pObject->IsActive())
-	{
-		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-		pDE->DrawAt(pObject->GetPosition(), image, 1.0f, pObject->GetAngle(), pObject->GetOpacity());
-	}
+	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
+	pDE->DrawAt(pObject->GetPosition(), image, 1.0f, pObject->GetAngle(), pObject->GetOpacity());
 };
 
 void RenderComponent::SetCurrentImage(int image)

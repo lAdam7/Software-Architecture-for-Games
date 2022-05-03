@@ -1,6 +1,8 @@
 #include "CollisionComponent.h"
 #include "GameObject.h"
 #include "gamecode.h"
+#include "EnemyGameObject.h"
+#include "PlayerLegsInputComponent.h"
 
 CollisionComponent::CollisionComponent(Circle2D shape, float rad)
 {
@@ -17,36 +19,6 @@ CollisionComponent::CollisionComponent(Rectangle2D shape, float wid, float hei)
 
 CollisionComponent::~CollisionComponent()
 {
-	/*
-	* std::list<GameObject*>::iterator it1;
-	std::list<GameObject*>::iterator it2;
-
-	for (it1 = m_pObjectList.begin(); it1 != m_pObjectList.end(); it1++)
-	{
-		if ((*it1)->IsCollidable())
-		{
-			if (SHOWHITBOX)
-			{
-				DrawHitbox((*it1)->GetShape());
-			}
-				
-			for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
-			{
-				if ((*it2)->IsCollidable())
-				{
-					if ((*it1) && (*it2) &&
-						(*it1)->IsActive() && (*it2)->IsActive() &&
-						(*it1)->GetShape().Intersects((*it2)->GetShape()))
-					{
-						(*it1)->HandleCollision(**it2);
-						(*it2)->HandleCollision(**it1);
-					}
-				}
-
-			}
-		}
-	}
-	*/
 };
 
 IShape2D& CollisionComponent::GetShape(GameObject* pObject)
@@ -67,9 +39,26 @@ IShape2D& CollisionComponent::GetShape(GameObject* pObject)
 
 void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pCollidedObject)
 {
-	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::WALL)
+
+	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::ENEMY)
 	{
+		PlayerLegsInputComponent* pTest = dynamic_cast<PlayerLegsInputComponent*>(pObject->GetInputComponent());
+		pTest->mainCharacter->Deactivate();
 		pObject->Deactivate();
+	}
+
+	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::BULLET)
+	{
+		GameObject* pEnemyObject = Game::instance.GetObjectManager().Create(L"Enemy1");
+		EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pEnemyObject);
+		EnemyGameObject* pTestB = dynamic_cast<EnemyGameObject*>(pObject);
+		pTest->pTarget = pTestB->pTarget;
+
+		pObject->DeleteObject();
+	}
+	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::WALL || pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::ENEMY)
+	{
+		pObject->DeleteObject();
 	}
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::WALL)

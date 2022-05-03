@@ -19,8 +19,13 @@ c:\users\adam\source\repos\game\game\debug\errorlogger.obj
 c:\users\adam\source\repos\game\game\debug\collisioncomponent.obj
 c:\users\adam\source\repos\game\game\debug\camera.obj
 c:\users\adam\source\repos\game\game\debug\animatedrendercomponent.obj
-c:\users\adam\source\repos\game\game\debug\game.ilk
+c:\users\adam\source\repos\game\game\debug\playermaininputcomponent.obj
+c:\users\adam\source\repos\game\game\debug\gun.obj
+c:\users\adam\source\repos\game\game\debug\bulletphysicscomponent.obj
+c:\users\adam\source\repos\game\game\debug\enemyphysicscomponent.obj
+c:\users\adam\source\repos\game\game\debug\enemygameobject.obj
 c:\users\adam\source\repos\game\debug\game.exe
+c:\users\adam\source\repos\game\game\debug\game.ilk
 c:\users\adam\source\repos\game\debug\game.pdb
 c:\users\adam\source\repos\game\game\debug\game.tlog\cl.command.1.tlog
 c:\users\adam\source\repos\game\game\debug\game.tlog\cl.read.1.tlog

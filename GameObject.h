@@ -9,11 +9,13 @@
 
 struct Message;
 enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
-enum class Type { IGNOREOBJ, PLAYER, WALL, BULLET };
+enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET };
 
 class GameObject
 {
 	private:
+		SoundFX* pSoundFX;
+
 		InputComponent* pInputComponent;
 		PhysicsComponent* pPhysicsComponent;
 		RenderComponent* pRenderComponent;
@@ -32,13 +34,12 @@ class GameObject
 	protected:
 		void ReceiveMessages(bool receive);
 	public:
-		GameObject(InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type);
+		GameObject(SoundFX* pSoundFX, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type);
 		virtual ~GameObject();
 
 		Type getType();
 
 		bool IsCollidable() const;
-		void CanCollide(bool collide);
 
 		float GetAngle();
 		void SetAngle(float angle);
@@ -61,6 +62,8 @@ class GameObject
 		void DeleteObject();	
 
 		void Update(double frameTime);
+
+		SoundFX* GetSoundFX();
 
 		InputComponent* GetInputComponent();
 		PhysicsComponent* GetPhysicsComponent();

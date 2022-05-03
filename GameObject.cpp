@@ -1,8 +1,11 @@
 #include "GameObject.h"
 #include "AnimatedRenderComponent.h"
+#include "ObjectManager.h"
 
-GameObject::GameObject(InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type)
+GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type)
 {
+	pSoundFX = pSound;
+
 	pInputComponent = pInput;
 	pPhysicsComponent = pPhysics;
 	pRenderComponent = pRender;
@@ -22,14 +25,17 @@ Type GameObject::getType()
 
 void GameObject::Update(double frameTime)
 {
-	if (pPhysicsComponent)
-		pPhysicsComponent->Update(this);
-	if (pRenderComponent)
-		pRenderComponent->Update(this);
-	if (pInputComponent)
-		pInputComponent->Update(this, frameTime);
-	if (pCollisionComponent)
-		pCollisionComponent->Update(this);
+	if (IsActive())
+	{
+		if (pPhysicsComponent)
+			pPhysicsComponent->Update(this);
+		if (pRenderComponent)
+			pRenderComponent->Update(this);
+		if (pInputComponent)
+			pInputComponent->Update(this, frameTime);
+		if (pCollisionComponent)
+			pCollisionComponent->Update(this);
+	}
 };
 
 bool GameObject::IsActive() const
@@ -39,12 +45,7 @@ bool GameObject::IsActive() const
 
 bool GameObject::IsCollidable() const
 {
-	return collidable;
-}
-
-void GameObject::CanCollide(bool collide)
-{
-	collidable = collide;
+	return pCollisionComponent != nullptr;
 }
 
 bool GameObject::CanDelete() const
@@ -130,6 +131,11 @@ bool GameObject::CanReceiveMessages() const
 void GameObject::ReceiveMessages(bool receive)
 {
 	receiveMessages = receive;
+}
+
+SoundFX* GameObject::GetSoundFX()
+{
+	return pSoundFX;
 }
 
 InputComponent* GameObject::GetInputComponent()

@@ -10,6 +10,9 @@
 #include "CollisionComponent.h"
 #include "PlayerMainInputComponent.h"
 #include "BulletPhysicsComponent.h"
+
+#include "EnemyGameObject.h"
+#include "EnemyPhysicsComponent.h"
 //#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
@@ -36,38 +39,25 @@ GameObject* ObjectManager::Create(std::wstring name)
 	{
 		BulletPhysicsComponent* pBulletPhysics = new BulletPhysicsComponent();
 		RenderComponent* pBulletRender = new RenderComponent(L"bullet.bmp");
-		Circle2D circle;
 		CollisionComponent* pBulletCollision = new CollisionComponent(circle, 10.0f);
 
 		pNewObject = new GameObject(
+			pSoundFX,
 			nullptr,
 			pBulletPhysics,
 			pBulletRender,
 			pBulletCollision,
 			Type::BULLET
 		);
-		pNewObject->CanCollide(true);
-	}
-	else if (name == L"Spaceship")
-	{
-		//pNewObject = new Spaceship();
-	}
-	else if (name == L"Asteroid")
-	{
-		//pNewObject = new Asteroid();
-	}
-	else if (name == L"Explosion")
-	{
-		//pNewObject = new Explosion();
 	}
 	else if (name == L"Wall")
 	{
 		RenderComponent* pWallRender = new RenderComponent(L"concrete.png");
 
-		Rectangle2D rectangle;
 		CollisionComponent* pWallCollision = new CollisionComponent(rectangle, 260.0f, 260.0f);
 
 		pNewObject = new GameObject(
+			pSoundFX,
 			nullptr,
 			nullptr,
 			pWallRender,
@@ -75,7 +65,6 @@ GameObject* ObjectManager::Create(std::wstring name)
 			Type::WALL
 		);
 		pNewObject->SetPosition(Vector2D(300, 100));
-		pNewObject->CanCollide(true);
 		pNewObject->Activate();
 
 	}
@@ -87,17 +76,16 @@ GameObject* ObjectManager::Create(std::wstring name)
 		//pPlayerLegsRender->AddImage(L"survivorRun_0.png");
 
 		PlayerLegsInputComponent* pPlayerLegsInput = new PlayerLegsInputComponent(pPlayerLegsRender);
-		Circle2D circle;
 		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 50.0f);
 
 		pNewObject = new GameObject(
+			pSoundFX,
 			pPlayerLegsInput,
 			nullptr,
 			pPlayerLegsRender,
 			pCollisionComponent,
 			Type::PLAYER
 		);
-		pNewObject->CanCollide(true);
 	}
 	else if (name == L"PlayerMain")
 	{
@@ -105,6 +93,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 		PlayerMainInputComponent* pPlayerMainInput = new PlayerMainInputComponent(pPlayerMainRender);
 
 		pNewObject = new GameObject(
+			pSoundFX,
 			pPlayerMainInput,
 			nullptr,
 			pPlayerMainRender,
@@ -112,7 +101,23 @@ GameObject* ObjectManager::Create(std::wstring name)
 			Type::IGNOREOBJ
 		);
 		pNewObject->Activate();
-		pNewObject->CanCollide(false);
+	}
+	else if (name == L"Enemy1")
+	{
+		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
+		EnemyPhysicsComponent* pEnemyPhysics = new EnemyPhysicsComponent(pEnemyRender);
+		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 50.0f);
+
+		pNewObject = new EnemyGameObject(
+			pSoundFX,
+			nullptr,
+			pEnemyPhysics,
+			pEnemyRender,
+			pCollisionComponent,
+			Type::ENEMY
+		);
+		pNewObject->SetPosition(Vector2D(600, 50));
+		pNewObject->Activate();
 	}
 	else
 	{
@@ -121,9 +126,13 @@ GameObject* ObjectManager::Create(std::wstring name)
 	}
 	if (pNewObject != nullptr)
 		m_pObjectList.push_back(pNewObject);
-	//AddObject(pNewObject);
 
 	return pNewObject;
+}
+
+void ObjectManager::SetSoundFX(SoundFX* pSound)
+{
+	pSoundFX = pSound;
 }
 
 void ObjectManager::AddObject(GameObject* pNewObject)
@@ -150,77 +159,40 @@ void ObjectManager::TransmitMessage(Message msg)
 
 void ObjectManager::UpdateAll(double frameTime)
 {
-	/*
+	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
+
 	std::list<GameObject*>::iterator it1;
 	std::list<GameObject*>::iterator it2;
 
 	for (it1 = m_pObjectList.begin(); it1 != m_pObjectList.end(); it1++)
 	{
-		(*it1)->Update(frameTime);
-		if ((*it1)->IsCollidable())
+		if ((*it1))
 		{
-			if (SHOWHITBOX)
+			(*it1)->Update(frameTime);
+			if ((*it1)->IsCollidable())
 			{
-				DrawHitbox((*it1)->GetShape((*it1)->print());
-			}
-
-			for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
-			{
-				if ((*it2)->IsCollidable())
+				if (SHOWHITBOX)
 				{
-					if ((*it1) && (*it2) &&
-						(*it1)->IsActive() && (*it2)->IsActive() &&
-						(*it1)->GetShape().Intersects((*it2)->GetShape()))
-					{
-						//(*it1)->HandleCollision(**it2);
-						//(*it2)->HandleCollision(**it1);
-					}
+					DrawHitbox((*it1)->GetCollisionComponent()->GetShape(*it1));
 				}
-
-			}
-		}
-	}*/
-
-	/*
-	* for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
-			{
-				if ((*it2)->IsCollidable())
+				for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
 				{
-					if ((*it1) && (*it2) &&
-						(*it1)->IsActive() && (*it2)->IsActive() &&
-						(*it1)->GetShape().Intersects((*it2)->GetShape()))
+					if ((*it2) && (*it2)->IsCollidable())
 					{
-						(*it1)->HandleCollision(**it2);
-						(*it2)->HandleCollision(**it1);
-					}
-				}
+						if ((*it1) && (*it2) &&
+							(*it1)->IsActive() && (*it2)->IsActive() &&
+							(*it1)->GetCollisionComponent()->GetShape((*it1)).Intersects((*it2)->GetCollisionComponent()->GetShape((*it2))))
+						{
+							MyDrawEngine* mDE = MyDrawEngine::GetInstance();
+							mDE->WriteText(100, 50, L"Collision detected!", MyDrawEngine::CYAN);
 
-			}
-	*/
-
-	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
-	for (auto const& a : m_pObjectList) {
-		a->Update(frameTime);
-		if (a->IsCollidable())
-		{
-			if (SHOWHITBOX)
-			{
-				DrawHitbox(a->GetCollisionComponent()->GetShape(a));
-			}
-			for (auto const& b : m_pObjectList)
-			{
-				if (b->IsCollidable())
-				{
-					if (a != b && a->IsActive() && b->IsActive() && a->GetCollisionComponent()->GetShape(a).Intersects(b->GetCollisionComponent()->GetShape(b)))
-					{
-						MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-						mDE->WriteText(100, 50, L"Collision detected!", MyDrawEngine::CYAN);
-
-						a->GetCollisionComponent()->HandleCollision(a, b);
-						b->GetCollisionComponent()->HandleCollision(b, a);
+							(*it1)->GetCollisionComponent()->HandleCollision((*it1), (*it2));
+							(*it2)->GetCollisionComponent()->HandleCollision((*it2), (*it1));
+						}
 					}
 				}
 			}
+			
 		}
 	}
 }

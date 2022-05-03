@@ -31,7 +31,7 @@ PlayerMainInputComponent::PlayerMainInputComponent(RenderComponent* pRender)
 
 	animate->SetCurrentAnimation(rifle);
 
-	gun.SetBulletDelay(0.1f);
+	gun.SetBulletDelay(0.5f);
 	gun.SetClipSize(12);
 	gun.SetReloadTime(3.0f);
 }

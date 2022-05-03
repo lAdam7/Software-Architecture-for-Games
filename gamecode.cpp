@@ -9,6 +9,7 @@
 #include "errorlogger.h"
 #include <math.h>
 #include "shapes.h"
+#include "EnemyGameObject.h"
 //#include "spaceship.h"
 //#include "Asteroid.h"
 
@@ -302,6 +303,7 @@ ErrorType Game::StartOfGame()
 	
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
+	om.SetSoundFX(pSoundFX);
 
 	//GameObject* pWall = om.Create(L"Wall");
 	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
@@ -386,6 +388,12 @@ ErrorType Game::StartOfGame()
 	GameObject* pFeet = om.Create(L"PlayerLegs");
 
 	GameObject* pWall = om.Create(L"Wall");
+
+
+	GameObject* pEnemy = om.Create(L"Enemy1");
+	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
+	pEnemyObject->pTarget = pFeet;
+
 	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
 	//GameObject* pMouse = om.Create(L"Mouse");
@@ -440,13 +448,16 @@ ErrorType Game::Update()
 
 	//MyInputs* pInputs = MyInputs::GetInstance();
 	//pInputs->SampleMouse();
-
-	//MyDrawEngine::GetInstance()->WriteInt(100, 50, pInputs->GetMouseDX(), MyDrawEngine::GREEN);
 	
 	//om.CheckAllCollisions();
 	//om.DeleteAllMarked();
 
 	om.UpdateAll(gt.mdFrameTime);
+
+	om.DeleteAllMarked();
+	
+	//DeleteAllMarked
+	// 
 	//om.RenderAll(gt.mdFrameTime);
 
    // *********************************************************************
