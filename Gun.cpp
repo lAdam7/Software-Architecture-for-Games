@@ -3,7 +3,9 @@
 #include "myinputs.h"
 #include "mydrawengine.h"
 
-void Gun::Fire(Vector2D pos, float rotation, SoundFX* pSoundFX)
+#include "BulletPhysicsComponent.h"
+
+void Gun::Fire(Vector2D pos, float rotation)
 {
 	if (CanShoot() && GetBulletDelayCounter() < 0)
 	{
@@ -17,7 +19,10 @@ void Gun::Fire(Vector2D pos, float rotation, SoundFX* pSoundFX)
 		Vector2D startingAngle;
 		startingAngle.setBearing(rotation + 0.55f, 50.0f);
 
-		pBullet->Initialise(pos + startingAngle, velocity, pSoundFX);
+		pBullet->SetPosition(pos + startingAngle);
+		
+		BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
+		pBulletCreated->velocity = velocity;
 	}
 }
 

@@ -9,10 +9,10 @@
 #include "errorlogger.h"
 #include <math.h>
 #include "shapes.h"
-#include "spaceship.h"
-#include "Asteroid.h"
+//#include "spaceship.h"
+//#include "Asteroid.h"
 
-#include "Wall.h"
+//#include "Wall.h"
 
 Game::Game()
 {
@@ -306,11 +306,9 @@ ErrorType Game::StartOfGame()
 	//GameObject* pWall = om.Create(L"Wall");
 	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
+	/*
 	for (int a = 0; a < 20; a++)
 	{
-
-
-
 		for (int x = 0; x < 7; x++)
 		{
 			for (int y = 0; y < 7; y++)
@@ -383,23 +381,25 @@ ErrorType Game::StartOfGame()
 
 
 
-	}
+	}*/
 
-	GameObject* pFeet = om.Create(L"Feet");
-	pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
+	GameObject* pFeet = om.Create(L"PlayerLegs");
 
-	GameObject* pMouse = om.Create(L"Mouse");
-	pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
+	GameObject* pWall = om.Create(L"Wall");
+	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
+
+	//GameObject* pMouse = om.Create(L"Mouse");
+	//pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
 
 	//pMouse = new Mouse();
 	//pMouse->StartUp();
 	
 	for (int i = 0; i < 6; i++)
 	{
-		GameObject* pAsteroid = om.Create(L"Asteroid");
-		int xPos = (rand() % (900 - -900 + 1) + -900);
-		int yPos = (rand() % (900 - -900 + 1) + -900);
-		pAsteroid->Initialise(Vector2D((float) xPos, (float) yPos), Vector2D(0, 0), pSoundFX);
+		//GameObject* pAsteroid = om.Create(L"Asteroid");
+		//int xPos = (rand() % (900 - -900 + 1) + -900);
+		//int yPos = (rand() % (900 - -900 + 1) + -900);
+		//pAsteroid->Initialise(Vector2D((float) xPos, (float) yPos), Vector2D(0, 0), pSoundFX);
 	}
 	
 
@@ -446,8 +446,8 @@ ErrorType Game::Update()
 	//om.CheckAllCollisions();
 	//om.DeleteAllMarked();
 
-	//om.UpdateAll(gt.mdFrameTime);
-	om.RenderAll(gt.mdFrameTime);
+	om.UpdateAll(gt.mdFrameTime);
+	//om.RenderAll(gt.mdFrameTime);
 
    // *********************************************************************
    // *********************************************************************

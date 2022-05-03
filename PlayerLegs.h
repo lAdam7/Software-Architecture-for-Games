@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class Feet : public GameObject
+class PlayerLegs : public GameObject
 {
 private:
 	Circle2D m_collisionShape;

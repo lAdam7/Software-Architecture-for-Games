@@ -1,6 +1,5 @@
 #pragma once
 #include "vector2D.h"
-#include "SoundFX.h"
 
 class Gun
 {
@@ -41,5 +40,5 @@ public:
 
 	void Update(float frameTime);
 
-	virtual void Fire(Vector2D position, float angle, SoundFX* pSound);
+	virtual void Fire(Vector2D position, float angle);
 };

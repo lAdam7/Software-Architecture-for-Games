@@ -1,15 +1,15 @@
 #include "gamecode.h"
 #include "myinputs.h"
 
-#include "Feet.h"
+#include "PlayerLegs.h"
 
-IShape2D& Feet::GetShape()
+IShape2D& PlayerLegs::GetShape()
 {
 	m_collisionShape.PlaceAt(GetPosition(), 32);
 	return m_collisionShape;
 }
 
-void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
+void PlayerLegs::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
 {
 	SetPosition(startingPosition);
 	SetAngle(0);
@@ -26,16 +26,16 @@ void Feet::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSo
 	CanCollide(false);
 	Activate();
 
-	m_mainCharacter = Game::instance.GetObjectManager().Create(L"Spaceship");
-	m_mainCharacter->Initialise(GetPosition(), Vector2D(0, 0), m_pSoundFX);
+	//m_mainCharacter = Game::instance.GetObjectManager().Create(L"Spaceship");
+	//m_mainCharacter->Initialise(GetPosition(), Vector2D(0, 0), m_pSoundFX);
 };
 
-void Feet::HandleCollision(GameObject& other)
+void PlayerLegs::HandleCollision(GameObject& other)
 {
 	
 }
 
-void Feet::HandleMessage(Message& msg)
+void PlayerLegs::HandleMessage(Message& msg)
 {
 	if (msg.type == EventType::CHARACTER_DIED) // shapeship destroyed
 	{
@@ -43,7 +43,7 @@ void Feet::HandleMessage(Message& msg)
 	}
 }
 
-void Feet::Update(double frameTime)
+void PlayerLegs::Update(double frameTime)
 {
 	SetPosition(m_mainCharacter->GetPosition());
 	SetAngle(m_mainCharacter->GetAngle());

@@ -1,9 +1,13 @@
 #include "GameObject.h"
+#include "AnimatedRenderComponent.h"
 
-GameObject::GameObject()
+GameObject::GameObject(InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type)
 {
-	scale = 1;
-	receiveMessages = false;
+	pInputComponent = pInput;
+	pPhysicsComponent = pPhysics;
+	pRenderComponent = pRender;
+	pCollisionComponent = pCollision;
+	m_type = type;
 }
 
 GameObject::~GameObject()
@@ -11,19 +15,21 @@ GameObject::~GameObject()
 
 }
 
-void GameObject::LoadImg(const wchar_t* filename)
+Type GameObject::getType()
 {
-	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	image = pDE->LoadPicture(filename);
-};
+	return m_type;
+}
 
-void GameObject::Render()
+void GameObject::Update(double frameTime)
 {
-	if (IsActive())
-	{
-		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-		pDE->DrawAt(position, image, scale, angle, opacity);
-	}
+	if (pPhysicsComponent)
+		pPhysicsComponent->Update(this);
+	if (pRenderComponent)
+		pRenderComponent->Update(this);
+	if (pInputComponent)
+		pInputComponent->Update(this, frameTime);
+	if (pCollisionComponent)
+		pCollisionComponent->Update(this);
 };
 
 bool GameObject::IsActive() const
@@ -58,6 +64,21 @@ void GameObject::Deactivate()
 
 void GameObject::DeleteObject()
 {
+	if (typeid(pRenderComponent) == typeid(AnimatedRenderComponent))
+	{
+		AnimatedRenderComponent* animatedRender = dynamic_cast<AnimatedRenderComponent*>(pRenderComponent);
+		animatedRender->DeleteObject();
+	}
+	
+	delete pInputComponent;
+	pInputComponent = nullptr;
+	delete pPhysicsComponent;
+	pPhysicsComponent = nullptr;
+	delete pRenderComponent;
+	pRenderComponent = nullptr;
+	delete pCollisionComponent;
+	pCollisionComponent = nullptr;
+
 	m_activity = Activity::CAN_DELETE;
 }
 
@@ -110,3 +131,23 @@ void GameObject::ReceiveMessages(bool receive)
 {
 	receiveMessages = receive;
 }
+
+InputComponent* GameObject::GetInputComponent()
+{
+	return pInputComponent;
+};
+
+PhysicsComponent* GameObject::GetPhysicsComponent()
+{
+	return pPhysicsComponent;
+};
+
+RenderComponent* GameObject::GetRenderComponent()
+{
+	return pRenderComponent;
+};
+
+CollisionComponent* GameObject::GetCollisionComponent()
+{
+	return pCollisionComponent;
+};

@@ -1,61 +1,69 @@
 #pragma once
+#include "InputComponent.h"
+#include "PhysicsComponent.h"
+#include "RenderComponent.h"
+#include "CollisionComponent.h"
 #include "mydrawengine.h"
 #include "SoundFX.h"
 #include "Message.h"
 
 struct Message;
 enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
+enum class Type { IGNOREOBJ, PLAYER, WALL, BULLET };
 
 class GameObject
 {
 	private:
-		PictureIndex image;
+		InputComponent* pInputComponent;
+		PhysicsComponent* pPhysicsComponent;
+		RenderComponent* pRenderComponent;
+		CollisionComponent* pCollisionComponent;
+		Type m_type;
+
 		Activity m_activity;
 		
+		Vector2D position;
 		float angle;
 		float opacity;
 		float scale;
+
 		bool collidable;
 		bool receiveMessages;
 	protected:
-		Vector2D position; // TODO move private
-		
-		void SetPosition(Vector2D position);
-		void SetOpacity(float opacity);
-		void SetScale(float scale);
-		
-
 		void ReceiveMessages(bool receive);
-
-		void LoadImg(const wchar_t* filename);
 	public:
-		GameObject();
+		GameObject(InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type);
 		virtual ~GameObject();
 
+		Type getType();
+
+		bool IsCollidable() const;
 		void CanCollide(bool collide);
+
+		float GetAngle();
 		void SetAngle(float angle);
-		virtual void Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSoundFX) = 0;
-		virtual IShape2D& GetShape() = 0;
 
-		virtual void HandleCollision(GameObject& other) = 0;
+		float GetScale();
+		void SetScale(float scale);
 
-		virtual void HandleMessage(Message& msg) = 0;
+		float GetOpacity();
+		void SetOpacity(float opacity);
 
-		void Render();
-		virtual void Update(double frameTime) = 0;
+		Vector2D GetPosition();
+		void SetPosition(Vector2D position);
+
+		bool CanReceiveMessages() const;
 
 		bool IsActive() const;
 		bool CanDelete() const;
 		void Activate();
 		void Deactivate();
-		void DeleteObject();
+		void DeleteObject();	
 
-		Vector2D GetPosition();
-		float GetAngle();
-		float GetOpacity();
-		float GetScale();
+		void Update(double frameTime);
 
-		bool IsCollidable() const;
-
-		bool CanReceiveMessages() const;
+		InputComponent* GetInputComponent();
+		PhysicsComponent* GetPhysicsComponent();
+		RenderComponent* GetRenderComponent();
+		CollisionComponent* GetCollisionComponent();
 };

@@ -1,20 +1,2 @@
-﻿  Asteroid.cpp
-  Feet.cpp
-  Gun.cpp
-  ObjectManager.cpp
-  Wall.cpp
-  gamecode.cpp
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(21,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(323,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(323,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(335,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(346,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(358,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(369,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(381,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  spaceship.cpp
-C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(126,47): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\spaceship.cpp(130,47): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  wincode.cpp
-  Generating Code...
+﻿  CollisionComponent.cpp
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe
