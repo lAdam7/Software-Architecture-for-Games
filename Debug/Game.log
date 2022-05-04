@@ -1,3 +1,2 @@
-﻿  PlayerLegsInputComponent.cpp
-C:\Users\Adam\source\repos\Game\Game\PlayerLegsInputComponent.cpp(110,25): warning C4305: 'argument': truncation from 'double' to 'float'
+﻿  EnemyPhysicsComponent.cpp
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

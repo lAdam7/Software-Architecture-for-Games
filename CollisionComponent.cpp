@@ -55,7 +55,6 @@ void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pColli
 		float contactY = pObject->GetPosition().YValue + ny * touchDistFromB1;
 
 		pObject->SetPosition(Vector2D(contactX - nx * radius, contactY - ny * radius));
-		//pCollidedObject->SetPosition(Vector2D(contactX + nx * 50.0f, contactY + ny * 50.0f));
 	}
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::ENEMY)

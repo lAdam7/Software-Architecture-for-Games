@@ -35,8 +35,8 @@ EnemyPhysicsComponent::EnemyPhysicsComponent(RenderComponent* pRender)
 void EnemyPhysicsComponent::Update(GameObject* pObject)
 {
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pObject);
-	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-	mDE->DrawLine(pEnemyObject->GetPosition(), pEnemyObject->pTarget->GetPosition(), MyDrawEngine::WHITE);
+	//MyDrawEngine* mDE = MyDrawEngine::GetInstance();
+	//mDE->DrawLine(pEnemyObject->GetPosition(), pEnemyObject->pTarget->GetPosition(), MyDrawEngine::WHITE);
 
 	float step = 1.0f;
 	
