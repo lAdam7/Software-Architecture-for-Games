@@ -3,6 +3,7 @@
 #include "gamecode.h"
 #include "EnemyGameObject.h"
 #include "PlayerLegsInputComponent.h"
+#include <corecrt_math_defines.h>
 
 CollisionComponent::CollisionComponent(Circle2D shape, float rad)
 {
@@ -39,6 +40,23 @@ IShape2D& CollisionComponent::GetShape(GameObject* pObject)
 
 void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pCollidedObject)
 {
+	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::ENEMY || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::SHIELD)
+	{
+		float dx = pCollidedObject->GetPosition().XValue - pObject->GetPosition().XValue;
+		float dy = pCollidedObject->GetPosition().YValue - pObject->GetPosition().YValue;
+
+		float dist = sqrt(dx * dx + dy * dy);
+
+		float nx = dx / dist;
+		float ny = dy / dist;
+
+		float touchDistFromB1 = (dist * (radius / (radius + pCollidedObject->GetCollisionComponent()->radius)));
+		float contactX = pObject->GetPosition().XValue + nx * touchDistFromB1;
+		float contactY = pObject->GetPosition().YValue + ny * touchDistFromB1;
+
+		pObject->SetPosition(Vector2D(contactX - nx * radius, contactY - ny * radius));
+		//pCollidedObject->SetPosition(Vector2D(contactX + nx * 50.0f, contactY + ny * 50.0f));
+	}
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::ENEMY)
 	{
@@ -61,7 +79,7 @@ void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pColli
 		pObject->DeleteObject();
 	}
 
-	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::WALL)
+	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::WALL || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::WALL)
 	{	
 		Vector2D newPos = pObject->GetPosition();
 		// Left

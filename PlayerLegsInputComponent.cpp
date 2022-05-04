@@ -78,6 +78,21 @@ void PlayerLegsInputComponent::Update(GameObject* pObject, float frameTime)
 		current = CharState::WALKING;
 		pObject->SetPosition(pObject->GetPosition() + Vector2D(positionAmount, 0));
 	}
+	if (pInputs->KeyPressed(DIK_F) && shieldCounter > 0.3f)
+	{
+		shieldCounter = 0.0f;
+		
+		if (shield != nullptr)
+		{
+			shield->DeleteObject();
+			shield = nullptr;
+		}
+		else
+		{
+			shield = Game::instance.GetObjectManager().Create(L"Shield");
+		}
+	}
+	shieldCounter += frameTime;
 
 	AnimatedRenderComponent* animate = dynamic_cast<AnimatedRenderComponent*>(pObject->GetRenderComponent());
 	if (current != m_state) {
@@ -97,4 +112,9 @@ void PlayerLegsInputComponent::Update(GameObject* pObject, float frameTime)
 	mainCharacter->SetPosition(pObject->GetPosition());
 	mainCharacter->SetAngle(pObject->GetAngle());
 	mainCharacter->GetRenderComponent()->Update(pObject);
+
+	if (shield)
+		shield->SetPosition(pObject->GetPosition());
+
+	MyDrawEngine::GetInstance()->theCamera.PlaceAt(pObject->GetPosition());
 };

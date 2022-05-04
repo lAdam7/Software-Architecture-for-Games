@@ -394,6 +394,13 @@ ErrorType Game::StartOfGame()
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
 	pEnemyObject->pTarget = pFeet;
 
+	
+	GameObject* pEnemyB = om.Create(L"Enemy1");
+	EnemyGameObject* pEnemyObjectB = dynamic_cast<EnemyGameObject*>(pEnemyB);
+	pEnemyObjectB->pTarget = pFeet;
+	pEnemyB->SetPosition(pEnemy->GetPosition() + Vector2D(150, 0));
+	
+
 	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
 	//GameObject* pMouse = om.Create(L"Mouse");
@@ -454,11 +461,13 @@ ErrorType Game::Update()
 
 	om.UpdateAll(gt.mdFrameTime);
 
-	om.DeleteAllMarked();
-	
-	//DeleteAllMarked
-	// 
-	//om.RenderAll(gt.mdFrameTime);
+	if (timer > 1000)
+	{
+		timer = 0;
+		om.DeleteAllMarked();
+	}
+
+	timer++;
 
    // *********************************************************************
    // *********************************************************************

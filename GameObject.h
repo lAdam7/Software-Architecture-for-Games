@@ -9,7 +9,7 @@
 
 struct Message;
 enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
-enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET };
+enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET, SHIELD };
 
 class GameObject
 {

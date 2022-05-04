@@ -52,6 +52,7 @@ private:
 
 	GameTimer gt;
 
+	int timer;
 
 public:
 	static Game instance;          // Singleton instance

@@ -11,7 +11,10 @@ public:
 	CharState m_state;
 	float animation = 4.0f;
 
+	float shieldCounter = 0.0f;
+
 	GameObject* mainCharacter;
+	GameObject* shield;
 
 	int idle, walk;
 };

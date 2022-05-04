@@ -64,7 +64,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pWallCollision,
 			Type::WALL
 		);
-		pNewObject->SetPosition(Vector2D(300, 100));
+		pNewObject->SetPosition(Vector2D(300, 0));
 		pNewObject->Activate();
 
 	}
@@ -116,8 +116,22 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pCollisionComponent,
 			Type::ENEMY
 		);
-		pNewObject->SetPosition(Vector2D(600, 50));
+		pNewObject->SetPosition(Vector2D(600, 0));
 		pNewObject->Activate();
+	}
+	else if (name == L"Shield")
+	{
+		RenderComponent* pShieldRender = new RenderComponent(L"shield.png");
+		CollisionComponent* pShieldCollision = new CollisionComponent(circle, 120.0f);
+
+		pNewObject = new EnemyGameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pShieldRender,
+			pShieldCollision,
+			Type::SHIELD
+		);
 	}
 	else
 	{
