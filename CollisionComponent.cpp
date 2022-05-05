@@ -3,6 +3,7 @@
 #include "gamecode.h"
 #include "EnemyGameObject.h"
 #include "PlayerLegsInputComponent.h"
+#include "BulletPhysicsComponent.h"
 #include <corecrt_math_defines.h>
 
 CollisionComponent::CollisionComponent(Circle2D shape, float rad)
@@ -38,7 +39,7 @@ IShape2D& CollisionComponent::GetShape(GameObject* pObject)
 	}	
 }
 
-void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pCollidedObject)
+void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject)
 {
 	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::ENEMY || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::SHIELD)
 	{
@@ -73,8 +74,23 @@ void CollisionComponent::HandleCollision(GameObject* pObject, GameObject* pColli
 
 		pObject->DeleteObject();
 	}
-	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::WALL || pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::ENEMY)
+	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::WALL)
 	{
+		pObject->DeleteObject();
+		/*
+		BulletPhysicsComponent* pTest = dynamic_cast<BulletPhysicsComponent*>(pObject->GetPhysicsComponent());
+
+		Vector2D normal = (pObject->GetPosition() - pCollidedObject->GetPosition()).unitVector();
+		if (normal * pTest->velocity < 0)
+		{
+			pTest->velocity = pTest->velocity - 2 * (pTest->velocity * normal) * normal;
+			pTest->velocity = 0.5f * pTest->velocity;
+		}*/
+	}
+
+	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::ENEMY)
+	{
+		pHUD->GivePoints(50);
 		pObject->DeleteObject();
 	}
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Shapes.h"
+#include "HUD.h"
 
 class GameObject;
 
@@ -18,7 +19,7 @@ public:
 	
 	virtual IShape2D& GetShape(GameObject* pObject);
 
-	virtual void HandleCollision(GameObject* pObject, GameObject* pCollidedObject); // = 0 TODO
+	virtual void HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject); // = 0 TODO
 
 	float radius;
 	float width;

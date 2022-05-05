@@ -6,5 +6,5 @@ class PhysicsComponent
 {
 public:
 	virtual ~PhysicsComponent();
-	virtual void Update(GameObject* obj);
+	virtual void Update(GameObject* obj, float frameTime);
 };

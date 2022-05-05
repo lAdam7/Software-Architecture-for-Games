@@ -36,21 +36,22 @@ PlayerMainInputComponent::PlayerMainInputComponent(RenderComponent* pRender)
 	gun.SetReloadTime(3.0f);
 }
 
-void PlayerMainInputComponent::Update(GameObject* pObject, float frameTime)
+void PlayerMainInputComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 {
-	gun.Update(frameTime);
+	gun.Update(pHUD, frameTime);
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
 
-	const float positionAmount = 4.0f;
-	const float rotationAmount = 5.0f;
 
 	if (pInputs->KeyPressed(DIK_SPACE))
 	{
 		gun.Fire(pObject->GetPosition(), pObject->GetAngle());
 	}
 
+	pHUD->SetMaxAmmo(gun.GetClipSize());
+	pHUD->SetAmmo(gun.GetClipSizeCounter());
+
 	AnimatedRenderComponent* animate = dynamic_cast<AnimatedRenderComponent*>(pObject->GetRenderComponent());
-	animate->Animate(123.31);
+	animate->Animate(frameTime);
 };

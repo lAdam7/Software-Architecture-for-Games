@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "ObjectManager.h"
 #include "SoundFX.h"
+#include "HUD.h"
 #include "Mouse.h"
 
 
@@ -42,6 +43,7 @@ private:
 
 	ObjectManager om;
 	SoundFX* pSoundFX;
+	HUD* pHUD;
 
 	//BuildMenu bm;
 

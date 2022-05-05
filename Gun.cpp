@@ -14,7 +14,7 @@ void Gun::Fire(Vector2D pos, float rotation)
 
 		GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
 		Vector2D velocity;
-		velocity.setBearing(rotation, 10.0f);
+		velocity.setBearing(rotation, 1200.0f);
 
 		Vector2D startingAngle;
 		startingAngle.setBearing(rotation + 0.55f, 50.0f);
@@ -26,7 +26,7 @@ void Gun::Fire(Vector2D pos, float rotation)
 	}
 }
 
-void Gun::Update(float frameTime)
+void Gun::Update(HUD* pHUD, float frameTime)
 {
 	if (CanShoot())
 	{
@@ -50,14 +50,16 @@ void Gun::Update(float frameTime)
 	Vector2D ammoPosition = Vector2D(topRightPosition.XValue - 100, topRightPosition.YValue - 300);
 
 	float percentage = (CanShoot())
-		? (100 - ((GetClipSizeCounter() / (float)GetClipSize()) * 100)) * 2
-		: (( GetReloadTimeCounter() / GetReloadTime() ) * 100) * 2;
+		? (100 - ((GetClipSizeCounter() / (float)GetClipSize()) * 100)) * 3
+		: (( GetReloadTimeCounter() / GetReloadTime() ) * 100) * 3;
+
+	pHUD->SetReloadProgress(percentage);
 
 	Rectangle2D rectangle;
 	rectangle.PlaceAt(ammoPosition + Vector2D(-150 + percentage, -60), ammoPosition + Vector2D(50, -45));
-	mDE->FillRect(rectangle, MyDrawEngine::CYAN, 0.0f);
+	//mDE->FillRect(rectangle, MyDrawEngine::CYAN, 0.0f);
 	
-	mDE->WriteInt(ammoPosition, GetClipSizeCounter(), MyDrawEngine::CYAN);
+	//mDE->WriteInt(ammoPosition, GetClipSizeCounter(), MyDrawEngine::CYAN);
 }
 
 void Gun::SetBulletDelay(float delay)

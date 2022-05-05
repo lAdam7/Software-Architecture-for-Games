@@ -29,6 +29,7 @@
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="gamecode.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="EnemyPhysicsComponent.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="gamecode.cpp" />

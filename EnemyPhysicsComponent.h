@@ -9,5 +9,5 @@ public:
 	int rifle;
 
 	EnemyPhysicsComponent(RenderComponent* pRender);
-	void Update(GameObject* pObject);
+	void Update(GameObject* pObject, float frameTime);
 };

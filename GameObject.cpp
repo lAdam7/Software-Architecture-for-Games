@@ -23,16 +23,16 @@ Type GameObject::getType()
 	return m_type;
 }
 
-void GameObject::Update(double frameTime)
+void GameObject::Update(HUD* pHUD, double frameTime)
 {
 	if (IsActive())
 	{
 		if (pPhysicsComponent)
-			pPhysicsComponent->Update(this);
+			pPhysicsComponent->Update(this, frameTime);
 		if (pRenderComponent)
 			pRenderComponent->Update(this);
 		if (pInputComponent)
-			pInputComponent->Update(this, frameTime);
+			pInputComponent->Update(pHUD, this, frameTime);
 		if (pCollisionComponent)
 			pCollisionComponent->Update(this);
 	}

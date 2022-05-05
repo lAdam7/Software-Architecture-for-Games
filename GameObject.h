@@ -61,7 +61,7 @@ class GameObject
 		void Deactivate();
 		void DeleteObject();	
 
-		void Update(double frameTime);
+		void Update(HUD* pHUD, double frameTime);
 
 		SoundFX* GetSoundFX();
 

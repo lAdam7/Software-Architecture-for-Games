@@ -10,7 +10,7 @@ public:
 
 	Gun gun;
 
-	void Update(GameObject* pObject, float frameTime) override;
+	void Update(HUD* pHUD, GameObject* pObject, float frameTime) override;
 	
 	float animation = 4.0f;
 

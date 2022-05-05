@@ -1,2 +1,3 @@
-﻿  EnemyPhysicsComponent.cpp
+﻿  gamecode.cpp
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(23,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

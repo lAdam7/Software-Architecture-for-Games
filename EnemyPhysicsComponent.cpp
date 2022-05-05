@@ -32,13 +32,13 @@ EnemyPhysicsComponent::EnemyPhysicsComponent(RenderComponent* pRender)
 	animate->SetCurrentAnimation(rifle);
 }
 
-void EnemyPhysicsComponent::Update(GameObject* pObject)
+void EnemyPhysicsComponent::Update(GameObject* pObject, float frameTime)
 {
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pObject);
 	//MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 	//mDE->DrawLine(pEnemyObject->GetPosition(), pEnemyObject->pTarget->GetPosition(), MyDrawEngine::WHITE);
 
-	float step = 1.0f;
+	float step = 140.0f * frameTime;
 	
 	Vector2D a = pEnemyObject->pTarget->GetPosition() - pEnemyObject->GetPosition();
 	float magnitude = a.magnitude();

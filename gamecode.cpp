@@ -10,6 +10,7 @@
 #include <math.h>
 #include "shapes.h"
 #include "EnemyGameObject.h"
+#include "PlayerLegsInputComponent.h"
 //#include "spaceship.h"
 //#include "Asteroid.h"
 
@@ -305,6 +306,8 @@ ErrorType Game::StartOfGame()
 	pSoundFX->LoadSounds();
 	om.SetSoundFX(pSoundFX);
 
+	pHUD = new HUD();
+
 	//GameObject* pWall = om.Create(L"Wall");
 	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
@@ -387,6 +390,9 @@ ErrorType Game::StartOfGame()
 
 	GameObject* pFeet = om.Create(L"PlayerLegs");
 
+	PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pFeet->GetInputComponent());
+	pLegsInput->mainCharacter = Game::instance.GetObjectManager().Create(L"PlayerMain");
+
 	GameObject* pWall = om.Create(L"Wall");
 
 
@@ -459,7 +465,9 @@ ErrorType Game::Update()
 	//om.CheckAllCollisions();
 	//om.DeleteAllMarked();
 
-	om.UpdateAll(gt.mdFrameTime);
+	om.UpdateAll(gt.mdFrameTime, pHUD);
+
+	pHUD->Update();
 
 	if (timer > 1000)
 	{
@@ -489,6 +497,8 @@ ErrorType Game::EndOfGame()
 	delete pSoundFX;
 	pSoundFX = nullptr;
 
+	delete pHUD;
+	pHUD = nullptr;
 	
 
 	return SUCCESS;

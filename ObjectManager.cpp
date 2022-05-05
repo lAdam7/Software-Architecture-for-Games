@@ -171,7 +171,7 @@ void ObjectManager::TransmitMessage(Message msg)
 
 
 
-void ObjectManager::UpdateAll(double frameTime)
+void ObjectManager::UpdateAll(double frameTime, HUD* pHUD)
 {
 	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
 
@@ -182,7 +182,7 @@ void ObjectManager::UpdateAll(double frameTime)
 	{
 		if ((*it1))
 		{
-			(*it1)->Update(frameTime);
+			(*it1)->Update(pHUD, frameTime);
 			if ((*it1)->IsCollidable())
 			{
 				if (SHOWHITBOX)
@@ -200,8 +200,8 @@ void ObjectManager::UpdateAll(double frameTime)
 							MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 							mDE->WriteText(100, 50, L"Collision detected!", MyDrawEngine::CYAN);
 
-							(*it1)->GetCollisionComponent()->HandleCollision((*it1), (*it2));
-							(*it2)->GetCollisionComponent()->HandleCollision((*it2), (*it1));
+							(*it1)->GetCollisionComponent()->HandleCollision(pHUD, (*it1), (*it2));
+							(*it2)->GetCollisionComponent()->HandleCollision(pHUD, (*it2), (*it1));
 						}
 					}
 				}

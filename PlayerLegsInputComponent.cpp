@@ -36,27 +36,25 @@ PlayerLegsInputComponent::PlayerLegsInputComponent(RenderComponent* pRender)
 	//animate->SetCurrentAnimation(walk);
 	
 	m_state = CharState::IDLE;
-
-	mainCharacter = Game::instance.GetObjectManager().Create(L"PlayerMain");
 }
 
-void PlayerLegsInputComponent::Update(GameObject* pObject, float frameTime)
+void PlayerLegsInputComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 {
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
 
-	const float positionAmount = 4.0f;
-	const float rotationAmount = 5.0f;
+	const float positionAmount = 600.0f * frameTime;
+	const float rotationAmount = 5.0f * frameTime;
 	
 	CharState current = CharState::IDLE;
 
 	if (pInputs->KeyPressed(DIK_LEFT))
 	{
-		pObject->SetAngle(pObject->GetAngle() - rotationAmount * frameTime);
+		pObject->SetAngle(pObject->GetAngle() - rotationAmount);
 	}
 	if (pInputs->KeyPressed(DIK_RIGHT))
 	{
-		pObject->SetAngle(pObject->GetAngle() + rotationAmount * frameTime);
+		pObject->SetAngle(pObject->GetAngle() + rotationAmount);
 	}
 	if (pInputs->KeyPressed(DIK_W))
 	{
@@ -107,11 +105,13 @@ void PlayerLegsInputComponent::Update(GameObject* pObject, float frameTime)
 		m_state = current;
 	}
 
-	animate->Animate(123.31);
+	animate->Animate(frameTime);
 
-	mainCharacter->SetPosition(pObject->GetPosition());
-	mainCharacter->SetAngle(pObject->GetAngle());
-	mainCharacter->GetRenderComponent()->Update(pObject);
+	if (mainCharacter)
+	{
+		mainCharacter->SetPosition(pObject->GetPosition());
+		mainCharacter->SetAngle(pObject->GetAngle());
+	}
 
 	if (shield)
 		shield->SetPosition(pObject->GetPosition());

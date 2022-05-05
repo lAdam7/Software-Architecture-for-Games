@@ -5,7 +5,7 @@ PhysicsComponent::~PhysicsComponent()
 
 };
 
-void PhysicsComponent::Update(GameObject* obj)
+void PhysicsComponent::Update(GameObject* obj, float frameTime)
 {
 
 };

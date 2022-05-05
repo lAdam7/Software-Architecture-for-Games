@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "HUD.h"
 #include <list>
 
 class ObjectManager
@@ -23,7 +24,7 @@ class ObjectManager
 
 		void TransmitMessage(Message msg);
 
-		void UpdateAll(double frameTime);
+		void UpdateAll(double frameTime, HUD* pHUD);
 
 		void DeleteAll();
 		void DeleteAllInactive();
