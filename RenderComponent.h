@@ -6,7 +6,7 @@ class GameObject;
 
 class RenderComponent
 {
-private:
+protected:
 	PictureIndex image;
 
 public:

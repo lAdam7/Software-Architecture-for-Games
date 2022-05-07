@@ -42,6 +42,7 @@
     <ClInclude Include="objecttypes.h" />
     <ClInclude Include="PlayerLegsInputComponent.h" />
     <ClInclude Include="PlayerMainInputComponent.h" />
+    <ClInclude Include="RecurringRenderComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="SoundFX.h" />
@@ -68,6 +69,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="PlayerLegsInputComponent.cpp" />
     <ClCompile Include="PlayerMainInputComponent.cpp" />
+    <ClCompile Include="RecurringRenderComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="SoundFX.cpp" />

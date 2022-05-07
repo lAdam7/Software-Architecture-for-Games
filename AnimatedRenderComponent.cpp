@@ -4,6 +4,7 @@
 void AnimatedRenderComponent::SetCurrentAnimation(int anim)
 {
 	m_currentAnimation = anim;
+	m_animationTimer = 0;
 };
 
 void AnimatedRenderComponent::Update(GameObject* pObject)
@@ -18,7 +19,7 @@ void AnimatedRenderComponent::Update(GameObject* pObject)
 void AnimatedRenderComponent::Animate(float frameTime)
 {
 	Animation& anim = animations[m_currentAnimation];
-	m_animationTimer += anim.m_animationSpeed;// *frameTime;
+	m_animationTimer += anim.m_animationSpeed * frameTime;
 	if (m_animationTimer >= anim.m_images.size())
 	{
 		m_currentAnimation = anim.m_nextAnimation;
@@ -43,6 +44,16 @@ void AnimatedRenderComponent::AddImage(int index, const wchar_t* filename)
 void AnimatedRenderComponent::DeleteObject()
 {
 	animations.clear();
+};
+
+void AnimatedRenderComponent::SetAnimationSpeed(int index, float speed)
+{
+	animations[index].m_animationSpeed = speed;
+};
+
+void AnimatedRenderComponent::NextAnimation(int currentIndex, int nextIndex)
+{
+	animations[currentIndex].m_nextAnimation = nextIndex;
 };
 
 /*

@@ -4,8 +4,9 @@
 #include "mydrawengine.h"
 
 #include "BulletPhysicsComponent.h"
+#include "AnimatedRenderComponent.h"
 
-void Gun::Fire(Vector2D pos, float rotation)
+bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 {
 	if (CanShoot() && GetBulletDelayCounter() < 0)
 	{
@@ -23,10 +24,16 @@ void Gun::Fire(Vector2D pos, float rotation)
 		
 		BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
 		pBulletCreated->velocity = velocity;
+
+		if (!CanShoot()) // start reload animation
+		{
+			return true;
+		}
 	}
+	return false;
 }
 
-void Gun::Update(HUD* pHUD, float frameTime)
+bool Gun::Update(HUD* pHUD, float frameTime)
 {
 	if (CanShoot())
 	{
@@ -38,6 +45,7 @@ void Gun::Update(HUD* pHUD, float frameTime)
 		if (pInputs->KeyPressed(DIK_R) && GetClipSize() != GetClipSizeCounter())
 		{
 			SetClipSizeCounter(0);
+			return true;
 		}
 	} 
 	else
@@ -60,6 +68,7 @@ void Gun::Update(HUD* pHUD, float frameTime)
 	//mDE->FillRect(rectangle, MyDrawEngine::CYAN, 0.0f);
 	
 	//mDE->WriteInt(ammoPosition, GetClipSizeCounter(), MyDrawEngine::CYAN);
+	return false;
 }
 
 void Gun::SetBulletDelay(float delay)

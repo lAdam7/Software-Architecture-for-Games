@@ -9,14 +9,14 @@
 CollisionComponent::CollisionComponent(Circle2D shape, float rad)
 {
 	type = ShapeType::CIRCLE;
-	radius = rad;
+	m_radius = rad;
 };
 
-CollisionComponent::CollisionComponent(Rectangle2D shape, float wid, float hei)
+CollisionComponent::CollisionComponent(Rectangle2D shape, float width, float height)
 {
 	type = ShapeType::RECTANGLE;
-	width = wid;
-	height = hei;
+	m_width = width;
+	m_height = height;
 };
 
 CollisionComponent::~CollisionComponent()
@@ -29,12 +29,12 @@ IShape2D& CollisionComponent::GetShape(GameObject* pObject)
 	//mDE->FillCircle(pObject->GetPosition(), radius, MyDrawEngine::RED);
 	if (type == ShapeType::CIRCLE) 
 	{
-		circle.PlaceAt(pObject->GetPosition(), radius);
+		circle.PlaceAt(pObject->GetPosition(), m_radius);
 		return circle;
 	}
 	else // rectangle
 	{
-		rectangle.PlaceAt(pObject->GetPosition() + Vector2D(-width/2, -width/2), pObject->GetPosition() + Vector2D(width/2, height/2));
+		rectangle.PlaceAt(pObject->GetPosition() + Vector2D(-m_width/2, -m_height/2), pObject->GetPosition() + Vector2D(m_width/2, m_height/2));
 		return rectangle;
 	}	
 }
@@ -51,11 +51,11 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 		float nx = dx / dist;
 		float ny = dy / dist;
 
-		float touchDistFromB1 = (dist * (radius / (radius + pCollidedObject->GetCollisionComponent()->radius)));
+		float touchDistFromB1 = (dist * (m_radius / (m_radius + pCollidedObject->GetCollisionComponent()->m_radius)));
 		float contactX = pObject->GetPosition().XValue + nx * touchDistFromB1;
 		float contactY = pObject->GetPosition().YValue + ny * touchDistFromB1;
 
-		pObject->SetPosition(Vector2D(contactX - nx * radius, contactY - ny * radius));
+		pObject->SetPosition(Vector2D(contactX - nx * m_radius, contactY - ny * m_radius));
 	}
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::ENEMY)
@@ -96,34 +96,37 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::WALL || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::WALL)
 	{	
+		const float COLLIDEDWIDTH = pCollidedObject->GetCollisionComponent()->GetWidth();
+		const float COLLIDEDHEIGHT = pCollidedObject->GetCollisionComponent()->GetHeight();
+
 		Vector2D newPos = pObject->GetPosition();
 		// Left
-		if (pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue && pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue + 130 && pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue - 130)
+		if (pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue && pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue + (COLLIDEDHEIGHT * 0.5) && pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue - (COLLIDEDHEIGHT * 0.5))
 		{
 			MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 			mDE->WriteText(50, 100, L"L", MyDrawEngine::RED);
-			newPos.XValue = pCollidedObject->GetPosition().XValue + (-130 - 50);
+			newPos.XValue = pCollidedObject->GetPosition().XValue - ((COLLIDEDWIDTH * 0.5) + 50);
 		}
 		// Right
-		if (pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue && pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue - 130 && pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue + 130)
+		if (pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue && pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue - (COLLIDEDHEIGHT * 0.5) && pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue + (COLLIDEDHEIGHT * 0.5))
 		{
 			MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 			mDE->WriteText(100, 100, L"R", MyDrawEngine::RED);
-			newPos.XValue = pCollidedObject->GetPosition().XValue + (130 + 50);
+			newPos.XValue = pCollidedObject->GetPosition().XValue + ((COLLIDEDWIDTH * 0.5) + 50);
 		}
 		// Top
-		if (pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue && pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue - 130 && pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue + 130)
+		if (pObject->GetPosition().YValue > pCollidedObject->GetPosition().YValue && pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue - (COLLIDEDWIDTH * 0.5) && pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue + (COLLIDEDWIDTH * 0.5))
 		{
 			MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 			mDE->WriteText(150, 100, L"T", MyDrawEngine::RED);
-			newPos.YValue = pCollidedObject->GetPosition().YValue + (130 + 50);
+			newPos.YValue = pCollidedObject->GetPosition().YValue + ((COLLIDEDHEIGHT * 0.5) + 50);
 		}
 		// Bottom
-		if (pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue && pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue + 130 && pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue - 130)
+		if (pObject->GetPosition().YValue < pCollidedObject->GetPosition().YValue && pObject->GetPosition().XValue < pCollidedObject->GetPosition().XValue + (COLLIDEDWIDTH * 0.5) && pObject->GetPosition().XValue > pCollidedObject->GetPosition().XValue - (COLLIDEDWIDTH * 0.5))
 		{
 			MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 			mDE->WriteText(200, 100, L"B", MyDrawEngine::RED);
-			newPos.YValue = pCollidedObject->GetPosition().YValue + (-130 - 50);
+			newPos.YValue = pCollidedObject->GetPosition().YValue - ((COLLIDEDHEIGHT * 0.5) + 50);
 		}
 		pObject->SetPosition(newPos);
 	}
@@ -132,4 +135,14 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 void CollisionComponent::Update(GameObject* pObject)
 {
 
+};
+
+float CollisionComponent::GetHeight()
+{
+	return m_height;
+};
+
+float CollisionComponent::GetWidth()
+{
+	return m_width;
 };

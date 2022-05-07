@@ -11,6 +11,10 @@ private:
 	ShapeType type;
 	Circle2D circle;
 	Rectangle2D rectangle;
+
+	float m_width;
+	float m_height;
+	float m_radius;
 public:
 	CollisionComponent(Circle2D shape, float radius);
 	CollisionComponent(Rectangle2D shape, float width, float height);
@@ -21,7 +25,6 @@ public:
 
 	virtual void HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject); // = 0 TODO
 
-	float radius;
-	float width;
-	float height;
+	float GetWidth();
+	float GetHeight();
 };

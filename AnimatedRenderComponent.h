@@ -22,6 +22,8 @@ public:
 	int NewAnimation();
 	void AddImage(int index, const wchar_t* filename);
 	void DeleteObject();
+	void SetAnimationSpeed(int index, float speed);
+	void NextAnimation(int currentIndex, int nextIndex);
 	//void SetCurrentImage(int index) override;
 
 	//void Update(GameObject* pObject) override;

@@ -13,6 +13,8 @@
 
 #include "EnemyGameObject.h"
 #include "EnemyPhysicsComponent.h"
+
+#include "RecurringRenderComponent.h"
 //#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
@@ -54,7 +56,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 	{
 		RenderComponent* pWallRender = new RenderComponent(L"concrete.png");
 
-		CollisionComponent* pWallCollision = new CollisionComponent(rectangle, 260.0f, 260.0f);
+		CollisionComponent* pWallCollision = new CollisionComponent(rectangle, 256.0f, 256.0f);
 
 		pNewObject = new GameObject(
 			pSoundFX,
@@ -67,6 +69,26 @@ GameObject* ObjectManager::Create(std::wstring name)
 		pNewObject->SetPosition(Vector2D(300, 0));
 		pNewObject->Activate();
 
+	}
+	else if (name == L"Walls")
+	{
+		const int WALLCOUNT = 1000;
+		RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent();
+		pRecurringWallRender->SetHorizontal(true);
+		pRecurringWallRender->SetRepeat(WALLCOUNT);
+		pRecurringWallRender->SetImageSize(256.0f);
+
+		CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 256.0f * WALLCOUNT, 256.0f);
+
+		pNewObject = new GameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pRecurringWallRender,
+			pRecurringWallCollision,
+			Type::WALL
+		);
+		pNewObject->SetPosition(Vector2D(0, -200));
 	}
 	else if (name == L"PlayerLegs")
 	{

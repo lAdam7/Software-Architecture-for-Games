@@ -1,6 +1,7 @@
 #pragma once
 #include "vector2D.h"
 #include "HUD.h"
+#include "GameObject.h"
 
 class Gun
 {
@@ -39,7 +40,7 @@ public:
 
 	bool CanShoot() const;
 
-	void Update(HUD* pHUD, float frameTime);
+	bool Update(HUD* pHUD, float frameTime);
 
-	virtual void Fire(Vector2D position, float angle);
+	virtual bool Fire(Vector2D position, float angle, GameObject* pObject, int reload);
 };

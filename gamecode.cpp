@@ -394,8 +394,9 @@ ErrorType Game::StartOfGame()
 	pLegsInput->mainCharacter = Game::instance.GetObjectManager().Create(L"PlayerMain");
 
 	GameObject* pWall = om.Create(L"Wall");
+	pWall->SetPosition(Vector2D(0, 600));
 
-
+	
 	GameObject* pEnemy = om.Create(L"Enemy1");
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
 	pEnemyObject->pTarget = pFeet;
@@ -406,7 +407,7 @@ ErrorType Game::StartOfGame()
 	pEnemyObjectB->pTarget = pFeet;
 	pEnemyB->SetPosition(pEnemy->GetPosition() + Vector2D(150, 0));
 	
-
+	GameObject* bb = om.Create(L"Walls");
 	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 
 	//GameObject* pMouse = om.Create(L"Mouse");
@@ -415,8 +416,9 @@ ErrorType Game::StartOfGame()
 	//pMouse = new Mouse();
 	//pMouse->StartUp();
 	
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 2; i++)
 	{
+		
 		//GameObject* pAsteroid = om.Create(L"Asteroid");
 		//int xPos = (rand() % (900 - -900 + 1) + -900);
 		//int yPos = (rand() % (900 - -900 + 1) + -900);
