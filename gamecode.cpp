@@ -21,7 +21,7 @@ Game::Game()
    // No-op
 	// Get the system time.
 	unsigned seed = time(0);
-
+	
 	// Seed the random number generator.
 	srand(seed);
 }
@@ -121,6 +121,7 @@ ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 		ErrorLogger::Writeln(L"Failed to start MyDrawEngine");
 		return FAILURE;
 	}
+	newFont = MyDrawEngine::GetInstance()->AddFont(L"Arial", 44, true, false);
 	if(FAILED(MySoundEngine::Start(hwnd)))
 	{
 		ErrorLogger::Writeln(L"Failed to start MySoundEngine");
@@ -165,21 +166,28 @@ void Game::Shutdown()
 ErrorType Game::PauseMenu()
 {
 	// Code for a basic pause menu
-
-	MyDrawEngine::GetInstance()->WriteText(450,220, L"Paused", MyDrawEngine::WHITE);
+	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
+	mDE->WriteText(450, 220, L"PAUSED", MyDrawEngine::WHITE, newFont);
 
 	const int NUMOPTIONS = 2;
-	wchar_t options[NUMOPTIONS][11] = {L"Resume", L"Main menu"};
+	wchar_t options[NUMOPTIONS][11] = {L"RESUME", L"MAIN MENU"};
 
    // Display menu options
-	for(int i=0;i<NUMOPTIONS;i++)
+	for (int i = 0; i < NUMOPTIONS; i++)
 	{
-		int colour = MyDrawEngine::GREY;       // If not selected, should be grey
-		if(i == m_menuOption)
+		Rectangle2D currentView;
+		currentView = mDE->GetViewport();
+
+		Rectangle2D buttonBar;
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * i) + (-10 * i) + 70));
+		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
+		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * i) + (-10 * i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
+		if (i == m_menuOption)
 		{
-			colour = MyDrawEngine::WHITE;       // Current selection is white
+			Rectangle2D selectedBar;
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * i) + (-10 * i) - 70));
+			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
 		}
-		MyDrawEngine::GetInstance()->WriteText(450,300+50*i, options[i], colour);
 	}
 
 	MyInputs* pInputs = MyInputs::GetInstance();
@@ -198,11 +206,11 @@ ErrorType Game::PauseMenu()
 	}
 	if(m_menuOption<0)
 	{
-		m_menuOption=0;
+		m_menuOption=NUMOPTIONS-1;
 	}
 	else if(m_menuOption>=NUMOPTIONS)
 	{
-		m_menuOption=NUMOPTIONS-1;
+		m_menuOption=0;
 	}
 
    // If player chooses an option ....
@@ -227,22 +235,31 @@ ErrorType Game::PauseMenu()
 // which is currently a basic placeholder
 ErrorType Game::MainMenu()
 {
-	MyDrawEngine::GetInstance()->WriteText(450,220, L"Main menu", MyDrawEngine::WHITE);
+	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
+	
+	mDE->WriteText(450,220, L"MAIN MENU", MyDrawEngine::WHITE, newFont);
 
-	const int NUMOPTIONS = 3;
-	wchar_t options[NUMOPTIONS][15] = {L"Start game", L"Test", L"Exit"};
+	const int NUMOPTIONS = 2;
+	wchar_t options[NUMOPTIONS][15] = {L"START GAME", L"EXIT"};
 
    // Display the options
 	for(int i=0;i<NUMOPTIONS;i++)
 	{
-		int colour = MyDrawEngine::GREY;
-		if(i == m_menuOption)
-		{
-			colour = MyDrawEngine::WHITE;
-		}
-		MyDrawEngine::GetInstance()->WriteText(450,300+50*i, options[i], colour);
-	}
+		Rectangle2D currentView;
+		currentView = mDE->GetViewport();
 
+		Rectangle2D buttonBar;
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * i) + (-10 * i) + 70));
+		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
+		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * i) + (-10 * i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
+		if (i == m_menuOption)
+		{
+			Rectangle2D selectedBar;
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * i) + (-10 * i) - 70));
+			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
+		}
+	}
+	
    // Get keyboard input
 	MyInputs* pInputs = MyInputs::GetInstance();
 
@@ -258,11 +275,11 @@ ErrorType Game::MainMenu()
 	}
 	if(m_menuOption<0)
 	{
-		m_menuOption=0;
+		m_menuOption=NUMOPTIONS-1;
 	}
 	else if(m_menuOption>=NUMOPTIONS)
 	{
-		m_menuOption=NUMOPTIONS-1;
+		m_menuOption=0;
 	}
 
    // User selects an option
@@ -273,14 +290,8 @@ ErrorType Game::MainMenu()
 			StartOfGame();             // Initialise the game
 			ChangeState(RUNNING);      // Run it
 		}
-		
-		if (m_menuOption == 1)		   // map creator
-		{
-			StartOfGame();
-			ChangeState(RUNNING);
-		}
 
-		if(m_menuOption == 2)          //Quit
+		if(m_menuOption == 1)          //Quit
 		{
 			ChangeState(GAMEOVER);
 		}
@@ -399,14 +410,14 @@ ErrorType Game::StartOfGame()
 	
 	GameObject* pEnemy = om.Create(L"Enemy1");
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
-	pEnemyObject->pTarget = pFeet;
+	pEnemyObject->SetTarget(pFeet);
 
-	
+	/*
 	GameObject* pEnemyB = om.Create(L"Enemy1");
 	EnemyGameObject* pEnemyObjectB = dynamic_cast<EnemyGameObject*>(pEnemyB);
 	pEnemyObjectB->pTarget = pFeet;
 	pEnemyB->SetPosition(pEnemy->GetPosition() + Vector2D(150, 0));
-	
+	*/
 	GameObject* bb = om.Create(L"Walls");
 	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
 

@@ -3,6 +3,9 @@
 
 HUD::HUD()
 {
+	m_maxHealth = 100;
+	m_currentHealth = 100;
+
 	m_points = 0;
 	SetActive(true);
 }
@@ -18,9 +21,12 @@ void HUD::Update()
 		pDE->WriteText(topRightPosition + Vector2D(-300, -500), strPoints.c_str(), MyDrawEngine::WHITE);
 
 
-		pDE->WriteText(topRightPosition + Vector2D(-300, -600), L"Health: 100", MyDrawEngine::WHITE);
+		float percentage = 300 - (((GetCurrentHealth() / GetMaxHealth() * 100)) * 3);
+
+		std::wstring strHealth = L"Health: " + std::to_wstring((int)GetCurrentHealth()) + L" / " + std::to_wstring((int)GetMaxHealth());
+		pDE->WriteText(topRightPosition + Vector2D(-300, -600), strHealth.c_str(), MyDrawEngine::WHITE);
 		Rectangle2D rectHealth;
-		rectHealth.PlaceAt(topRightPosition + Vector2D(-300, -665), topRightPosition + Vector2D(0, -645));
+		rectHealth.PlaceAt(topRightPosition + Vector2D(-300 + percentage, -665), topRightPosition + Vector2D(0, -645));
 		pDE->FillRect(rectHealth, MyDrawEngine::GREEN);
 
 

@@ -28,7 +28,7 @@ void GameObject::Update(HUD* pHUD, double frameTime)
 	if (IsActive())
 	{
 		if (pPhysicsComponent)
-			pPhysicsComponent->Update(this, frameTime);
+			pPhysicsComponent->Update(pHUD, this, frameTime);
 		if (pRenderComponent)
 			pRenderComponent->Update(this);
 		if (pInputComponent)

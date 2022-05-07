@@ -32,8 +32,8 @@ PlayerLegsInputComponent::PlayerLegsInputComponent(RenderComponent* pRender)
 	animate->AddImage(walk, L"survivorRun_17.png");
 	animate->AddImage(walk, L"survivorRun_18.png");
 	animate->AddImage(walk, L"survivorRun_19.png");
-	
-	//animate->SetCurrentAnimation(walk);
+	animate->NextAnimation(walk, walk);
+	animate->SetAnimationSpeed(walk, 17.0f);
 	
 	m_state = CharState::IDLE;
 }
@@ -117,4 +117,11 @@ void PlayerLegsInputComponent::Update(HUD* pHUD, GameObject* pObject, float fram
 		shield->SetPosition(pObject->GetPosition());
 
 	MyDrawEngine::GetInstance()->theCamera.PlaceAt(pObject->GetPosition());
+
+	if (pHUD->GetCurrentHealth() <= 0)
+	{
+		pHUD->SetActive(false);
+		mainCharacter->DeleteObject();
+		pObject->DeleteObject();	
+	}
 };

@@ -58,11 +58,10 @@ private:
 
 public:
 	static Game instance;          // Singleton instance
-
    // Starts the game engines - Draw Engine, Sound Engine, Input Engine - singletons
    // This is called soon after the program runs
 	ErrorType Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance);
-
+	FontIndex newFont;
    // Terminates the game engines - Draw Engine, Sound Engine, Input Engine
    // This is called just before the program exits
 	void Shutdown();

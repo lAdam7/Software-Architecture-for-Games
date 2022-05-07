@@ -1,6 +1,6 @@
 #include "BulletPhysicsComponent.h"
 
-void BulletPhysicsComponent::Update(GameObject* pObject, float frameTime)
+void BulletPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 {
 	pObject->SetPosition(pObject->GetPosition() + velocity * frameTime);
 

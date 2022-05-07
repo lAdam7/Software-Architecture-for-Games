@@ -72,7 +72,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 	}
 	else if (name == L"Walls")
 	{
-		const int WALLCOUNT = 1000;
+		const int WALLCOUNT = 2000;
 		RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent();
 		pRecurringWallRender->SetHorizontal(true);
 		pRecurringWallRender->SetRepeat(WALLCOUNT);

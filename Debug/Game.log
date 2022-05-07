@@ -1,3 +1,13 @@
 ﻿  gamecode.cpp
 C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(23,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(182,98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(182,183): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(184,124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(188,101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(188,185): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(252,98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(252,183): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(254,124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(258,101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(258,185): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

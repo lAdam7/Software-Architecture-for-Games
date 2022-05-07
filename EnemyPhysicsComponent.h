@@ -2,12 +2,14 @@
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 #include "GameObject.h"
+#include "AnimatedRenderComponent.h"
 
 class EnemyPhysicsComponent : public PhysicsComponent
 {
 public:
-	int rifle;
+	int idle, run, attack;
+	AnimatedRenderComponent* pAnimatedRenderComponent;
 
 	EnemyPhysicsComponent(RenderComponent* pRender);
-	void Update(GameObject* pObject, float frameTime);
+	void Update(HUD* pHUD, GameObject* pObject, float frameTime);
 };

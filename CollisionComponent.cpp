@@ -6,6 +6,8 @@
 #include "BulletPhysicsComponent.h"
 #include <corecrt_math_defines.h>
 
+#include "EnemyPhysicsComponent.h"
+
 CollisionComponent::CollisionComponent(Circle2D shape, float rad)
 {
 	type = ShapeType::CIRCLE;
@@ -41,7 +43,7 @@ IShape2D& CollisionComponent::GetShape(GameObject* pObject)
 
 void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject)
 {
-	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::ENEMY || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::SHIELD)
+	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::ENEMY || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::SHIELD || pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::PLAYER)
 	{
 		float dx = pCollidedObject->GetPosition().XValue - pObject->GetPosition().XValue;
 		float dy = pCollidedObject->GetPosition().YValue - pObject->GetPosition().YValue;
@@ -60,19 +62,26 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 
 	if (pObject->getType() == Type::PLAYER && pCollidedObject->getType() == Type::ENEMY)
 	{
-		PlayerLegsInputComponent* pTest = dynamic_cast<PlayerLegsInputComponent*>(pObject->GetInputComponent());
-		pTest->mainCharacter->Deactivate();
-		pObject->Deactivate();
+		//EnemyGameObject* pGO = dynamic_cast<EnemyGameObject*>(pCollidedObject);
+		//EnemyPhysicsComponent* pTest = dynamic_cast<EnemyPhysicsComponent*>(pGO->GetPhysicsComponent());
+		
+		//PlayerLegsInputComponent* pTest = dynamic_cast<PlayerLegsInputComponent*>(pObject->GetInputComponent());
+		//pTest->mainCharacter->Deactivate();
+		//pObject->Deactivate();
 	}
 
 	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::BULLET)
 	{
+		/*
 		GameObject* pEnemyObject = Game::instance.GetObjectManager().Create(L"Enemy1");
 		EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pEnemyObject);
 		EnemyGameObject* pTestB = dynamic_cast<EnemyGameObject*>(pObject);
-		pTest->pTarget = pTestB->pTarget;
+		pTest->SetTarget(pTestB->GetTarget());
 
-		pObject->DeleteObject();
+		pObject->DeleteObject();*/
+
+		EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pObject);
+		pTest->Damage(10);
 	}
 	if (pObject->getType() == Type::BULLET && pCollidedObject->getType() == Type::WALL)
 	{

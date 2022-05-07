@@ -7,6 +7,11 @@ void AnimatedRenderComponent::SetCurrentAnimation(int anim)
 	m_animationTimer = 0;
 };
 
+int AnimatedRenderComponent::GetCurrentAnimation()
+{
+	return m_currentAnimation;
+}
+
 void AnimatedRenderComponent::Update(GameObject* pObject)
 {
 	if (pObject->IsActive())
