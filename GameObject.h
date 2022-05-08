@@ -9,7 +9,7 @@
 
 struct Message;
 enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
-enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET, SHIELD };
+enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET, SHIELD, KEY, DOOR, EXPLOSIVE, EXPLOSION };
 
 class GameObject
 {
@@ -61,7 +61,7 @@ class GameObject
 		void Deactivate();
 		void DeleteObject();	
 
-		void Update(HUD* pHUD, double frameTime);
+		void Update(HUD* pHUD, float frameTime);
 
 		SoundFX* GetSoundFX();
 

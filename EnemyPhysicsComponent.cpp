@@ -82,7 +82,7 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 	
 	Vector2D a = pEnemyObject->GetTarget()->GetPosition() - pEnemyObject->GetPosition();
 	float magnitude = a.magnitude();
-	if (magnitude <= (step*40) || magnitude == 0.0f)
+	if (magnitude <= (step*44) || magnitude == 0.0f)
 	{
 		// Melee? 
 		if (pAnimatedRenderComponent->GetCurrentAnimation() != attack && pEnemyObject->CanDamage())
@@ -97,7 +97,7 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 		Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetTarget()->GetPosition();
 
 		pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
-		pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+		//pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
 	}
 
 

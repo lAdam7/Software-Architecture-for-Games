@@ -15,6 +15,8 @@
 #include "EnemyPhysicsComponent.h"
 
 #include "RecurringRenderComponent.h"
+#include "ExplosionCollisionComponent.h"
+#include "ShieldCollisionComponent.h"
 //#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
@@ -73,9 +75,9 @@ GameObject* ObjectManager::Create(std::wstring name)
 	else if (name == L"Walls")
 	{
 		const int WALLCOUNT = 2000;
-		RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent();
-		pRecurringWallRender->SetHorizontal(true);
-		pRecurringWallRender->SetRepeat(WALLCOUNT);
+		RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(L"concrete.png");
+		//pRecurringWallRender->SetHorizontal(true);
+		//pRecurringWallRender->SetRepeat(WALLCOUNT);
 		pRecurringWallRender->SetImageSize(256.0f);
 
 		CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 256.0f * WALLCOUNT, 256.0f);
@@ -144,7 +146,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 	else if (name == L"Shield")
 	{
 		RenderComponent* pShieldRender = new RenderComponent(L"shield.png");
-		CollisionComponent* pShieldCollision = new CollisionComponent(circle, 120.0f);
+		CollisionComponent* pShieldCollision = new ShieldCollisionComponent(circle, 140.0f);
 
 		pNewObject = new EnemyGameObject(
 			pSoundFX,
@@ -153,6 +155,52 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pShieldRender,
 			pShieldCollision,
 			Type::SHIELD
+		);
+	}
+	else if (name == L"Explosive")
+	{
+		RenderComponent* pExplosionRender = new RenderComponent(L"explosive.png");
+		CollisionComponent* pExplosionCollision = new CollisionComponent(circle, 30.0f);
+
+		pNewObject = new GameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pExplosionRender,
+			pExplosionCollision,
+			Type::EXPLOSIVE
+		);
+	}
+	else if (name == L"Explosion")
+	{
+		RenderComponent* pExplosionRender = new AnimatedRenderComponent();
+		AnimatedRenderComponent* circle = dynamic_cast<AnimatedRenderComponent*>(pExplosionRender);
+		
+		Circle2D circleV;
+		CollisionComponent* pExplosionCollision = new ExplosionCollisionComponent(circleV, 300.0f, 0.3f);
+
+		int explode;
+		explode = circle->NewAnimation();
+		circle->AddImage(explode, L"explosion1.bmp");
+		circle->AddImage(explode, L"explosion2.bmp");
+		circle->AddImage(explode, L"explosion3.bmp");
+		circle->AddImage(explode, L"explosion4.bmp");
+		circle->AddImage(explode, L"explosion5.bmp");
+		circle->AddImage(explode, L"explosion6.bmp");
+		circle->AddImage(explode, L"explosion7.bmp");
+		circle->AddImage(explode, L"explosion8.bmp");
+
+		circle->NextAnimation(explode, explode);
+		circle->SetAnimationSpeed(explode, 10.0f);
+		circle->SetCurrentAnimation(explode);
+
+		pNewObject = new GameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pExplosionRender,
+			pExplosionCollision,
+			Type::EXPLOSION
 		);
 	}
 	else
@@ -165,6 +213,37 @@ GameObject* ObjectManager::Create(std::wstring name)
 
 	return pNewObject;
 }
+
+void ObjectManager::CreateEnemy(Vector2D pos, GameObject* pTarget)
+{
+	GameObject* pEnemy = Create(L"Enemy1");
+	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
+	pEnemyObject->SetTarget(pTarget);
+	pEnemyObject->SetPosition(pos);
+};
+
+void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
+{
+	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(filename);
+	pRecurringWallRender->SetRepeatX(repeatX);
+	pRecurringWallRender->SetRepeatY(repeatY);
+	pRecurringWallRender->SetImageSize(imageSize);
+
+	CollisionComponent* pRecurringWallCollision = nullptr;
+	if (collision)
+		pRecurringWallCollision = new CollisionComponent(rectangle, imageSize * repeatX, imageSize * repeatY);
+
+	GameObject* pNewObject = new GameObject(
+		pSoundFX,
+		nullptr,
+		nullptr,
+		pRecurringWallRender,
+		pRecurringWallCollision,
+		type
+	);
+	pNewObject->SetPosition(position);
+	AddObject(pNewObject);
+};
 
 void ObjectManager::SetSoundFX(SoundFX* pSound)
 {
@@ -204,7 +283,7 @@ void ObjectManager::UpdateAll(double frameTime, HUD* pHUD)
 	{
 		if ((*it1))
 		{
-			(*it1)->Update(pHUD, frameTime);
+			(*it1)->Update(pHUD, (float)frameTime);
 			if ((*it1)->IsCollidable())
 			{
 				if (SHOWHITBOX)

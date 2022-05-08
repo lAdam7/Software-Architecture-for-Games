@@ -33,10 +33,10 @@ void EnemyGameObject::Damage(float damage)
 	m_currentHealth -= damage;
 	if (m_currentHealth <= 0)
 	{
-		GameObject* pB = Game::instance.GetObjectManager().Create(L"Enemy1");
-		EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pB);
+		//GameObject* pB = Game::instance.GetObjectManager().Create(L"Enemy1");
+		//EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pB);
 		
-		pTest->SetTarget(m_pTarget);
+		//pTest->SetTarget(m_pTarget);
 
 		DeleteObject();
 	}

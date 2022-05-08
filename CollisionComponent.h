@@ -18,8 +18,9 @@ private:
 public:
 	CollisionComponent(Circle2D shape, float radius);
 	CollisionComponent(Rectangle2D shape, float width, float height);
+	//CollisionComponent() = default;
 	virtual ~CollisionComponent();
-	virtual void Update(GameObject* pObject);
+	virtual void Update(GameObject* pObject, float frameTime);
 	
 	virtual IShape2D& GetShape(GameObject* pObject);
 

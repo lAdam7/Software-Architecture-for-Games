@@ -13,11 +13,10 @@ class ObjectManager
 		const bool SHOWHITBOX = false;
 		void DrawHitbox(IShape2D& shape);
 
-		void AddObject(GameObject* pNewObject);
-
 		Circle2D circle;
 		Rectangle2D rectangle;
 	public:
+		void AddObject(GameObject* pObject);
 		GameObject* Create(std::wstring name);
 
 		void SetSoundFX(SoundFX* pSound);
@@ -29,4 +28,7 @@ class ObjectManager
 		void DeleteAll();
 		void DeleteAllInactive();
 		void DeleteAllMarked();
+
+		void CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position);
+		void CreateEnemy(Vector2D pos, GameObject* pTarget);
 };

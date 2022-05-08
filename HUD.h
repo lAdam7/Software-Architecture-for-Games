@@ -15,11 +15,13 @@ private:
 	int m_currentAmmo;
 	float m_ReloadProgress;
 	
+	bool m_activeShield = false;
 	float m_maxShield;
 	float m_currentShield;
 public:
 	HUD();
 
+	void SetShield(bool active);
 	void SetActive(bool activity);
 	bool IsActive();
 

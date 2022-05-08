@@ -1,15 +1,25 @@
 #include "RecurringRenderComponent.h"
-#include "GameObject.h";
+#include "GameObject.h"
 
-RecurringRenderComponent::RecurringRenderComponent()
+RecurringRenderComponent::RecurringRenderComponent(const wchar_t* filename)
 {
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	image = pDE->LoadPicture(L"concrete.png");
+	image = pDE->LoadPicture(filename);
 }
 
 void RecurringRenderComponent::Update(GameObject* pObject)
 {
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
+	for (int x = 0; x < GetRepeatX(); x++)
+	{
+		for (int y = 0; y < GetRepeatY(); y++)
+		{
+			Vector2D pos = pObject->GetPosition();
+			pos = pos + Vector2D(-(GetImageSize() * (GetRepeatX() * .5f)) + (GetImageSize() * (float)x) + (GetImageSize() * .5f), -(GetImageSize() * (GetRepeatY() * .5f)) + (GetImageSize() * (float)y) + (GetImageSize() * .5f));
+			pDE->DrawAt(pos, image, 1.0f, pObject->GetAngle(), pObject->GetOpacity());
+		}
+	}
+	/*
 	for (int n = 0; n < GetRepeat(); n++)
 	{
 		Vector2D pos = pObject->GetPosition();
@@ -23,7 +33,7 @@ void RecurringRenderComponent::Update(GameObject* pObject)
 		}
 		
 		pDE->DrawAt(pos, image, 1.0f, pObject->GetAngle(), pObject->GetOpacity());
-	}
+	}*/
 };
 
 void RecurringRenderComponent::SetImageSize(float size)
@@ -35,20 +45,20 @@ float RecurringRenderComponent::GetImageSize()
 	return m_imageSize;
 };
 
-void RecurringRenderComponent::SetHorizontal(bool horizontal)
+void RecurringRenderComponent::SetRepeatX(int amount)
 {
-	m_horizontal = horizontal;
+	m_repeatX = amount;
 };
-bool RecurringRenderComponent::IsHorizontal()
+int RecurringRenderComponent::GetRepeatX()
 {
-	return m_horizontal;
+	return m_repeatX;
 };
 
-void RecurringRenderComponent::SetRepeat(int amount)
+void RecurringRenderComponent::SetRepeatY(int amount)
 {
-	m_repeat = amount;
+	m_repeatY = amount;
 };
-int RecurringRenderComponent::GetRepeat()
+int RecurringRenderComponent::GetRepeatY()
 {
-	return m_repeat;
+	return m_repeatY;
 };

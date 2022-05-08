@@ -11,6 +11,9 @@
 #include "shapes.h"
 #include "EnemyGameObject.h"
 #include "PlayerLegsInputComponent.h"
+#include "RecurringRenderComponent.h"
+#include "DoorInputComponent.h"
+#include "KeyInputComponent.h"
 //#include "spaceship.h"
 //#include "Asteroid.h"
 
@@ -115,6 +118,8 @@ void Game::ChangeState(GameState newState)
 // This is called soon after the program runs
 ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 {
+	mouse = new Mouse();
+
 	// Create the engines - this should be done before creating other DDraw objects
 	if(FAILED(MyDrawEngine::Start(hwnd, bFullScreen)))
 	{
@@ -179,13 +184,13 @@ ErrorType Game::PauseMenu()
 		currentView = mDE->GetViewport();
 
 		Rectangle2D buttonBar;
-		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * i) + (-10 * i) + 70));
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * (float)i) + (-10 * (float)i) + 70));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * i) + (-10 * i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
+		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * (float)i) + (-10 * (float)i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
 		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
-			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * i) + (-10 * i) - 70));
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * (float)i) + (-10 * (float)i) - 70));
 			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
 		}
 	}
@@ -249,13 +254,13 @@ ErrorType Game::MainMenu()
 		currentView = mDE->GetViewport();
 
 		Rectangle2D buttonBar;
-		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * i) + (-10 * i) + 70));
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * (float)i) + (-10 * (float)i) + 70));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * i) + (-10 * i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
+		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * (float)i) + (-10 * (float)i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
 		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
-			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * i) + (-10 * i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * i) + (-10 * i) - 70));
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * (float)i) + (-10 * (float)i) - 70));
 			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
 		}
 	}
@@ -313,120 +318,234 @@ ErrorType Game::StartOfGame()
    // Code to set up your game *********************************************
    // **********************************************************************
 	
+	om.CreateMultiple(L"floor_0.png", 16, 16, 128.0f, false, Type::WALL, Vector2D(0, 700));
+	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(-832, 1788));
+	om.CreateMultiple(L"wall_0.png", 11, 1, 128.0f, true, Type::WALL, Vector2D(448, 1788));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-1088, 700));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(1088, 700));
+	om.CreateMultiple(L"wall_0.png", 18, 1, 128.0f, true, Type::WALL, Vector2D(0, -388));
+	om.CreateMultiple(L"wall_0.png", 1, 13, 128.0f, true, Type::WALL, Vector2D(-704, 892));
+	om.CreateMultiple(L"wall_0.png", 12, 1, 128.0f, true, Type::WALL, Vector2D(0, -4));
+	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(704, 572));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-64, 1276));
+	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-128, 380));
+	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(128, 764));
+
+	om.CreateMultiple(L"floor_0.png", 2, 1, 128.0f, false, Type::WALL, Vector2D(-384, 1788));
+	om.CreateMultiple(L"floor_0.png", 4, 10, 128.0f, false, Type::WALL, Vector2D(-384, 1788+448+256));
+	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-384 - 320, 1788 + 448+256));
+	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-384 + 320, 1788 + 448+256));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640, 1788 + 448 + 256 + 704 - 128));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 + 320 + 640, 1788 + 448 + 256 + 704 - 128));
+	om.CreateMultiple(L"floor_0.png", 24, 15, 128.0f, false, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 1600));
+
+	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 896, 1788 + 448 + 256 + 704 + 1792));
+	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-384 + 896, 1788 + 448 + 256 + 704 + 1792));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-384 - 1600, 1788 + 448 + 256 + 1536));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-384 + 1600, 1788 + 448 + 256 + 1536));
+	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 1024));
+	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-384 - 576, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448));
+	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-384 + 576, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448));
+
+	om.CreateMultiple(L"floor_0.png", 8, 7, 128.0f, false, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448-64));
+
+
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256, 1788 + 448 + 256 + 704 + 256));
+	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 - 512, 1788 + 448 + 256 + 704 + 256 + 640));
+	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640, 1788 + 448 + 256 + 704 + 256 + 640 - 128));
+	om.CreateMultiple(L"wall_0.png", 12, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 + 128, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 704, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 + 192 - 64));
+	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640));
+	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256 - 192, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 256));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256 + 192, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 256));
+	
+	
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768));
+	om.CreateMultiple(L"wall_0.png", 1, 7, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64 + 640, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 384));
+
+	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 768));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 320, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 768 - 256));
+
+	GameObject* explosion = om.Create(L"Explosive");
+	explosion->SetPosition(Vector2D(-986, -290));
+
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
 	om.SetSoundFX(pSoundFX);
 
 	pHUD = new HUD();
-
-	//GameObject* pWall = om.Create(L"Wall");
-	//pWall->Initialise(Vector2D(500, 500), Vector2D(0, 0), pSoundFX);
 	
-	/*
-	for (int a = 0; a < 20; a++)
-	{
-		for (int x = 0; x < 7; x++)
-		{
-			for (int y = 0; y < 7; y++)
-			{
-				GameObject* pWall = om.Create(L"Wall");
-
-				Wall& wall = dynamic_cast<Wall&>(*pWall);
-				wall.SetImageQuick(L"floor_1.png");
-
-				pWall->Initialise(Vector2D(256 * x, 256 * y), Vector2D(0, 0), pSoundFX);
-			}
-		}
-
-		for (int x = 0; x < 7; x++)
-		{
-			GameObject* pWall = om.Create(L"Wall");
-
-			Wall& wall = dynamic_cast<Wall&>(*pWall);
-			wall.CanCollide(true);
-			wall.SetImageQuick(L"wall_2.png");
-
-			pWall->Initialise(Vector2D(256 * x, 1792), Vector2D(0, 0), pSoundFX);
-		}
-
-		for (int x = 0; x < 7; x++)
-		{
-			GameObject* pWall = om.Create(L"Wall");
-
-			Wall& wall = dynamic_cast<Wall&>(*pWall);
-			wall.CanCollide(true);
-			wall.SetImageQuick(L"wall_1.png");
-
-			pWall->Initialise(Vector2D(256 * x, 2048), Vector2D(0, 0), pSoundFX);
-		}
-
-		for (int y = 0; y < 9; y++)
-		{
-			GameObject* pWall = om.Create(L"Wall");
-
-			Wall& wall = dynamic_cast<Wall&>(*pWall);
-
-			wall.CanCollide(true);
-			wall.SetAngle(3.141592653589793238f);
-			wall.SetImageQuick(L"side_1.png");
-			pWall->Initialise(Vector2D(-256, 256 * y), Vector2D(0, 0), pSoundFX);
-		}
-
-		for (int y = 0; y < 9; y++)
-		{
-			GameObject* pWall = om.Create(L"Wall");
-
-			Wall& wall = dynamic_cast<Wall&>(*pWall);
-
-			wall.CanCollide(true);
-			wall.SetImageQuick(L"side_1.png");
-			pWall->Initialise(Vector2D(1792, 256 * y), Vector2D(0, 0), pSoundFX);
-		}
-
-		for (int x = 0; x < 7; x++)
-		{
-			GameObject* pWall = om.Create(L"Wall");
-
-			Wall& wall = dynamic_cast<Wall&>(*pWall);
-
-			wall.CanCollide(true);
-			wall.SetAngle(3.141592653589793238f * .5);
-			wall.SetImageQuick(L"side_1.png");
-			pWall->Initialise(Vector2D(256 * x, -258), Vector2D(0, 0), pSoundFX);
-		}
-
-
-
-	}*/
-
 	GameObject* pFeet = om.Create(L"PlayerLegs");
-
+	pFeet->SetPosition(Vector2D(-896, 1536));
 	PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pFeet->GetInputComponent());
 	pLegsInput->mainCharacter = Game::instance.GetObjectManager().Create(L"PlayerMain");
 
-	GameObject* pWall = om.Create(L"Wall");
-	pWall->SetPosition(Vector2D(0, 600));
+
+	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(L"door_0.png");
+	pRecurringWallRender->SetRepeatX(2);
+	pRecurringWallRender->SetRepeatY(1);
+	pRecurringWallRender->SetImageSize(128.0f);
+
+	Rectangle2D rectangle;
+	CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 128.0f * 2, 128.0f * 1);
+	
+	DoorInputComponent* pInputWall = new DoorInputComponent(1);
+	pInputWall->pPlayer = pFeet;
+
+	GameObject* pNewObject = new GameObject(
+		pSoundFX,
+		pInputWall,
+		nullptr,
+		pRecurringWallRender,
+		pRecurringWallCollision,
+		Type::WALL
+	);
+	pNewObject->SetPosition(Vector2D(-384, 1788));
+	om.AddObject(pNewObject);
+
+	Circle2D circle;
+	KeyInputComponent* pInputKey = new KeyInputComponent(pNewObject);
+	RenderComponent* pRenderKey = new RenderComponent(L"key.png");
+	CollisionComponent* pCollisionKey = new CollisionComponent(circle, 50.0f);
+
+
+	GameObject* pNewKey = new GameObject(
+		pSoundFX,
+		pInputKey,
+		nullptr,
+		pRenderKey,
+		pCollisionKey,
+		Type::KEY
+	);
+	pNewKey->SetPosition(Vector2D(-496, 174));
+	om.AddObject(pNewKey);
+
+
+	/////////////
+	RecurringRenderComponent* pRecurringWallRender_B = new RecurringRenderComponent(L"door_0.png");
+	pRecurringWallRender_B->SetRepeatX(4);
+	pRecurringWallRender_B->SetRepeatY(1);
+	pRecurringWallRender_B->SetImageSize(128.0f);
+
+	CollisionComponent* pRecurringWallCollision_B = new CollisionComponent(rectangle, 128.0f * 4, 128.0f * 1);
+
+	DoorInputComponent* pInputWall_B = new DoorInputComponent(2);
+	pInputWall_B->pPlayer = pFeet;
+
+	GameObject* pNewObject_B = new GameObject(
+		pSoundFX,
+		pInputWall_B,
+		nullptr,
+		pRecurringWallRender_B,
+		pRecurringWallCollision_B,
+		Type::WALL
+	);
+	pNewObject_B->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792));
+	om.AddObject(pNewObject_B);
+
+	////////////////
+
+
+
+	KeyInputComponent* pInputKey_B = new KeyInputComponent(pNewObject_B);
+	RenderComponent* pRenderKey_B = new RenderComponent(L"key.png");
+	CollisionComponent* pCollisionKey_B = new CollisionComponent(circle, 50.0f);
+
+	GameObject* pNewKey_B = new GameObject(
+		pSoundFX,
+		pInputKey_B,
+		nullptr,
+		pRenderKey_B,
+		pCollisionKey_B,
+		Type::KEY
+	);
+	pNewKey_B->SetPosition(Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
+	om.AddObject(pNewKey_B);
+
+	KeyInputComponent* pInputKey_C = new KeyInputComponent(pNewObject_B);
+	RenderComponent* pRenderKey_C = new RenderComponent(L"key.png");
+	CollisionComponent* pCollisionKey_C = new CollisionComponent(circle, 50.0f);
+
+	GameObject* pNewKey_C = new GameObject(
+		pSoundFX,
+		pInputKey_C,
+		nullptr,
+		pRenderKey_C,
+		pCollisionKey_C,
+		Type::KEY
+	);
+	pNewKey_C->SetPosition(Vector2D(255, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
+	om.AddObject(pNewKey_C);
+
+
+
 
 	
-	GameObject* pEnemy = om.Create(L"Enemy1");
-	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
-	pEnemyObject->SetTarget(pFeet);
+	//om.CreateEnemy(Vector2D(0, 0), pFeet);
+	//Below spawn
+	om.CreateEnemy(Vector2D(-896, 325), pFeet);
+	om.CreateEnemy(Vector2D(-896, 225), pFeet);
+	om.CreateEnemy(Vector2D(-896, 125), pFeet);
 
-	/*
-	GameObject* pEnemyB = om.Create(L"Enemy1");
-	EnemyGameObject* pEnemyObjectB = dynamic_cast<EnemyGameObject*>(pEnemyB);
-	pEnemyObjectB->pTarget = pFeet;
-	pEnemyB->SetPosition(pEnemy->GetPosition() + Vector2D(150, 0));
-	*/
-	GameObject* bb = om.Create(L"Walls");
-	//pFeet->Initialise(Vector2D(0, 0), Vector2D(0 ,0), pSoundFX);
+	//bottom
+	om.CreateEnemy(Vector2D(-505, -135), pFeet);
+	om.CreateEnemy(Vector2D(-505, -259), pFeet);
+	om.CreateEnemy(Vector2D(-405, -135), pFeet);
+	om.CreateEnemy(Vector2D(-405, -259), pFeet);
+	om.CreateEnemy(Vector2D(-305, -135), pFeet);
+	om.CreateEnemy(Vector2D(-305, -259), pFeet);
+	om.CreateEnemy(Vector2D(-205, -135), pFeet);
+	om.CreateEnemy(Vector2D(-205, -259), pFeet);
 
-	//GameObject* pMouse = om.Create(L"Mouse");
-	//pMouse->Initialise(Vector2D(0, 0), Vector2D(0, 0), pSoundFX);
+	//far right
+	om.CreateEnemy(Vector2D(874, 16), pFeet);
+	om.CreateEnemy(Vector2D(874, 216), pFeet);
+	om.CreateEnemy(Vector2D(874, 416), pFeet);
+	om.CreateEnemy(Vector2D(874, 616), pFeet);
 
-	//pMouse = new Mouse();
-	//pMouse->StartUp();
+	om.CreateEnemy(Vector2D(378, 1509), pFeet);
+	om.CreateEnemy(Vector2D(278, 1509), pFeet);
+	om.CreateEnemy(Vector2D(178, 1509), pFeet);
+	om.CreateEnemy(Vector2D(406, 1005), pFeet);
+	om.CreateEnemy(Vector2D(30, 1005), pFeet);
+	om.CreateEnemy(Vector2D(-520, 1005), pFeet);
+	om.CreateEnemy(Vector2D(-520, 577), pFeet);
+	om.CreateEnemy(Vector2D(30, 577), pFeet);
+	om.CreateEnemy(Vector2D(406, 577), pFeet);
+	om.CreateEnemy(Vector2D(187, 187), pFeet);
+	om.CreateEnemy(Vector2D(87, 187), pFeet);
+	om.CreateEnemy(Vector2D(-13, 187), pFeet);
 	
+	om.CreateEnemy(Vector2D(-520, 2110), pFeet);
+	om.CreateEnemy(Vector2D(-268, 2110), pFeet);
+	om.CreateEnemy(Vector2D(-520, 2400), pFeet);
+	om.CreateEnemy(Vector2D(-520, 2400), pFeet);
+	om.CreateEnemy(Vector2D(-372, 2866), pFeet);
+	om.CreateEnemy(Vector2D(-1000, 3240), pFeet);
+	om.CreateEnemy(Vector2D(-1500, 3240), pFeet);
+	om.CreateEnemy(Vector2D(-1796, 3608), pFeet);
+	om.CreateEnemy(Vector2D(-1796, 4162), pFeet);
+	om.CreateEnemy(Vector2D(-1147, 4795), pFeet);
+	om.CreateEnemy(Vector2D(-1020, 3924), pFeet);
+	om.CreateEnemy(Vector2D(-1404, 3924), pFeet);
+	om.CreateEnemy(Vector2D(-632, 3924), pFeet);
+	
+	om.CreateEnemy(Vector2D(240, 3248), pFeet);
+	om.CreateEnemy(Vector2D(1023, 3248), pFeet);
+	om.CreateEnemy(Vector2D(1023, 3691), pFeet);
+	om.CreateEnemy(Vector2D(1023, 4039), pFeet);
+	om.CreateEnemy(Vector2D(258, 3954), pFeet);
+	om.CreateEnemy(Vector2D(-22, 3954), pFeet);
+	om.CreateEnemy(Vector2D(-258, 4390), pFeet);
+	om.CreateEnemy(Vector2D(635, 3664), pFeet);
+	om.CreateEnemy(Vector2D(482, 4798), pFeet);
+	om.CreateEnemy(Vector2D(121, 4798), pFeet);
+	om.CreateEnemy(Vector2D(-243, 4798), pFeet);
+
+
+
+
 	for (int i = 0; i < 2; i++)
 	{
 		
@@ -435,9 +554,6 @@ ErrorType Game::StartOfGame()
 		//int yPos = (rand() % (900 - -900 + 1) + -900);
 		//pAsteroid->Initialise(Vector2D((float) xPos, (float) yPos), Vector2D(0, 0), pSoundFX);
 	}
-	
-
-	
 
 	gt.mark();
 	gt.mark();
@@ -468,7 +584,6 @@ ErrorType Game::Update()
    // Your code goes here *************************************************
    // *********************************************************************
 
-
 	gt.mark();
 
 
@@ -478,7 +593,7 @@ ErrorType Game::Update()
 	//om.CheckAllCollisions();
 	//om.DeleteAllMarked();
 
-	om.UpdateAll(gt.mdFrameTime, pHUD);
+	om.UpdateAll((float)gt.mdFrameTime, pHUD);
 
 	pHUD->Update();
 
@@ -487,7 +602,7 @@ ErrorType Game::Update()
 		timer = 0;
 		om.DeleteAllMarked();
 	}
-
+	mouse->UpdateMouse();
 	timer++;
 
    // *********************************************************************
@@ -512,6 +627,9 @@ ErrorType Game::EndOfGame()
 
 	delete pHUD;
 	pHUD = nullptr;
+
+	delete mouse;
+	mouse = nullptr;
 	
 
 	return SUCCESS;

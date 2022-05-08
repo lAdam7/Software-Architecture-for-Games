@@ -24,13 +24,17 @@
     <ClInclude Include="BulletPhysicsComponent.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="DoorInputComponent.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="EnemyPhysicsComponent.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
+    <ClInclude Include="ExplosionCollisionComponent.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="KeyInputComponent.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="gamecode.h" />
     <ClInclude Include="GameObject.h" />
@@ -45,6 +49,7 @@
     <ClInclude Include="RecurringRenderComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="ShieldCollisionComponent.h" />
     <ClInclude Include="SoundFX.h" />
     <ClInclude Include="vector2D.h" />
   </ItemGroup>
@@ -53,12 +58,16 @@
     <ClCompile Include="BulletPhysicsComponent.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="DoorInputComponent.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
     <ClCompile Include="EnemyPhysicsComponent.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
+    <ClCompile Include="ExplosionCollisionComponent.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="KeyInputComponent.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -72,6 +81,7 @@
     <ClCompile Include="RecurringRenderComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="ShieldCollisionComponent.cpp" />
     <ClCompile Include="SoundFX.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wincode.cpp" />

@@ -1,13 +1,36 @@
-﻿  gamecode.cpp
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(23,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(182,98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(182,183): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(184,124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(188,101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(188,185): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(252,98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(252,183): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(254,124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(258,101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(258,185): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  AnimatedRenderComponent.cpp
+  BulletPhysicsComponent.cpp
+  camera.cpp
+  CollisionComponent.cpp
+  DoorInputComponent.cpp
+  EnemyGameObject.cpp
+  EnemyPhysicsComponent.cpp
+  ErrorLogger.cpp
+  ExplosionCollisionComponent.cpp
+  Gun.cpp
+  HUD.cpp
+  InputComponent.cpp
+  KeyInputComponent.cpp
+  Mouse.cpp
+  PhysicsComponent.cpp
+  gamecode.cpp
+C:\Users\Adam\source\repos\Game\Game\gamecode.cpp(26,16): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
+  GameObject.cpp
+  gametimer.cpp
+  mydrawengine.cpp
+  myinputs.cpp
+  Generating Code...
+  Compiling...
+  mysoundengine.cpp
+  ObjectManager.cpp
+  PlayerLegsInputComponent.cpp
+  PlayerMainInputComponent.cpp
+  RecurringRenderComponent.cpp
+  RenderComponent.cpp
+  Shapes.cpp
+  ShieldCollisionComponent.cpp
+  SoundFX.cpp
+  vector2D.cpp
+  wincode.cpp
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

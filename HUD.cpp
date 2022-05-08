@@ -36,15 +36,20 @@ void HUD::Update()
 		rectAmmo.PlaceAt(topRightPosition + Vector2D(-300 + GetReloadProgress(), -755), topRightPosition + Vector2D(0, -735));
 		pDE->FillRect(rectAmmo, MyDrawEngine::CYAN);
 
-		
-		/*
-		pDE->WriteText(topRightPosition + Vector2D(-300, -780), L"Shield: 100", MyDrawEngine::WHITE);
-		Rectangle2D rectShield;
-		rectShield.PlaceAt(topRightPosition + Vector2D(-300, -845), topRightPosition + Vector2D(0, -825));
-		pDE->FillRect(rectShield, MyDrawEngine::RED);
-		*/
+		if (m_activeShield)
+		{
+			pDE->WriteText(topRightPosition + Vector2D(-300, -780), L"Shield: 100", MyDrawEngine::WHITE);
+			Rectangle2D rectShield;
+			rectShield.PlaceAt(topRightPosition + Vector2D(-300, -845), topRightPosition + Vector2D(0, -825));
+			pDE->FillRect(rectShield, MyDrawEngine::RED);
+		}
 	};
 }
+
+void HUD::SetShield(bool active)
+{
+	m_activeShield = active;
+};
 
 void HUD::SetActive(bool activity)
 {

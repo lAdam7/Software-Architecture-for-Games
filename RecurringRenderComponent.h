@@ -5,19 +5,18 @@ class RecurringRenderComponent : public RenderComponent
 {
 private:
 	float m_imageSize;
-	bool m_horizontal;
-	int m_repeat;
+	int m_repeatX;
+	int m_repeatY;
 public:
-	RecurringRenderComponent();
+	RecurringRenderComponent(const wchar_t* filename);
 
 	void SetImageSize(float size);
 	float GetImageSize();
 
-	void SetHorizontal(bool horizontal);
-	bool IsHorizontal();
-
-	void SetRepeat(int amount);
-	int GetRepeat();
+	void SetRepeatX(int amount);
+	void SetRepeatY(int amount);
+	int GetRepeatX();
+	int GetRepeatY();
 
 	void Update(GameObject* pObject) override;
 };

@@ -2,18 +2,7 @@
 #include "myinputs.h"
 #include "mydrawengine.h"
 
-void Mouse::Initialise(Vector2D startingPosition, Vector2D velocity, SoundFX* pSound)
-{
-	Rectangle2D test = MyDrawEngine::GetInstance()->GetViewport();
-	m_widthRadius = test.GetTopRight().XValue;
-
-	LoadImg(L"ship.bmp");
-
-	GameObject::Activate();
-
-};
-
-void Mouse::Update(double frameTime)
+void Mouse::UpdateMouse()
 {
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleMouse();
@@ -49,24 +38,8 @@ void Mouse::Update(double frameTime)
 
 	Vector2D cameraPos = MyDrawEngine::GetInstance()->theCamera.GetCameraPosition();
 
-	SetPosition(Vector2D(cameraPos.XValue + m_mouseX, -cameraPos.YValue + m_mouseY));
-}
+	MyDrawEngine::GetInstance()->FillCircle(Vector2D(cameraPos.XValue + m_mouseX, -cameraPos.YValue + m_mouseY), 50.0f, MyDrawEngine::YELLOW);
 
-IShape2D& Mouse::GetShape()
-{
-	Vector2D offset;
-	offset.setBearing(GameObject::GetAngle(), -45.0f);
-
-	m_collisionShape.PlaceAt(GameObject::GetPosition() + offset, 40);
-	return m_collisionShape;
-}
-
-void Mouse::HandleCollision(GameObject& other)
-{
-	
-}
-
-void Mouse::HandleMessage(Message& msg)
-{
-
+	MyDrawEngine::GetInstance()->WriteDouble(500, 50, cameraPos.XValue + m_mouseX, MyDrawEngine::RED);
+	MyDrawEngine::GetInstance()->WriteDouble(650, 50, -cameraPos.YValue + m_mouseY, MyDrawEngine::RED);
 }

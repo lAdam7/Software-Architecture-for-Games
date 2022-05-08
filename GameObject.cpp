@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "AnimatedRenderComponent.h"
+#include "DoorInputComponent.h"
 #include "ObjectManager.h"
 
 GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type)
@@ -23,7 +24,7 @@ Type GameObject::getType()
 	return m_type;
 }
 
-void GameObject::Update(HUD* pHUD, double frameTime)
+void GameObject::Update(HUD* pHUD, float frameTime)
 {
 	if (IsActive())
 	{
@@ -34,7 +35,7 @@ void GameObject::Update(HUD* pHUD, double frameTime)
 		if (pInputComponent)
 			pInputComponent->Update(pHUD, this, frameTime);
 		if (pCollisionComponent)
-			pCollisionComponent->Update(this);
+			pCollisionComponent->Update(this, frameTime);
 	}
 };
 
@@ -69,6 +70,12 @@ void GameObject::DeleteObject()
 	{
 		AnimatedRenderComponent* animatedRender = dynamic_cast<AnimatedRenderComponent*>(pRenderComponent);
 		animatedRender->DeleteObject();
+	}
+	if (typeid(pInputComponent) == typeid(DoorInputComponent))
+	{
+		DoorInputComponent* input = dynamic_cast<DoorInputComponent*>(pInputComponent);
+		delete input->pPlayer;
+		input->pPlayer = nullptr;
 	}
 	
 	delete pInputComponent;
