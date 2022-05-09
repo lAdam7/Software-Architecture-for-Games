@@ -5,8 +5,8 @@
 class ShieldCollisionComponent : public CollisionComponent
 {
 public:
-	float m_health = 100;
+	float m_health;
 	ShieldCollisionComponent(Circle2D circle, float radius);
-	void Update(GameObject* pObject, float frameTime);
+	void Update(HUD* pHUD, GameObject* pObject, float frameTime) override;
 	void Damage(float amount);
 };

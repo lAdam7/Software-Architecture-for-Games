@@ -1,12 +1,11 @@
 c:\users\adam\source\repos\game\game\debug\vc143.pdb
 c:\users\adam\source\repos\game\game\debug\vc143.idb
-c:\users\adam\source\repos\game\game\debug\myinputs.obj
-c:\users\adam\source\repos\game\game\debug\mydrawengine.obj
 c:\users\adam\source\repos\game\game\debug\gametimer.obj
 c:\users\adam\source\repos\game\game\debug\gameobject.obj
 c:\users\adam\source\repos\game\game\debug\gamecode.obj
 c:\users\adam\source\repos\game\game\debug\physicscomponent.obj
 c:\users\adam\source\repos\game\game\debug\mouse.obj
+c:\users\adam\source\repos\game\game\debug\messagecomponent.obj
 c:\users\adam\source\repos\game\game\debug\keyinputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\inputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\hud.obj
@@ -14,6 +13,7 @@ c:\users\adam\source\repos\game\game\debug\gun.obj
 c:\users\adam\source\repos\game\game\debug\explosioncollisioncomponent.obj
 c:\users\adam\source\repos\game\game\debug\errorlogger.obj
 c:\users\adam\source\repos\game\game\debug\enemyphysicscomponent.obj
+c:\users\adam\source\repos\game\game\debug\enemymessagecomponent.obj
 c:\users\adam\source\repos\game\game\debug\enemygameobject.obj
 c:\users\adam\source\repos\game\game\debug\doorinputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\collisioncomponent.obj
@@ -31,8 +31,10 @@ c:\users\adam\source\repos\game\game\debug\playermaininputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\playerlegsinputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\objectmanager.obj
 c:\users\adam\source\repos\game\game\debug\mysoundengine.obj
-c:\users\adam\source\repos\game\game\debug\messagecomponent.obj
-c:\users\adam\source\repos\game\game\debug\enemymessagecomponent.obj
+c:\users\adam\source\repos\game\game\debug\myinputs.obj
+c:\users\adam\source\repos\game\game\debug\mydrawengine.obj
+c:\users\adam\source\repos\game\game\debug\bossphysicscomponent.obj
+c:\users\adam\source\repos\game\game\debug\upgrademenu.obj
 c:\users\adam\source\repos\game\debug\game.exe
 c:\users\adam\source\repos\game\game\debug\game.ilk
 c:\users\adam\source\repos\game\debug\game.pdb

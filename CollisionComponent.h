@@ -20,7 +20,7 @@ public:
 	CollisionComponent(Rectangle2D shape, float width, float height);
 	//CollisionComponent() = default;
 	virtual ~CollisionComponent();
-	virtual void Update(GameObject* pObject, float frameTime);
+	virtual void Update(HUD* pHUD, GameObject* pObject, float frameTime);
 	
 	virtual IShape2D& GetShape(GameObject* pObject);
 

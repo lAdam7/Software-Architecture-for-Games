@@ -20,7 +20,7 @@ BossPhysicsComponent::BossPhysicsComponent(RenderComponent* pRender)
 	pAnimatedRenderComponent->AddImage(run, L"boss_walk_7.png");
 	pAnimatedRenderComponent->AddImage(run, L"boss_walk_8.png");
 	pAnimatedRenderComponent->NextAnimation(run, run);
-	pAnimatedRenderComponent->SetAnimationSpeed(run, 14.0f);
+	pAnimatedRenderComponent->SetAnimationSpeed(run, 8.0f);
 
 	idle = pAnimatedRenderComponent->NewAnimation();
 	pAnimatedRenderComponent->AddImage(idle, L"boss_walk_0.png");
@@ -54,7 +54,7 @@ void BossPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTim
 	Vector2D a = pEnemyObject->GetTarget()->GetPosition() - pEnemyObject->GetPosition();
 	
 	float magnitude = a.magnitude();
-	if (magnitude <= (step * 85) || magnitude == 0.0f)
+	if (magnitude <= (step * 45) || magnitude == 0.0f)
 	{
 		// Melee? 
 		if (pAnimatedRenderComponent->GetCurrentAnimation() != attack && pEnemyObject->CanDamage())
@@ -75,7 +75,6 @@ void BossPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTim
 			{
 				pAnimatedRenderComponent->SetCurrentAnimation(run);
 			}
-
 		}
 		else
 		{

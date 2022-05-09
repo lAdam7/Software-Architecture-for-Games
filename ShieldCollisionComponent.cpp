@@ -9,10 +9,12 @@ void ShieldCollisionComponent::Damage(float amount)
 	m_health -= amount;
 };
 
-void ShieldCollisionComponent::Update(GameObject* pObject, float frameTime)
+void ShieldCollisionComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 {
+	pHUD->SetShield(m_health);
 	if (m_health < 0)
 	{
+		pHUD->SetShield(false);
 		pObject->DeleteObject();
 	}
 };

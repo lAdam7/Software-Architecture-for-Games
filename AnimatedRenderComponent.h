@@ -24,6 +24,7 @@ public:
 	void DeleteObject();
 	void SetAnimationSpeed(int index, float speed);
 	void NextAnimation(int currentIndex, int nextIndex);
+	
 	int GetCurrentAnimation();
 
 	//void SetCurrentImage(int index) override;

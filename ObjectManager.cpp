@@ -85,7 +85,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 		pRecurringWallRender->SetImageSize(256.0f);
 
 		CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 256.0f * WALLCOUNT, 256.0f);
-
+		
 		pNewObject = new GameObject(
 			pSoundFX,
 			nullptr,
@@ -158,7 +158,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 	{
 		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
 		BossPhysicsComponent* pEnemyPhysiscs = new BossPhysicsComponent(pEnemyRender);
-		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 150.0f);
+		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 60.0f);
 
 		pNewObject = new EnemyGameObject(
 			pSoundFX,
@@ -167,16 +167,22 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pEnemyRender,
 			pCollisionComponent,
 			nullptr,
-			Type::ENEMY
+			Type::ENEMY_BOSS
 		);
 		pNewObject->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 512));
+		pNewObject->SetScale(0.2f);
+
+		EnemyGameObject* test = dynamic_cast<EnemyGameObject*>(pNewObject);
+		test->SetMaxHealth(1000.0f);
+		test->Heal();
+		
 	}
 	else if (name == L"Shield")
 	{
 		RenderComponent* pShieldRender = new RenderComponent(L"shield.png");
 		CollisionComponent* pShieldCollision = new ShieldCollisionComponent(circle, 140.0f);
 
-		pNewObject = new EnemyGameObject(
+		pNewObject = new GameObject(
 			pSoundFX,
 			nullptr,
 			nullptr,
@@ -275,6 +281,7 @@ void ObjectManager::CreateBoss(GameObject* pTarget)
 	GameObject* pEnemy = Create(L"Boss");
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
 	pEnemyObject->SetTarget(pTarget);
+	pEnemyObject->SetDamage(60.0f);
 };
 
 void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
@@ -407,6 +414,11 @@ void ObjectManager::DeleteAllMarked()
 	m_pObjectList.remove(nullptr);
 }
 
+void ObjectManager::FreezeGame(bool freezeGame, Type_Freeze freezeScreen)
+{
+	m_freezeGame = freezeGame;
+	m_freezeScreen = freezeScreen;
+};
 void ObjectManager::FreezeGame(bool freezeGame)
 {
 	m_freezeGame = freezeGame;
@@ -414,6 +426,10 @@ void ObjectManager::FreezeGame(bool freezeGame)
 bool ObjectManager::IsFrozen() const
 {
 	return m_freezeGame;
+};
+Type_Freeze ObjectManager::GetFreezeScreen()
+{
+	return m_freezeScreen;
 };
 
 bool ObjectManager::EnemyDirectSight(IShape2D& shape)

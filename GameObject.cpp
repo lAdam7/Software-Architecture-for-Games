@@ -36,7 +36,7 @@ void GameObject::Update(HUD* pHUD, float frameTime, bool isFrozen)
 		if (pInputComponent && !isFrozen)
 			pInputComponent->Update(pHUD, this, frameTime);
 		if (pCollisionComponent && !isFrozen)
-			pCollisionComponent->Update(this, frameTime);
+			pCollisionComponent->Update(pHUD, this, frameTime);
 	}
 };
 

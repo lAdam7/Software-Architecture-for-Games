@@ -10,7 +10,7 @@
 
 struct Message;
 enum class Activity { ACTIVE, INACTIVE, CAN_DELETE };
-enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET, SHIELD, KEY, DOOR, EXPLOSIVE, EXPLOSION };
+enum class Type { IGNOREOBJ, PLAYER, ENEMY, WALL, BULLET, SHIELD, KEY, DOOR, EXPLOSIVE, EXPLOSION, ENEMY_BOSS };
 
 class GameObject
 {
@@ -29,7 +29,7 @@ class GameObject
 		Vector2D position;
 		float angle;
 		float opacity;
-		float scale;
+		float scale = 1.0f;
 
 		bool collidable;
 		bool receiveMessages;

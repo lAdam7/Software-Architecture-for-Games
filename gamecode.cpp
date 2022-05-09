@@ -66,7 +66,12 @@ ErrorType Game::Main()
 	case RUNNING:           // Playing the actual game
 		err = Update();
 		if (om.IsFrozen())
-			DeadMenu();
+		{
+			if (om.GetFreezeScreen() == Type_Freeze::BUY)
+				um->Update((float)gt.mdFrameTime, pHUD);
+			if (om.GetFreezeScreen() == Type_Freeze::DEFEAT)
+				DeadMenu();
+		}
 		break;
 	case GAMEOVER:
 		err = FAILURE;       // Error return causes the window loop to exit
@@ -261,7 +266,7 @@ ErrorType Game::PauseMenu()
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
 		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
+		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
 			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
@@ -391,7 +396,7 @@ ErrorType Game::StartOfGame()
 {
    // Code to set up your game *********************************************
    // **********************************************************************
-	
+	um = new UpgradeMenu();
 	om.FreezeGame(false);
 
 	om.CreateMultiple(L"floor_0.png", 16, 16, 128.0f, false, Type::WALL, Vector2D(0, 700));
@@ -660,6 +665,13 @@ ErrorType Game::Update()
    // Your code goes here *************************************************
    // *********************************************************************
 
+	MyInputs* pInputs = MyInputs::GetInstance();
+	pInputs->SampleKeyboard();
+	if (!om.IsFrozen() && pInputs->NewKeyPressed(DIK_B))
+	{
+		om.FreezeGame(true, Type_Freeze::BUY);
+	}
+
 	gt.mark();
 
 
@@ -705,4 +717,3 @@ ErrorType Game::EndOfGame()
 	
 	return SUCCESS;
 }
-

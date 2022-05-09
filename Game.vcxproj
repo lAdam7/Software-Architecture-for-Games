@@ -55,6 +55,7 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShieldCollisionComponent.h" />
     <ClInclude Include="SoundFX.h" />
+    <ClInclude Include="UpgradeMenu.h" />
     <ClInclude Include="vector2D.h" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +91,7 @@
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShieldCollisionComponent.cpp" />
     <ClCompile Include="SoundFX.cpp" />
+    <ClCompile Include="UpgradeMenu.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wincode.cpp" />
   </ItemGroup>

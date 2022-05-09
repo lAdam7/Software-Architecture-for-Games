@@ -1,2 +1,4 @@
-﻿  BossPhysicsComponent.cpp
+﻿  ExplosionCollisionComponent.cpp
+  ObjectManager.cpp
+  Generating Code...
   Game.vcxproj -> C:\Users\Adam\source\repos\Game\Debug\Game.exe

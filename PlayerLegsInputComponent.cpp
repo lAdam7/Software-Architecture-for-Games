@@ -90,6 +90,7 @@ void PlayerLegsInputComponent::Update(HUD* pHUD, GameObject* pObject, float fram
 		{
 			shield = Game::instance.GetObjectManager().Create(L"Shield");
 			pHUD->SetShield(true);
+
 		}
 	}
 	shieldCounter += frameTime;

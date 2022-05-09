@@ -38,9 +38,11 @@ void HUD::Update()
 
 		if (m_activeShield)
 		{
-			pDE->WriteText(topRightPosition + Vector2D(-300, -780), L"Shield: 100", MyDrawEngine::WHITE);
+			float percentage = 300 - (((m_currentShield / m_maxShield * 100)) * 3);
+			std::wstring strShield = L"Shield: " + std::to_wstring((int)m_currentShield) + L" / " + std::to_wstring((int)m_maxShield);
+			pDE->WriteText(topRightPosition + Vector2D(-300, -780), strShield.c_str(), MyDrawEngine::WHITE);
 			Rectangle2D rectShield;
-			rectShield.PlaceAt(topRightPosition + Vector2D(-300, -845), topRightPosition + Vector2D(0, -825));
+			rectShield.PlaceAt(topRightPosition + Vector2D(-300 + percentage, -845), topRightPosition + Vector2D(0, -825));
 			pDE->FillRect(rectShield, MyDrawEngine::RED);
 		}
 	};
@@ -49,6 +51,7 @@ void HUD::Update()
 void HUD::SetShield(bool active)
 {
 	m_activeShield = active;
+	m_currentShield = m_maxShield;
 };
 
 void HUD::SetActive(bool activity)
@@ -142,4 +145,22 @@ void HUD::SetReloadProgress(float progress)
 float HUD::GetReloadProgress()
 {
 	return m_ReloadProgress;
+};
+
+void HUD::SetMaxShield(float amount)
+{
+	m_maxShield = amount;
+	m_currentShield = amount;
+};
+void HUD::SetShield(float amount)
+{
+	m_currentShield = amount;
+};
+int HUD::GetMaxShield()
+{
+	return m_maxShield;
+};
+int HUD::GetShield()
+{
+	return m_currentShield;
 };

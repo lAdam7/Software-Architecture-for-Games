@@ -17,7 +17,7 @@ void AnimatedRenderComponent::Update(GameObject* pObject)
 	if (pObject->IsActive())
 	{
 		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-		pDE->DrawAt(pObject->GetPosition(), animations[m_currentAnimation].m_images[int(m_animationTimer)], 1.0f, pObject->GetAngle());
+		pDE->DrawAt(pObject->GetPosition(), animations[m_currentAnimation].m_images[int(m_animationTimer)], pObject->GetScale(), pObject->GetAngle());
 	}
 };
 

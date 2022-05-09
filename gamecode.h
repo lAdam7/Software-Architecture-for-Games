@@ -15,6 +15,7 @@
 #include "ObjectManager.h"
 #include "SoundFX.h"
 #include "HUD.h"
+#include "UpgradeMenu.h"
 
 
 // This is a hack for reading keyboard in situations where you don't want to
@@ -45,6 +46,7 @@ private:
 	HUD* pHUD;
 
 	//BuildMenu bm;
+	UpgradeMenu* um;
 
 	int m_menuOption;              // Tracks the currently selected menu option, during main or pause menu
 	Game();                        // Constructor

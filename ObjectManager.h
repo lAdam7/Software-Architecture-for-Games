@@ -3,6 +3,7 @@
 #include "HUD.h"
 #include <list>
 
+enum class Type_Freeze { PAUSE, WON, DEFEAT, BUY };
 class ObjectManager
 {		
 	private:
@@ -17,6 +18,7 @@ class ObjectManager
 		Rectangle2D rectangle;
 		
 		bool m_freezeGame;
+		Type_Freeze m_freezeScreen;
 	public:
 		void AddObject(GameObject* pObject);
 		GameObject* Create(std::wstring name);
@@ -35,8 +37,12 @@ class ObjectManager
 		void CreateEnemy(Vector2D pos, GameObject* pTarget, float angle);
 		void CreateBoss(GameObject* pTarget);
 
+		void FreezeGame(bool freeze, Type_Freeze m_freezeScreen);
 		void FreezeGame(bool freeze);
 		bool IsFrozen() const;
+		Type_Freeze GetFreezeScreen();
+
 
 		bool EnemyDirectSight(IShape2D& shape);
+
 };
