@@ -15,7 +15,6 @@
 #include "ObjectManager.h"
 #include "SoundFX.h"
 #include "HUD.h"
-#include "Mouse.h"
 
 
 // This is a hack for reading keyboard in situations where you don't want to
@@ -44,7 +43,6 @@ private:
 	ObjectManager om;
 	SoundFX* pSoundFX;
 	HUD* pHUD;
-	Mouse* mouse;
 
 	//BuildMenu bm;
 
@@ -71,6 +69,8 @@ public:
    // It will run either Update( ), MainMenu() or PauseMenu() depending on the
    // game state
 	ErrorType Main();
+
+	ErrorType DeadMenu();
 
    // Called each frame when in the pause state. Manages the pause menu
    // which is currently a basic placeholder

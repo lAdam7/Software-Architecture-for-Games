@@ -3,7 +3,7 @@
 #include "DoorInputComponent.h"
 #include "ObjectManager.h"
 
-GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type)
+GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, MessageComponent* pMessage, Type type)
 {
 	pSoundFX = pSound;
 
@@ -11,6 +11,7 @@ GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent
 	pPhysicsComponent = pPhysics;
 	pRenderComponent = pRender;
 	pCollisionComponent = pCollision;
+	pMessageComponent = pMessage;
 	m_type = type;
 }
 
@@ -24,17 +25,17 @@ Type GameObject::getType()
 	return m_type;
 }
 
-void GameObject::Update(HUD* pHUD, float frameTime)
+void GameObject::Update(HUD* pHUD, float frameTime, bool isFrozen)
 {
 	if (IsActive())
 	{
-		if (pPhysicsComponent)
+		if (pPhysicsComponent && !isFrozen)
 			pPhysicsComponent->Update(pHUD, this, frameTime);
 		if (pRenderComponent)
 			pRenderComponent->Update(this);
-		if (pInputComponent)
+		if (pInputComponent && !isFrozen)
 			pInputComponent->Update(pHUD, this, frameTime);
-		if (pCollisionComponent)
+		if (pCollisionComponent && !isFrozen)
 			pCollisionComponent->Update(this, frameTime);
 	}
 };
@@ -86,6 +87,8 @@ void GameObject::DeleteObject()
 	pRenderComponent = nullptr;
 	delete pCollisionComponent;
 	pCollisionComponent = nullptr;
+	delete pMessageComponent;
+	pMessageComponent = nullptr;
 
 	m_activity = Activity::CAN_DELETE;
 }
@@ -163,4 +166,9 @@ RenderComponent* GameObject::GetRenderComponent()
 CollisionComponent* GameObject::GetCollisionComponent()
 {
 	return pCollisionComponent;
+};
+
+MessageComponent* GameObject::GetMessageComponent()
+{
+	return pMessageComponent;
 };

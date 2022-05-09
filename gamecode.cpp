@@ -46,7 +46,6 @@ ObjectManager& Game::GetObjectManager()
 // It will run either Update( ), MainMenu() or PauseMenu() depending on the
 // game state
 ErrorType Game::Main()
-
 {
 	//Flip and clear the back buffer
 	MyDrawEngine* pTheDrawEngine= MyDrawEngine::GetInstance();
@@ -55,25 +54,27 @@ ErrorType Game::Main()
 
 	ErrorType err=SUCCESS;
 
-	switch(m_currentState)
+	switch (m_currentState)
 	{
 	case MENU:
 
-		err= MainMenu();     // Menu at start of game
+		err = MainMenu();     // Menu at start of game
 		break;
 	case PAUSED:
 		err = PauseMenu();   // Player has paused the game
 		break;
 	case RUNNING:           // Playing the actual game
-		err= Update();
+		err = Update();
+		if (om.IsFrozen())
+			DeadMenu();
 		break;
-   case GAMEOVER:
+	case GAMEOVER:
 		err = FAILURE;       // Error return causes the window loop to exit
 	default:
 		// Not a valid state
 		err = FAILURE;       // Error return causes the window loop to exit
 	}
-
+	
 	return err;
 }
 
@@ -118,8 +119,6 @@ void Game::ChangeState(GameState newState)
 // This is called soon after the program runs
 ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 {
-	mouse = new Mouse();
-
 	// Create the engines - this should be done before creating other DDraw objects
 	if(FAILED(MyDrawEngine::Start(hwnd, bFullScreen)))
 	{
@@ -168,6 +167,81 @@ void Game::Shutdown()
 
 // Called each frame when in the pause state. Manages the pause menu
 // which is currently a basic placeholder
+ErrorType Game::DeadMenu()
+{
+	// Code for a basic pause menu
+	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
+	mDE->WriteText(450, 220, L"YOU DIED", MyDrawEngine::RED, newFont);
+
+	const int NUMOPTIONS = 3;
+	wchar_t options[NUMOPTIONS][11] = { L"RESTART", L"MAIN MENU", L"EXIT"};
+
+	// Display menu options
+	for (int i = 0; i < NUMOPTIONS; i++)
+	{
+		Rectangle2D currentView;
+		currentView = mDE->GetViewport();
+
+		Rectangle2D buttonBar;
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
+		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
+		{
+			Rectangle2D selectedBar;
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
+			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
+		}
+	}
+
+	MyInputs* pInputs = MyInputs::GetInstance();
+
+	// Get user input
+	pInputs->SampleKeyboard();
+
+	// Move choice up and down
+	if (pInputs->NewKeyPressed(DIK_UP))
+	{
+		m_menuOption--;
+	}
+	if (pInputs->NewKeyPressed(DIK_DOWN))
+	{
+		m_menuOption++;
+	}
+	if (m_menuOption < 0)
+	{
+		m_menuOption = NUMOPTIONS - 1;
+	}
+	else if (m_menuOption >= NUMOPTIONS)
+	{
+		m_menuOption = 0;
+	}
+
+	// If player chooses an option ....
+	if (pInputs->NewKeyPressed(DIK_RETURN))
+	{
+		if (m_menuOption == 0)      // Restart
+		{
+			EndOfGame();
+			StartOfGame();
+		}
+		if (m_menuOption == 1)      // Main menu
+		{
+			EndOfGame();           // Clear up the game
+			ChangeState(MENU);     // Go back to the menu
+		}
+		if (m_menuOption == 2) // exit
+		{
+			EndOfGame();
+			ChangeState(GAMEOVER);
+		}
+	}
+
+	return SUCCESS;
+}
+
+// Called each frame when in the pause state. Manages the pause menu
+// which is currently a basic placeholder
 ErrorType Game::PauseMenu()
 {
 	// Code for a basic pause menu
@@ -177,20 +251,20 @@ ErrorType Game::PauseMenu()
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][11] = {L"RESUME", L"MAIN MENU"};
 
-   // Display menu options
+	// Display menu options
 	for (int i = 0; i < NUMOPTIONS; i++)
 	{
 		Rectangle2D currentView;
 		currentView = mDE->GetViewport();
 
 		Rectangle2D buttonBar;
-		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * (float)i) + (-10 * (float)i) + 70));
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * (float)i) + (-10 * (float)i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
 		{
 			Rectangle2D selectedBar;
-			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * (float)i) + (-10 * (float)i) - 70));
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
 		}
 	}
@@ -225,7 +299,7 @@ ErrorType Game::PauseMenu()
 		{
 			ChangeState(RUNNING);  // Go back to running the game
 		}
-		if(m_menuOption ==1)      // Quit
+		if(m_menuOption ==1)      // main menu
 		{
 			EndOfGame();           // Clear up the game
 			ChangeState(MENU);     // Go back to the menu
@@ -247,20 +321,20 @@ ErrorType Game::MainMenu()
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][15] = {L"START GAME", L"EXIT"};
 
-   // Display the options
-	for(int i=0;i<NUMOPTIONS;i++)
+	// Display menu options
+	for (int i = 0; i < NUMOPTIONS; i++)
 	{
 		Rectangle2D currentView;
 		currentView = mDE->GetViewport();
 
 		Rectangle2D buttonBar;
-		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) - 70), Vector2D(currentView.GetTopLeft().XValue + 1500, 400 + (-200 * (float)i) + (-10 * (float)i) + 70));
+		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(Vector2D(currentView.GetTopLeft().XValue + 950, 400 + (-200 * (float)i) + (-10 * (float)i) - 70 + 108), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
 		{
 			Rectangle2D selectedBar;
-			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, 400 + (-200 * (float)i) + (-10 * (float)i) + 70), Vector2D(currentView.GetTopLeft().XValue + 925, 400 + (-200 * (float)i) + (-10 * (float)i) - 70));
+			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
 		}
 	}
@@ -318,6 +392,8 @@ ErrorType Game::StartOfGame()
    // Code to set up your game *********************************************
    // **********************************************************************
 	
+	om.FreezeGame(false);
+
 	om.CreateMultiple(L"floor_0.png", 16, 16, 128.0f, false, Type::WALL, Vector2D(0, 700));
 	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(-832, 1788));
 	om.CreateMultiple(L"wall_0.png", 11, 1, 128.0f, true, Type::WALL, Vector2D(448, 1788));
@@ -399,6 +475,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		pRecurringWallRender,
 		pRecurringWallCollision,
+		nullptr,
 		Type::WALL
 	);
 	pNewObject->SetPosition(Vector2D(-384, 1788));
@@ -416,6 +493,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		pRenderKey,
 		pCollisionKey,
+		nullptr,
 		Type::KEY
 	);
 	pNewKey->SetPosition(Vector2D(-496, 174));
@@ -439,6 +517,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		pRecurringWallRender_B,
 		pRecurringWallCollision_B,
+		nullptr,
 		Type::WALL
 	);
 	pNewObject_B->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792));
@@ -458,6 +537,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		pRenderKey_B,
 		pCollisionKey_B,
+		nullptr,
 		Type::KEY
 	);
 	pNewKey_B->SetPosition(Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
@@ -473,78 +553,74 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		pRenderKey_C,
 		pCollisionKey_C,
+		nullptr,
 		Type::KEY
 	);
 	pNewKey_C->SetPosition(Vector2D(255, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
 	om.AddObject(pNewKey_C);
 
 
-
-
 	
-	//om.CreateEnemy(Vector2D(0, 0), pFeet);
+	//om.CreateEnemy(Vector2D(0, 0), pFeet); 1.5708
 	//Below spawn
-	om.CreateEnemy(Vector2D(-896, 325), pFeet);
-	om.CreateEnemy(Vector2D(-896, 225), pFeet);
-	om.CreateEnemy(Vector2D(-896, 125), pFeet);
-
+	om.CreateEnemy(Vector2D(-896, 325), pFeet, 1.5708f);
+	om.CreateEnemy(Vector2D(-896, 225), pFeet, 1.5708f);
+	om.CreateEnemy(Vector2D(-896, 125), pFeet, 1.5708f);
+	
 	//bottom
-	om.CreateEnemy(Vector2D(-505, -135), pFeet);
-	om.CreateEnemy(Vector2D(-505, -259), pFeet);
-	om.CreateEnemy(Vector2D(-405, -135), pFeet);
-	om.CreateEnemy(Vector2D(-405, -259), pFeet);
-	om.CreateEnemy(Vector2D(-305, -135), pFeet);
-	om.CreateEnemy(Vector2D(-305, -259), pFeet);
-	om.CreateEnemy(Vector2D(-205, -135), pFeet);
-	om.CreateEnemy(Vector2D(-205, -259), pFeet);
+	om.CreateEnemy(Vector2D(-505, -135), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-505, -259), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-405, -135), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-405, -259), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-305, -135), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-305, -259), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-205, -135), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-205, -259), pFeet, 0.0f);
 
 	//far right
-	om.CreateEnemy(Vector2D(874, 16), pFeet);
-	om.CreateEnemy(Vector2D(874, 216), pFeet);
-	om.CreateEnemy(Vector2D(874, 416), pFeet);
-	om.CreateEnemy(Vector2D(874, 616), pFeet);
-
-	om.CreateEnemy(Vector2D(378, 1509), pFeet);
-	om.CreateEnemy(Vector2D(278, 1509), pFeet);
-	om.CreateEnemy(Vector2D(178, 1509), pFeet);
-	om.CreateEnemy(Vector2D(406, 1005), pFeet);
-	om.CreateEnemy(Vector2D(30, 1005), pFeet);
-	om.CreateEnemy(Vector2D(-520, 1005), pFeet);
-	om.CreateEnemy(Vector2D(-520, 577), pFeet);
-	om.CreateEnemy(Vector2D(30, 577), pFeet);
-	om.CreateEnemy(Vector2D(406, 577), pFeet);
-	om.CreateEnemy(Vector2D(187, 187), pFeet);
-	om.CreateEnemy(Vector2D(87, 187), pFeet);
-	om.CreateEnemy(Vector2D(-13, 187), pFeet);
+	om.CreateEnemy(Vector2D(874, 16), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(874, 216), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(874, 416), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(874, 616), pFeet, -1.5708f);
 	
-	om.CreateEnemy(Vector2D(-520, 2110), pFeet);
-	om.CreateEnemy(Vector2D(-268, 2110), pFeet);
-	om.CreateEnemy(Vector2D(-520, 2400), pFeet);
-	om.CreateEnemy(Vector2D(-520, 2400), pFeet);
-	om.CreateEnemy(Vector2D(-372, 2866), pFeet);
-	om.CreateEnemy(Vector2D(-1000, 3240), pFeet);
-	om.CreateEnemy(Vector2D(-1500, 3240), pFeet);
-	om.CreateEnemy(Vector2D(-1796, 3608), pFeet);
-	om.CreateEnemy(Vector2D(-1796, 4162), pFeet);
-	om.CreateEnemy(Vector2D(-1147, 4795), pFeet);
-	om.CreateEnemy(Vector2D(-1020, 3924), pFeet);
-	om.CreateEnemy(Vector2D(-1404, 3924), pFeet);
-	om.CreateEnemy(Vector2D(-632, 3924), pFeet);
+	om.CreateEnemy(Vector2D(378, 1509), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(278, 1509), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(178, 1509), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(406, 1005), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(30, 1005), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(-520, 1005), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(-520, 577), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(30, 577), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(406, 577), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(187, 187), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(87, 187), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(-13, 187), pFeet, 1.5708f * 2);
 	
-	om.CreateEnemy(Vector2D(240, 3248), pFeet);
-	om.CreateEnemy(Vector2D(1023, 3248), pFeet);
-	om.CreateEnemy(Vector2D(1023, 3691), pFeet);
-	om.CreateEnemy(Vector2D(1023, 4039), pFeet);
-	om.CreateEnemy(Vector2D(258, 3954), pFeet);
-	om.CreateEnemy(Vector2D(-22, 3954), pFeet);
-	om.CreateEnemy(Vector2D(-258, 4390), pFeet);
-	om.CreateEnemy(Vector2D(635, 3664), pFeet);
-	om.CreateEnemy(Vector2D(482, 4798), pFeet);
-	om.CreateEnemy(Vector2D(121, 4798), pFeet);
-	om.CreateEnemy(Vector2D(-243, 4798), pFeet);
+	om.CreateEnemy(Vector2D(-520, 2110), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-268, 2110), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-372, 2866), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-1000, 3240), pFeet, 1.5708f*2);
+	om.CreateEnemy(Vector2D(-1500, 3240), pFeet, 1.5708f*2);
+	om.CreateEnemy(Vector2D(-1796, 3608), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-1796, 4162), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-1147, 4795), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-1020, 3924), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-1404, 3924), pFeet, 1.5708f);
+	om.CreateEnemy(Vector2D(-632, 3924), pFeet, 1.5708f);
+	
+	om.CreateEnemy(Vector2D(240, 3248), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(1023, 3248), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(1023, 3691), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(1023, 4039), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(258, 3954), pFeet, -1.5708f);
+	om.CreateEnemy(Vector2D(-22, 3954), pFeet, 0.0f);
+	om.CreateEnemy(Vector2D(-258, 4390), pFeet, 1.5708f*2);
+	om.CreateEnemy(Vector2D(635, 3664), pFeet, 1.5708f);
+	om.CreateEnemy(Vector2D(482, 4798), pFeet, 1.5708f*2);
+	om.CreateEnemy(Vector2D(121, 4798), pFeet, 1.5708f*2);
+	om.CreateEnemy(Vector2D(-243, 4798), pFeet, 1.5708f*2);
 
-
-
+	om.CreateBoss(pFeet);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -571,7 +647,7 @@ ErrorType Game::Update()
 {
 	// Check for entry to pause menu
 	static bool escapepressed = true;
-	if(KEYPRESSED(VK_ESCAPE))
+	if(KEYPRESSED(VK_ESCAPE) && !om.IsFrozen())
 	{
 		if(!escapepressed)
 			ChangeState(PAUSED);
@@ -602,7 +678,6 @@ ErrorType Game::Update()
 		timer = 0;
 		om.DeleteAllMarked();
 	}
-	mouse->UpdateMouse();
 	timer++;
 
    // *********************************************************************
@@ -627,11 +702,7 @@ ErrorType Game::EndOfGame()
 
 	delete pHUD;
 	pHUD = nullptr;
-
-	delete mouse;
-	mouse = nullptr;
 	
-
 	return SUCCESS;
 }
 

@@ -82,6 +82,9 @@ public:
 	// Comparison of vectors
 	bool operator==(const Vector2D& otherVector) const;
 
+	//Comparison of vectors
+	bool operator!=(const Vector2D& otherVector) const;
+
 	// Returns the angle of the vector from the (0,1) direction
 	float angle() const;
 

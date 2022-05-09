@@ -15,6 +15,8 @@ class ObjectManager
 
 		Circle2D circle;
 		Rectangle2D rectangle;
+		
+		bool m_freezeGame;
 	public:
 		void AddObject(GameObject* pObject);
 		GameObject* Create(std::wstring name);
@@ -30,5 +32,11 @@ class ObjectManager
 		void DeleteAllMarked();
 
 		void CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position);
-		void CreateEnemy(Vector2D pos, GameObject* pTarget);
+		void CreateEnemy(Vector2D pos, GameObject* pTarget, float angle);
+		void CreateBoss(GameObject* pTarget);
+
+		void FreezeGame(bool freeze);
+		bool IsFrozen() const;
+
+		bool EnemyDirectSight(IShape2D& shape);
 };

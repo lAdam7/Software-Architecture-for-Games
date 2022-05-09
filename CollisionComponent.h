@@ -28,4 +28,5 @@ public:
 
 	float GetWidth();
 	float GetHeight();
+	float GetRadius();
 };

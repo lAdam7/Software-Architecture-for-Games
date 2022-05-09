@@ -3,6 +3,7 @@
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 #include "CollisionComponent.h"
+#include "MessageComponent.h"
 #include "mydrawengine.h"
 #include "SoundFX.h"
 #include "Message.h"
@@ -20,6 +21,7 @@ class GameObject
 		PhysicsComponent* pPhysicsComponent;
 		RenderComponent* pRenderComponent;
 		CollisionComponent* pCollisionComponent;
+		MessageComponent* pMessageComponent;
 		Type m_type;
 
 		Activity m_activity;
@@ -34,7 +36,7 @@ class GameObject
 	protected:
 		void ReceiveMessages(bool receive);
 	public:
-		GameObject(SoundFX* pSoundFX, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, Type type);
+		GameObject(SoundFX* pSoundFX, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, MessageComponent* pMessage, Type type);
 		virtual ~GameObject();
 
 		Type getType();
@@ -61,7 +63,7 @@ class GameObject
 		void Deactivate();
 		void DeleteObject();	
 
-		void Update(HUD* pHUD, float frameTime);
+		void Update(HUD* pHUD, float frameTime, bool isFrozen);
 
 		SoundFX* GetSoundFX();
 
@@ -69,4 +71,5 @@ class GameObject
 		PhysicsComponent* GetPhysicsComponent();
 		RenderComponent* GetRenderComponent();
 		CollisionComponent* GetCollisionComponent();
+		MessageComponent* GetMessageComponent();
 };

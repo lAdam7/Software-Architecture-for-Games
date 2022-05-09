@@ -183,3 +183,8 @@ float CollisionComponent::GetWidth()
 {
 	return m_width;
 };
+
+float CollisionComponent::GetRadius()
+{
+	return m_radius;
+};

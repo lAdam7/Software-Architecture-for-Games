@@ -1,5 +1,7 @@
 #include "EnemyPhysicsComponent.h"
 #include "EnemyGameObject.h"
+#include "gamecode.h"
+#include "BulletPhysicsComponent.h"
 
 
 EnemyPhysicsComponent::EnemyPhysicsComponent(RenderComponent* pRender)
@@ -27,7 +29,6 @@ EnemyPhysicsComponent::EnemyPhysicsComponent(RenderComponent* pRender)
 
 	pAnimatedRenderComponent->NextAnimation(run, run);
 	pAnimatedRenderComponent->SetAnimationSpeed(run, 10.0f);
-	pAnimatedRenderComponent->SetCurrentAnimation(run);
 
 	idle = pAnimatedRenderComponent->NewAnimation();
 	pAnimatedRenderComponent->AddImage(idle, L"skeleton-idle_0.png");
@@ -50,6 +51,7 @@ EnemyPhysicsComponent::EnemyPhysicsComponent(RenderComponent* pRender)
 
 	pAnimatedRenderComponent->NextAnimation(idle, idle);
 	pAnimatedRenderComponent->SetAnimationSpeed(idle, 10.0f);
+	pAnimatedRenderComponent->SetCurrentAnimation(idle);
 
 	attack = pAnimatedRenderComponent->NewAnimation();
 	pAnimatedRenderComponent->AddImage(attack, L"skeleton-attack_0.png");
@@ -78,7 +80,10 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 {
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pObject);
 
-	float step = 140.0f * frameTime;
+
+	float step = (m_rushing && m_rushingCountdown > 0.0f)
+		? 320.0f * frameTime
+		: 140.0f * frameTime;
 	
 	Vector2D a = pEnemyObject->GetTarget()->GetPosition() - pEnemyObject->GetPosition();
 	float magnitude = a.magnitude();
@@ -94,12 +99,52 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 	}
 	else
 	{
-		Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetTarget()->GetPosition();
+		if (pAnimatedRenderComponent->GetCurrentAnimation() == idle)
+		{
+			Segment2D line;
+			line.PlaceAt(pEnemyObject->GetPosition(), pEnemyObject->GetTarget()->GetPosition());
+			bool sight = Game::instance.GetObjectManager().EnemyDirectSight(line);
+			if (sight)
+			{
+				pAnimatedRenderComponent->SetCurrentAnimation(run);		
+			}
 
-		pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
-		//pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+		}
+		else
+		{
+			if (m_moveToPos != Vector2D(0, 0))
+			{
+				step = 350.0f * frameTime;
+				a = m_moveToPos - pEnemyObject->GetPosition();
+				magnitude = a.magnitude();
+				Vector2D normal = pEnemyObject->GetPosition() - m_moveToPos;
+				pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
+				pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+				if (m_bulletAvoid == nullptr)
+				{
+					m_moveToPos = Vector2D(0, 0);
+				}
+				else
+				{
+					if ((pEnemyObject->GetPosition() - m_bulletAvoid->GetPosition()).magnitude() < 125.0f || m_bulletAvoidTimer > m_magnitude * .09)
+					{
+						m_moveToPos = Vector2D(0, 0);
+					}
+					m_bulletAvoidTimer += 140.0f * frameTime;
+				}
+			}
+			else
+			{
+				Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetTarget()->GetPosition();
+				pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
+				pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+			}	
+		}
+		if (m_rushing)
+		{
+			m_rushingCountdown -= 140.0f * frameTime;
+		}
 	}
-
 
 	if (pEnemyObject->IsHurt())
 	{
@@ -116,4 +161,39 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 
 	pEnemyObject->AddDamageTimer(frameTime);
 	pAnimatedRenderComponent->Animate(frameTime);
+};
+
+void EnemyPhysicsComponent::DodgeBullet(GameObject* pObject, GameObject* pBullet)
+{
+	if (!m_dodgedBullet)
+	{
+		m_dodgedBullet = true;
+		m_bulletAvoid = pBullet;
+		m_bulletAvoidTimer = 0.0f;
+		m_magnitude = (pObject->GetPosition() - pBullet->GetPosition()).magnitude();
+
+		BulletPhysicsComponent* pBulletPhysics = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
+
+		Vector2D angle1;
+		angle1.setBearing(pBulletPhysics->velocity.angle() + 1.5708f, 100.0f);
+
+		m_moveToPos = pObject->GetPosition() + angle1;
+
+		Circle2D circle;
+		circle.PlaceAt(m_moveToPos, pObject->GetCollisionComponent()->GetRadius());
+		if (!Game::instance.GetObjectManager().EnemyDirectSight(circle)) // use opposite angle
+		{
+			Vector2D angle2;
+			angle2.setBearing(pBulletPhysics->velocity.angle() - 1.5708f, 100.0f);
+			m_moveToPos = pObject->GetPosition() + angle2;
+		}
+	}
+};
+
+void EnemyPhysicsComponent::RushPlayer()
+{
+	if (!m_rushing && pAnimatedRenderComponent->GetCurrentAnimation() != idle)
+	{
+		m_rushing = true;
+	}
 };

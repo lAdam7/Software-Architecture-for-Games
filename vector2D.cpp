@@ -146,6 +146,12 @@ bool Vector2D::operator==(const Vector2D& otherVector) const
 	return (XValue == otherVector.XValue && YValue == otherVector.YValue);
 }
 
+
+bool Vector2D::operator!=(const Vector2D& otherVector) const
+{
+	return (XValue != otherVector.XValue || YValue != otherVector.YValue);
+}
+
 Vector2D Vector2D::operator/(float divisor) const
 {
 	return Vector2D(XValue/divisor,YValue/divisor);

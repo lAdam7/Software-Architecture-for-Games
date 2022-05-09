@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClInclude Include="AnimatedRenderComponent.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="BossPhysicsComponent.h" />
     <ClInclude Include="BulletPhysicsComponent.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="DoorInputComponent.h" />
     <ClInclude Include="EnemyGameObject.h" />
+    <ClInclude Include="EnemyMessageComponent.h" />
     <ClInclude Include="EnemyPhysicsComponent.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
@@ -34,6 +36,8 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KeyInputComponent.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageComponent.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="gamecode.h" />
@@ -55,11 +59,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedRenderComponent.cpp" />
+    <ClCompile Include="BossPhysicsComponent.cpp" />
     <ClCompile Include="BulletPhysicsComponent.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="DoorInputComponent.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
+    <ClCompile Include="EnemyMessageComponent.cpp" />
     <ClCompile Include="EnemyPhysicsComponent.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="ExplosionCollisionComponent.cpp" />
@@ -67,6 +73,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="KeyInputComponent.cpp" />
+    <ClCompile Include="MessageComponent.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="gamecode.cpp" />

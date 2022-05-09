@@ -17,6 +17,8 @@
 #include "RecurringRenderComponent.h"
 #include "ExplosionCollisionComponent.h"
 #include "ShieldCollisionComponent.h"
+#include "EnemyMessageComponent.h"
+#include "BossPhysicsComponent.h"
 //#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
@@ -42,7 +44,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 	if (name == L"Bullet")
 	{
 		BulletPhysicsComponent* pBulletPhysics = new BulletPhysicsComponent();
-		RenderComponent* pBulletRender = new RenderComponent(L"bullet.bmp");
+		RenderComponent* pBulletRender = new RenderComponent(L"bullet.png");
 		CollisionComponent* pBulletCollision = new CollisionComponent(circle, 10.0f);
 
 		pNewObject = new GameObject(
@@ -51,6 +53,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pBulletPhysics,
 			pBulletRender,
 			pBulletCollision,
+			nullptr,
 			Type::BULLET
 		);
 	}
@@ -66,6 +69,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pWallRender,
 			pWallCollision,
+			nullptr,
 			Type::WALL
 		);
 		pNewObject->SetPosition(Vector2D(300, 0));
@@ -88,6 +92,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pRecurringWallRender,
 			pRecurringWallCollision,
+			nullptr,
 			Type::WALL
 		);
 		pNewObject->SetPosition(Vector2D(0, -200));
@@ -108,8 +113,10 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pPlayerLegsRender,
 			pCollisionComponent,
+			nullptr,
 			Type::PLAYER
 		);
+		pNewObject->SetAngle(1.5708f*2);
 	}
 	else if (name == L"PlayerMain")
 	{
@@ -122,6 +129,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pPlayerMainRender,
 			nullptr,
+			nullptr,
 			Type::IGNOREOBJ
 		);
 		pNewObject->Activate();
@@ -130,7 +138,9 @@ GameObject* ObjectManager::Create(std::wstring name)
 	{
 		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
 		EnemyPhysicsComponent* pEnemyPhysics = new EnemyPhysicsComponent(pEnemyRender);
+	
 		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 50.0f);
+		MessageComponent* pEnemyMessage = new EnemyMessageComponent();
 
 		pNewObject = new EnemyGameObject(
 			pSoundFX,
@@ -138,10 +148,28 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pEnemyPhysics,
 			pEnemyRender,
 			pCollisionComponent,
+			pEnemyMessage,
 			Type::ENEMY
 		);
 		pNewObject->SetPosition(Vector2D(600, 0));
 		pNewObject->Activate();
+	}
+	else if (name == L"Boss")
+	{
+		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
+		BossPhysicsComponent* pEnemyPhysiscs = new BossPhysicsComponent(pEnemyRender);
+		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 150.0f);
+
+		pNewObject = new EnemyGameObject(
+			pSoundFX,
+			nullptr,
+			pEnemyPhysiscs,
+			pEnemyRender,
+			pCollisionComponent,
+			nullptr,
+			Type::ENEMY
+		);
+		pNewObject->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 512));
 	}
 	else if (name == L"Shield")
 	{
@@ -154,7 +182,24 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pShieldRender,
 			pShieldCollision,
+			nullptr,
 			Type::SHIELD
+		);
+	}
+	else if (name == L"Drop")
+	{
+		//TODO CLEAN
+		RenderComponent* pExplosionRender = new RenderComponent(L"explosive.png");
+		CollisionComponent* pExplosionCollision = new CollisionComponent(circle, 30.0f);
+
+		pNewObject = new GameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pExplosionRender,
+			pExplosionCollision,
+			nullptr,
+			Type::EXPLOSIVE
 		);
 	}
 	else if (name == L"Explosive")
@@ -168,6 +213,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pExplosionRender,
 			pExplosionCollision,
+			nullptr,
 			Type::EXPLOSIVE
 		);
 	}
@@ -200,6 +246,7 @@ GameObject* ObjectManager::Create(std::wstring name)
 			nullptr,
 			pExplosionRender,
 			pExplosionCollision,
+			nullptr,
 			Type::EXPLOSION
 		);
 	}
@@ -214,12 +261,20 @@ GameObject* ObjectManager::Create(std::wstring name)
 	return pNewObject;
 }
 
-void ObjectManager::CreateEnemy(Vector2D pos, GameObject* pTarget)
+void ObjectManager::CreateEnemy(Vector2D pos, GameObject* pTarget, float angle)
 {
 	GameObject* pEnemy = Create(L"Enemy1");
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
 	pEnemyObject->SetTarget(pTarget);
 	pEnemyObject->SetPosition(pos);
+	pEnemy->SetAngle(angle);
+};
+
+void ObjectManager::CreateBoss(GameObject* pTarget)
+{
+	GameObject* pEnemy = Create(L"Boss");
+	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
+	pEnemyObject->SetTarget(pTarget);
 };
 
 void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
@@ -239,6 +294,7 @@ void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int rep
 		nullptr,
 		pRecurringWallRender,
 		pRecurringWallCollision,
+		nullptr,
 		type
 	);
 	pNewObject->SetPosition(position);
@@ -262,9 +318,9 @@ void ObjectManager::TransmitMessage(Message msg)
 {
 	for (GameObject* pNext : m_pObjectList)
 	{
-		//if (pNext && pNext->CanReceiveMessages())
+		if (pNext && pNext->GetMessageComponent() && pNext->GetMessageComponent()->IsListening())
 		{
-		//	//pNext->HandleMessage(msg);
+			pNext->GetMessageComponent()->HandleMessage(pNext, msg);
 		}
 	}
 }
@@ -283,8 +339,8 @@ void ObjectManager::UpdateAll(double frameTime, HUD* pHUD)
 	{
 		if ((*it1))
 		{
-			(*it1)->Update(pHUD, (float)frameTime);
-			if ((*it1)->IsCollidable())
+			(*it1)->Update(pHUD, (float)frameTime, IsFrozen());
+			if ((*it1)->IsCollidable() && !IsFrozen())
 			{
 				if (SHOWHITBOX)
 				{
@@ -351,6 +407,29 @@ void ObjectManager::DeleteAllMarked()
 	m_pObjectList.remove(nullptr);
 }
 
+void ObjectManager::FreezeGame(bool freezeGame)
+{
+	m_freezeGame = freezeGame;
+};
+bool ObjectManager::IsFrozen() const
+{
+	return m_freezeGame;
+};
+
+bool ObjectManager::EnemyDirectSight(IShape2D& shape)
+{
+	for (GameObject* pNext : m_pObjectList)
+	{
+		if (pNext->getType() == Type::WALL)
+		{
+			if (pNext && pNext->IsCollidable() && pNext->IsActive() && pNext->GetCollisionComponent()->GetShape(pNext).Intersects(shape))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+};
 
 
 /*

@@ -31,8 +31,10 @@ c:\users\adam\source\repos\game\game\debug\playermaininputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\playerlegsinputcomponent.obj
 c:\users\adam\source\repos\game\game\debug\objectmanager.obj
 c:\users\adam\source\repos\game\game\debug\mysoundengine.obj
-c:\users\adam\source\repos\game\game\debug\game.ilk
+c:\users\adam\source\repos\game\game\debug\messagecomponent.obj
+c:\users\adam\source\repos\game\game\debug\enemymessagecomponent.obj
 c:\users\adam\source\repos\game\debug\game.exe
+c:\users\adam\source\repos\game\game\debug\game.ilk
 c:\users\adam\source\repos\game\debug\game.pdb
 c:\users\adam\source\repos\game\game\debug\game.tlog\cl.command.1.tlog
 c:\users\adam\source\repos\game\game\debug\game.tlog\cl.read.1.tlog

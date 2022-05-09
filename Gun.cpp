@@ -29,6 +29,11 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 		{
 			return true;
 		}
+
+		Message msg;
+		msg.type = EventType::BULLET_FIRED;
+		msg.pSource = pBullet;
+		Game::instance.GetObjectManager().TransmitMessage(msg);
 	}
 	return false;
 }
@@ -50,6 +55,12 @@ bool Gun::Update(HUD* pHUD, float frameTime)
 	} 
 	else
 	{
+		if (m_reloadTimeCounter == m_reloadTime)
+		{
+			Message msg;
+			msg.type = EventType::CHARACTER_IS_RELOADING;
+			Game::instance.GetObjectManager().TransmitMessage(msg);
+		}
 		DecreaseReloadTime(frameTime);
 	}
 	

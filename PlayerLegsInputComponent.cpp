@@ -116,7 +116,9 @@ void PlayerLegsInputComponent::Update(HUD* pHUD, GameObject* pObject, float fram
 	}
 
 	if (shield)
+	{
 		shield->SetPosition(pObject->GetPosition());
+	}
 
 	MyDrawEngine::GetInstance()->theCamera.PlaceAt(pObject->GetPosition());
 
@@ -125,5 +127,6 @@ void PlayerLegsInputComponent::Update(HUD* pHUD, GameObject* pObject, float fram
 		pHUD->SetActive(false);
 		mainCharacter->DeleteObject();
 		pObject->DeleteObject();	
+		Game::instance.GetObjectManager().FreezeGame(true);
 	}
 };
