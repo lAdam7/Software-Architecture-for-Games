@@ -4,22 +4,32 @@
 #include "gamecode.h"
 #include <string>
 
+/*
+* Pressing B whilst in game, opens up
+* the shop to upgrade health and shields
+* if user has enough points
+*
+* @author W19023403
+*/
+
+// Render menu onto the screen
 void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 {
 	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 
 	Rectangle2D currentView;
-	currentView = mDE->GetViewport();
+	currentView = mDE->GetViewport(); // Current location, needed as camera changes position
 
-	Vector2D centerBackground = Vector2D(currentView.GetTopLeft().XValue, currentView.GetCentre().YValue);
+	Vector2D centerBackground = Vector2D(currentView.GetTopLeft().XValue, currentView.GetCentre().YValue); // Center
 
 	Rectangle2D background;
-	background.PlaceAt(centerBackground + Vector2D(0, -350), centerBackground + Vector2D(500, 350));
+	background.PlaceAt(centerBackground + Vector2D(0, -350), centerBackground + Vector2D(500, 350)); // Background rectangle
 	mDE->FillRect(background, MyDrawEngine::DARKBLUE);
 	
 	
-	mDE->WriteText(background.GetTopLeft() + Vector2D(30, -25), L"UPGRADES", MyDrawEngine::WHITE);
+	mDE->WriteText(background.GetTopLeft() + Vector2D(30, -25), L"UPGRADES", MyDrawEngine::WHITE); // Heading
 
+	// Options available
 	const int NUMOPTIONS = 3;
 	wchar_t options[NUMOPTIONS][11] = { L"RESUME", L"HEALTH", L"SHIELD" };
 
@@ -75,13 +85,6 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 	Rectangle2D selectedBar;
 	selectedBar.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(15, -160));
 	mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
-	/*
-	std::wstring strHealthLevel = L"Health Level: " + std::to_wstring(m_currentHealthLevel + 1);
-	mDE->WriteText(background.GetTopLeft() + Vector2D(30, -75), strHealthLevel.c_str(), MyDrawEngine::GREY);
-	Rectangle2D healthUprade;
-	healthUprade.PlaceAt(background.GetTopLeft() + Vector2D(30, -120), background.GetTopLeft() + Vector2D(470, -220));
-	mDE->FillRect(healthUprade, MyDrawEngine::GREY);
-	*/
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
@@ -123,16 +126,3 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 	}
 
 };
-
-/*
-Rectangle2D buttonBar;
-		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
-		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
-		{
-			Rectangle2D selectedBar;
-			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
-			mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
-		}
-*/

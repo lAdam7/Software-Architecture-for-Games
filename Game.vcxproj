@@ -22,20 +22,24 @@
     <ClInclude Include="AnimatedRenderComponent.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="BossPhysicsComponent.h" />
+    <ClInclude Include="BulletCollisionComponent.h" />
     <ClInclude Include="BulletPhysicsComponent.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="DoorInputComponent.h" />
     <ClInclude Include="DropCollisionComponent.h" />
+    <ClInclude Include="EnemyCollisionComponent.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="EnemyMessageComponent.h" />
     <ClInclude Include="EnemyPhysicsComponent.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
     <ClInclude Include="ExplosionCollisionComponent.h" />
+    <ClInclude Include="ExplosiveCollisionComponent.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="KeyCollisionComponent.h" />
     <ClInclude Include="KeyInputComponent.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MessageComponent.h" />
@@ -51,6 +55,7 @@
     <ClInclude Include="objecttypes.h" />
     <ClInclude Include="PlayerLegsInputComponent.h" />
     <ClInclude Include="PlayerMainInputComponent.h" />
+    <ClInclude Include="RecurringCollisionComponent.h" />
     <ClInclude Include="RecurringRenderComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Shapes.h" />
@@ -62,19 +67,23 @@
   <ItemGroup>
     <ClCompile Include="AnimatedRenderComponent.cpp" />
     <ClCompile Include="BossPhysicsComponent.cpp" />
+    <ClCompile Include="BulletCollisionComponent.cpp" />
     <ClCompile Include="BulletPhysicsComponent.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="DoorInputComponent.cpp" />
     <ClCompile Include="DropCollisionComponent.cpp" />
+    <ClCompile Include="EnemyCollisionComponent.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
     <ClCompile Include="EnemyMessageComponent.cpp" />
     <ClCompile Include="EnemyPhysicsComponent.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="ExplosionCollisionComponent.cpp" />
+    <ClCompile Include="ExplosiveCollisionComponent.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="KeyCollisionComponent.cpp" />
     <ClCompile Include="KeyInputComponent.cpp" />
     <ClCompile Include="MessageComponent.cpp" />
     <ClCompile Include="Mouse.cpp" />
@@ -88,6 +97,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="PlayerLegsInputComponent.cpp" />
     <ClCompile Include="PlayerMainInputComponent.cpp" />
+    <ClCompile Include="RecurringCollisionComponent.cpp" />
     <ClCompile Include="RecurringRenderComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Shapes.cpp" />
@@ -96,6 +106,9 @@
     <ClCompile Include="UpgradeMenu.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wincode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

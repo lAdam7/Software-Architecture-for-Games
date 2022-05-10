@@ -1,9 +1,5 @@
 #include "ObjectManager.h"
-//#include "spaceship.h"
-//#include "Bullet.h"
-//#include "Asteroid.h"
-//#include "Explosion.h"
-//#include "Wall.h"
+
 #include "PlayerLegs.h"
 #include "PlayerLegsInputComponent.h"
 #include "AnimatedRenderComponent.h"
@@ -21,165 +17,138 @@
 #include "BossPhysicsComponent.h"
 
 #include "DropCollisionComponent.h"
-//#include "Mouse.h"
+#include "ExplosiveCollisionComponent.h"
+#include "EnemyCollisionComponent.h"
+#include "BulletCollisionComponent.h"
+#include "RecurringCollisionComponent.h"
 
+/*
+* Managing all objects in the game, storing all
+* the game objects that exist and managing deletion,
+* sending messages and sounds
+*
+* @author W19023403
+*/
+
+// Draw the given shape onto the screen, used for testing purposes
+// to show the collision boxes of all objects and the interaction 
+// that occurs
 void ObjectManager::DrawHitbox(IShape2D& shape)
 {
-	
-	if (typeid(shape) == typeid(Circle2D))
+	if (typeid(shape) == typeid(Circle2D)) // circle collision object
 	{
 		Circle2D circle = dynamic_cast<Circle2D&>(shape);
-		MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-		
 		MyDrawEngine::GetInstance()->FillCircle(circle.GetCentre(), circle.GetRadius(), MyDrawEngine::CYAN);
 	}
-	else if (typeid(shape) == typeid(Rectangle2D))
+	else if (typeid(shape) == typeid(Rectangle2D)) // rectangle collision object
 	{
 		Rectangle2D rectangle = dynamic_cast<Rectangle2D&>(shape);
 		MyDrawEngine::GetInstance()->FillRect(rectangle, MyDrawEngine::CYAN);
 	}
-}
+};
 
+// Create a object based off a string sent, if the string matches a object
+// it will be created, possible ones are: Bullet, PlayersLegs, PlayerMain,
+// Enemy, Boss, Shield, Explosive, Explosion or Drop. Adds to the object
+// list ready for updates
 GameObject* ObjectManager::Create(std::wstring name)
 {
 	GameObject* pNewObject = nullptr;
-	if (name == L"Bullet")
+
+	// Collision types
+	Circle2D circle;
+	Rectangle2D rectangle;
+
+	if (name == L"Bullet") // Create a bullet
 	{
 		BulletPhysicsComponent* pBulletPhysics = new BulletPhysicsComponent();
 		RenderComponent* pBulletRender = new RenderComponent(L"bullet.png");
-		CollisionComponent* pBulletCollision = new CollisionComponent(circle, 10.0f);
+		CollisionComponent* pBulletCollision = new BulletCollisionComponent(circle, 10.0f);
 
 		pNewObject = new GameObject(
 			pSoundFX,
 			nullptr,
-			pBulletPhysics,
-			pBulletRender,
-			pBulletCollision,
+			pBulletPhysics, // Keep bullet moving on the velocity of the bullet
+			pBulletRender, // Render on screen
+			pBulletCollision, // Object collision
 			nullptr,
 			Type::BULLET
 		);
 	}
-	else if (name == L"Wall")
+	else if (name == L"PlayerLegs") // Different sprite, controls the direction moving and rotation of the player
 	{
-		RenderComponent* pWallRender = new RenderComponent(L"concrete.png");
-
-		CollisionComponent* pWallCollision = new CollisionComponent(rectangle, 256.0f, 256.0f);
-
-		pNewObject = new GameObject(
-			pSoundFX,
-			nullptr,
-			nullptr,
-			pWallRender,
-			pWallCollision,
-			nullptr,
-			Type::WALL
-		);
-		pNewObject->SetPosition(Vector2D(300, 0));
-		pNewObject->Activate();
-
-	}
-	else if (name == L"Walls")
-	{
-		const int WALLCOUNT = 2000;
-		RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(L"concrete.png");
-		//pRecurringWallRender->SetHorizontal(true);
-		//pRecurringWallRender->SetRepeat(WALLCOUNT);
-		pRecurringWallRender->SetImageSize(256.0f);
-
-		CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 256.0f * WALLCOUNT, 256.0f);
-		
-		pNewObject = new GameObject(
-			pSoundFX,
-			nullptr,
-			nullptr,
-			pRecurringWallRender,
-			pRecurringWallCollision,
-			nullptr,
-			Type::WALL
-		);
-		pNewObject->SetPosition(Vector2D(0, -200));
-	}
-	else if (name == L"PlayerLegs")
-	{
-		//RenderComponent* pPlayerLegsRender = new RenderComponent(L"idle_0.png");
 		RenderComponent* pPlayerLegsRender = new AnimatedRenderComponent();
-		
-		//pPlayerLegsRender->AddImage(L"survivorRun_0.png");
-
 		PlayerLegsInputComponent* pPlayerLegsInput = new PlayerLegsInputComponent(pPlayerLegsRender);
 		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 50.0f);
 
 		pNewObject = new GameObject(
 			pSoundFX,
-			pPlayerLegsInput,
+			pPlayerLegsInput, //  Direction and rotation of the player, controls forcefield when enabled
 			nullptr,
-			pPlayerLegsRender,
-			pCollisionComponent,
+			pPlayerLegsRender, // Render on screen
+			pCollisionComponent, // Object collision
 			nullptr,
 			Type::PLAYER
 		);
-		pNewObject->SetAngle(1.5708f*2);
+		pNewObject->SetAngle(3.1416f); // Have player default facing downwards (due to the map)
 	}
-	else if (name == L"PlayerMain")
+	else if (name == L"PlayerMain") // Different sprite, controls the gun / shooting aspect of the player
 	{
 		RenderComponent* pPlayerMainRender = new AnimatedRenderComponent();
 		PlayerMainInputComponent* pPlayerMainInput = new PlayerMainInputComponent(pPlayerMainRender);
 
 		pNewObject = new GameObject(
 			pSoundFX,
-			pPlayerMainInput,
+			pPlayerMainInput, // Shooting and gun mechanics, reload
 			nullptr,
-			pPlayerMainRender,
+			pPlayerMainRender, // Render on screen
 			nullptr,
 			nullptr,
-			Type::IGNOREOBJ
+			Type::IGNOREOBJ // Not required for any collision or type checks, the legs control collisions
 		);
 		pNewObject->Activate();
 	}
-	else if (name == L"Enemy1")
+	else if (name == L"Enemy") // Main zombie / enemy sprite
 	{
 		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
 		EnemyPhysicsComponent* pEnemyPhysics = new EnemyPhysicsComponent(pEnemyRender);
-	
-		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 50.0f);
+		CollisionComponent* pCollisionComponent = new EnemyCollisionComponent(circle, 50.0f);
 		MessageComponent* pEnemyMessage = new EnemyMessageComponent();
 
 		pNewObject = new EnemyGameObject(
 			pSoundFX,
 			nullptr,
-			pEnemyPhysics,
-			pEnemyRender,
-			pCollisionComponent,
-			pEnemyMessage,
+			pEnemyPhysics, // Detection of the player, checking if in sight, damage cooldown and setting sprite up
+			pEnemyRender, // Render on screen
+			pCollisionComponent, // Object collision
+			pEnemyMessage, // Can receive messages, used for when playing is reloading to use speed boost and when a bullet is fired
 			Type::ENEMY
 		);
-		pNewObject->SetPosition(Vector2D(600, 0));
-		pNewObject->Activate();
 	}
-	else if (name == L"Boss")
+	else if (name == L"Boss") // Zombie boss sprite
 	{
 		RenderComponent* pEnemyRender = new AnimatedRenderComponent();
 		BossPhysicsComponent* pEnemyPhysiscs = new BossPhysicsComponent(pEnemyRender);
-		CollisionComponent* pCollisionComponent = new CollisionComponent(circle, 60.0f);
+		CollisionComponent* pCollisionComponent = new EnemyCollisionComponent(circle, 60.0f);
 
 		pNewObject = new EnemyGameObject(
 			pSoundFX,
 			nullptr,
-			pEnemyPhysiscs,
-			pEnemyRender,
-			pCollisionComponent,
+			pEnemyPhysiscs, // Detection of the player, checking if in sight, damage cooldown and setting sprite up
+			pEnemyRender, // Render on screen
+			pCollisionComponent, // Object collision
 			nullptr,
 			Type::ENEMY_BOSS
 		);
-		pNewObject->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 512));
-		pNewObject->SetScale(0.2f);
+		pNewObject->SetPosition(Vector2D(-384, 5500)); // Boss spawn location in the top room
+		pNewObject->SetScale(0.2f); // Sprite too big, reduce size
 
 		EnemyGameObject* test = dynamic_cast<EnemyGameObject*>(pNewObject);
-		test->SetMaxHealth(1000.0f);
-		test->Heal();
+		test->SetMaxHealth(1000.0f); // Health of the boss
+		test->Heal(); // Enemy is healed to the max health
 		
 	}
-	else if (name == L"Shield")
+	else if (name == L"Shield") // Shield that is located on the player when drop is picked-up
 	{
 		RenderComponent* pShieldRender = new RenderComponent(L"shield.png");
 		CollisionComponent* pShieldCollision = new ShieldCollisionComponent(circle, 140.0f);
@@ -188,35 +157,37 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pSoundFX,
 			nullptr,
 			nullptr,
-			pShieldRender,
-			pShieldCollision,
+			pShieldRender, // Render on screen
+			pShieldCollision, // Object collision
 			nullptr,
 			Type::SHIELD
 		);
 	}
-	else if (name == L"Explosive")
+	else if (name == L"Explosive") // Explosive, if shot it explodes
 	{
 		RenderComponent* pExplosionRender = new RenderComponent(L"explosive.png");
-		CollisionComponent* pExplosionCollision = new CollisionComponent(circle, 30.0f);
+		CollisionComponent* pExplosionCollision = new ExplosiveCollisionComponent(circle, 30.0f);
+
 
 		pNewObject = new GameObject(
 			pSoundFX,
 			nullptr,
 			nullptr,
-			pExplosionRender,
-			pExplosionCollision,
+			pExplosionRender, // Render on screen
+			pExplosionCollision, // Object collision (if bullet hits, it explodes)
 			nullptr,
 			Type::EXPLOSIVE
 		);
 	}
-	else if (name == L"Explosion")
+	else if (name == L"Explosion") // Works alongside Explosive, if hit the Explosion is put on-top of it
 	{
 		RenderComponent* pExplosionRender = new AnimatedRenderComponent();
 		AnimatedRenderComponent* circle = dynamic_cast<AnimatedRenderComponent*>(pExplosionRender);
-		
 		Circle2D circleV;
 		CollisionComponent* pExplosionCollision = new ExplosionCollisionComponent(circleV, 300.0f, 0.3f);
 
+		// Only requires one animation, add all images to the animationrender, set to reapeat
+		// speed and set the animation to active
 		int explode;
 		explode = circle->NewAnimation();
 		circle->AddImage(explode, L"explosion1.bmp");
@@ -236,16 +207,15 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pSoundFX,
 			nullptr,
 			nullptr,
-			pExplosionRender,
-			pExplosionCollision,
+			pExplosionRender, // Render on screen
+			pExplosionCollision, // Object collision, damages opponents
 			nullptr,
 			Type::EXPLOSION
 		);
 	}
-	else if (name == L"Drop")
+	else if (name == L"Drop") // Drops, randomly dropped upon a zombies death, randomly selects the type of drop
 	{
-		// check if any current powerup is active
-		int randomNumber = 1 + (rand() % 3);
+		int randomNumber = 1 + (rand() % 3); // 3 different drops, set imageName and dropType depending on this value
 		std::wstring imageName = (randomNumber == 1) ? L"shotgun.png" : (randomNumber == 2) ? L"bouncing_bullet.png" : L"shield_drop.png";
 		Type_Drop dropType = (randomNumber == 1) ? Type_Drop::SHOTGUN : (randomNumber == 2) ? Type_Drop::BOUNCING_BULLET : Type_Drop::FORCEFIELD;
 
@@ -256,32 +226,35 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pSoundFX,
 			nullptr,
 			nullptr,
-			pDropRender,
-			pDropCollision,
+			pDropRender, // Render on screen
+			pDropCollision, // If player collides, they can have the picked up powerup
 			nullptr,
 			Type::POWERUP
 		);
 	}
 	else
 	{
+		// Given name doesn't exist output error
 		ErrorLogger::Write(L"Could not create item: ");
 		ErrorLogger::Writeln(name.c_str());
 	}
 	if (pNewObject != nullptr)
-		m_pObjectList.push_back(pNewObject);
+		AddObject(pNewObject); // Add object to the list, if one has been created
 
 	return pNewObject;
-}
+};
 
-void ObjectManager::CreateEnemy(Vector2D pos, GameObject* pTarget, float angle)
+// Create the enemy, passed spawn position, target player and angle of the player on spawn
+void ObjectManager::CreateEnemy(Vector2D position, GameObject* pTarget, float angle)
 {
-	GameObject* pEnemy = Create(L"Enemy1");
+	GameObject* pEnemy = Create(L"Enemy");
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pEnemy);
 	pEnemyObject->SetTarget(pTarget);
-	pEnemyObject->SetPosition(pos);
+	pEnemyObject->SetPosition(position);
 	pEnemy->SetAngle(angle);
 };
 
+// Create the boss, always has a default spawn location
 void ObjectManager::CreateBoss(GameObject* pTarget)
 {
 	GameObject* pEnemy = Create(L"Boss");
@@ -290,57 +263,64 @@ void ObjectManager::CreateBoss(GameObject* pTarget)
 	pEnemyObject->SetDamage(60.0f);
 };
 
+// Repeating the same texture in a grid-type system, used for walls and floors
 void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
 {
 	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(filename);
-	pRecurringWallRender->SetRepeatX(repeatX);
-	pRecurringWallRender->SetRepeatY(repeatY);
-	pRecurringWallRender->SetImageSize(imageSize);
+	pRecurringWallRender->SetRepeatX(repeatX); // X grid size
+	pRecurringWallRender->SetRepeatY(repeatY); // Y grid size
+	pRecurringWallRender->SetImageSize(imageSize); // image size
 
 	CollisionComponent* pRecurringWallCollision = nullptr;
-	if (collision)
-		pRecurringWallCollision = new CollisionComponent(rectangle, imageSize * repeatX, imageSize * repeatY);
+	Rectangle2D rectangle;
+	if (collision) // Create the total collision size, if the object should have collision
+		pRecurringWallCollision = new RecurringCollisionComponent(rectangle, imageSize * repeatX, imageSize * repeatY);
 
 	GameObject* pNewObject = new GameObject(
 		pSoundFX,
 		nullptr,
 		nullptr,
-		pRecurringWallRender,
-		pRecurringWallCollision,
+		pRecurringWallRender, // Render on screen
+		pRecurringWallCollision, // Wall collision
 		nullptr,
 		type
 	);
-	pNewObject->SetPosition(position);
-	AddObject(pNewObject);
+
+	pNewObject->SetPosition(position); // Set to given position
+	AddObject(pNewObject); // Add to object list
 };
 
+// Used in start of gamecode, when sound is created store in the
+// object manager for repeat use
 void ObjectManager::SetSoundFX(SoundFX* pSound)
 {
 	pSoundFX = pSound;
-}
+};
 
+// Add object to the game object list
 void ObjectManager::AddObject(GameObject* pNewObject)
 {
 	if (pNewObject != nullptr)
 	{
 		m_pObjectList.push_back(pNewObject);
 	}
-}
+};
 
+// Send a message, to all objects that have a messagign component 
+// and doesn't have listening disabled for the event
 void ObjectManager::TransmitMessage(Message msg)
 {
-	for (GameObject* pNext : m_pObjectList)
+	for (GameObject* pNext : m_pObjectList) // every object
 	{
 		if (pNext && pNext->GetMessageComponent() && pNext->GetMessageComponent()->IsListening())
 		{
-			pNext->GetMessageComponent()->HandleMessage(pNext, msg);
+			pNext->GetMessageComponent()->HandleMessage(pNext, msg); // Send message, the component can check if it's relevent to them
 		}
 	}
-}
+};
 
-
-
-
+// Called every frame to update all objects in the list and call the components
+// that it has
 void ObjectManager::UpdateAll(double frameTime, HUD* pHUD)
 {
 	MyDrawEngine::GetInstance()->WriteInt(50, 50, m_pObjectList.size(), MyDrawEngine::GREEN);
@@ -350,37 +330,35 @@ void ObjectManager::UpdateAll(double frameTime, HUD* pHUD)
 
 	for (it1 = m_pObjectList.begin(); it1 != m_pObjectList.end(); it1++)
 	{
-		if ((*it1))
+		if ((*it1)) // not nullptr
 		{
-			(*it1)->Update(pHUD, (float)frameTime, IsFrozen());
-			if ((*it1)->IsCollidable() && !IsFrozen())
+			(*it1)->Update(pHUD, (float)frameTime, IsFrozen()); // Call update of the GameObject, send IsFrozen() so it will only Render if frozen
+			if ((*it1)->IsCollidable() && !IsFrozen()) // Object is collidable and game is not frozen check collisions
 			{
-				if (SHOWHITBOX)
+				if (SHOWHITBOX) // Debug tool, draw the collision on the screen
 				{
 					DrawHitbox((*it1)->GetCollisionComponent()->GetShape(*it1));
 				}
 				for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
 				{
-					if ((*it2) && (*it2)->IsCollidable())
+					if ((*it2) && (*it2)->IsCollidable()) // object 2 is collidable
 					{
 						if ((*it1) && (*it2) &&
-							(*it1)->IsActive() && (*it2)->IsActive() &&
-							(*it1)->GetCollisionComponent()->GetShape((*it1)).Intersects((*it2)->GetCollisionComponent()->GetShape((*it2))))
+							(*it1)->IsActive() && (*it2)->IsActive() && // both are active, not inactive or marked for delete
+							(*it1)->GetCollisionComponent()->GetShape((*it1)).Intersects((*it2)->GetCollisionComponent()->GetShape((*it2)))) // shapes intersects
 						{
-							MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-							mDE->WriteText(100, 50, L"Collision detected!", MyDrawEngine::CYAN);
-
-							(*it1)->GetCollisionComponent()->HandleCollision(pHUD, (*it1), (*it2));
-							(*it2)->GetCollisionComponent()->HandleCollision(pHUD, (*it2), (*it1));
+							(*it1)->GetCollisionComponent()->HandleCollision(pHUD, (*it1), (*it2)); // Send collision message to first object
+							(*it2)->GetCollisionComponent()->HandleCollision(pHUD, (*it2), (*it1)); // Send collision message to second object
 						}
 					}
 				}
 			}
-			
+
 		}
 	}
-}
+};
 
+// Delete all objects in the list
 void ObjectManager::DeleteAll()
 {
 	for (GameObject* obj : m_pObjectList)
@@ -390,8 +368,9 @@ void ObjectManager::DeleteAll()
 		obj = nullptr;
 	}
 	m_pObjectList.clear();
-}
+};
 
+// Delete all objects in the list that are not currently active
 void ObjectManager::DeleteAllInactive()
 {
 	for (GameObject*& obj : m_pObjectList)
@@ -404,8 +383,10 @@ void ObjectManager::DeleteAllInactive()
 		}
 	}
 	m_pObjectList.remove(nullptr);
-}
+};
 
+// Delete all objects in the list, that are marked as CAN_DELETE
+// called every n frames in gamecode
 void ObjectManager::DeleteAllMarked()
 {
 	for (GameObject*& obj : m_pObjectList)
@@ -418,33 +399,40 @@ void ObjectManager::DeleteAllMarked()
 		}
 	}
 	m_pObjectList.remove(nullptr);
-}
+};
 
+// Freeze/UnFreeze game and the reasoning of the state
 void ObjectManager::FreezeGame(bool freezeGame, Type_Freeze freezeScreen)
 {
 	m_freezeGame = freezeGame;
 	m_freezeScreen = freezeScreen;
 };
+
+// Freeze/Unfeeze game
 void ObjectManager::FreezeGame(bool freezeGame)
 {
 	m_freezeGame = freezeGame;
 };
+// If currently frozen
 bool ObjectManager::IsFrozen() const
 {
 	return m_freezeGame;
 };
+// The reason for the freeze
 Type_Freeze ObjectManager::GetFreezeScreen()
 {
 	return m_freezeScreen;
 };
 
+// Check if the given shape intersects with a wall, if not has direct sight to the player
+// so enemy can attack/move to the player
 bool ObjectManager::EnemyDirectSight(IShape2D& shape)
 {
 	for (GameObject* pNext : m_pObjectList)
 	{
-		if (pNext->getType() == Type::WALL)
+		if (pNext->GetType() == Type::WALL) // Check all walls in the object list
 		{
-			if (pNext && pNext->IsCollidable() && pNext->IsActive() && pNext->GetCollisionComponent()->GetShape(pNext).Intersects(shape))
+			if (pNext && pNext->IsCollidable() && pNext->IsActive() && pNext->GetCollisionComponent()->GetShape(pNext).Intersects(shape)) // Collidable and intersection check
 			{
 				return false;
 			}
@@ -452,37 +440,3 @@ bool ObjectManager::EnemyDirectSight(IShape2D& shape)
 	}
 	return true;
 };
-
-
-/*
-void ObjectManager::CheckAllCollisions()
-{
-	std::list<GameObject*>::iterator it1;
-	std::list<GameObject*>::iterator it2;
-
-	for (it1 = m_pObjectList.begin(); it1 != m_pObjectList.end(); it1++)
-	{
-		if ((*it1)->IsCollidable())
-		{
-			if (SHOWHITBOX)
-			{
-				DrawHitbox((*it1)->GetShape());
-			}
-				
-			for (it2 = next(it1); it2 != m_pObjectList.end(); it2++)
-			{
-				if ((*it2)->IsCollidable())
-				{
-					if ((*it1) && (*it2) &&
-						(*it1)->IsActive() && (*it2)->IsActive() &&
-						(*it1)->GetShape().Intersects((*it2)->GetShape()))
-					{
-						(*it1)->HandleCollision(**it2);
-						(*it2)->HandleCollision(**it1);
-					}
-				}
-
-			}
-		}
-	}
-}*/

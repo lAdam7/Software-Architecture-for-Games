@@ -14,6 +14,7 @@
 #include "RecurringRenderComponent.h"
 #include "DoorInputComponent.h"
 #include "KeyInputComponent.h"
+#include "KeyCollisionComponent.h"
 //#include "spaceship.h"
 //#include "Asteroid.h"
 
@@ -460,7 +461,7 @@ ErrorType Game::StartOfGame()
 	GameObject* pFeet = om.Create(L"PlayerLegs");
 	pFeet->SetPosition(Vector2D(-896, 1536));
 	PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pFeet->GetInputComponent());
-	pLegsInput->mainCharacter = Game::instance.GetObjectManager().Create(L"PlayerMain");
+	pLegsInput->SetMainCharacter(Game::instance.GetObjectManager().Create(L"PlayerMain"));
 
 
 	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(L"door_0.png");
@@ -472,7 +473,7 @@ ErrorType Game::StartOfGame()
 	CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 128.0f * 2, 128.0f * 1);
 	
 	DoorInputComponent* pInputWall = new DoorInputComponent(1);
-	pInputWall->pPlayer = pFeet;
+	pInputWall->SetPlayer(pFeet);
 
 	GameObject* pNewObject = new GameObject(
 		pSoundFX,
@@ -489,7 +490,7 @@ ErrorType Game::StartOfGame()
 	Circle2D circle;
 	KeyInputComponent* pInputKey = new KeyInputComponent(pNewObject);
 	RenderComponent* pRenderKey = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey = new CollisionComponent(circle, 50.0f);
+	CollisionComponent* pCollisionKey = new KeyCollisionComponent(circle, 50.0f);
 
 
 	GameObject* pNewKey = new GameObject(
@@ -514,7 +515,7 @@ ErrorType Game::StartOfGame()
 	CollisionComponent* pRecurringWallCollision_B = new CollisionComponent(rectangle, 128.0f * 4, 128.0f * 1);
 
 	DoorInputComponent* pInputWall_B = new DoorInputComponent(2);
-	pInputWall_B->pPlayer = pFeet;
+	pInputWall_B->SetPlayer(pFeet);
 
 	GameObject* pNewObject_B = new GameObject(
 		pSoundFX,
@@ -568,6 +569,7 @@ ErrorType Game::StartOfGame()
 	
 	//om.CreateEnemy(Vector2D(0, 0), pFeet); 1.5708
 	//Below spawn
+	
 	om.CreateEnemy(Vector2D(-896, 325), pFeet, 1.5708f);
 	om.CreateEnemy(Vector2D(-896, 225), pFeet, 1.5708f);
 	om.CreateEnemy(Vector2D(-896, 125), pFeet, 1.5708f);
@@ -627,15 +629,6 @@ ErrorType Game::StartOfGame()
 
 	om.CreateBoss(pFeet);
 
-	for (int i = 0; i < 2; i++)
-	{
-		
-		//GameObject* pAsteroid = om.Create(L"Asteroid");
-		//int xPos = (rand() % (900 - -900 + 1) + -900);
-		//int yPos = (rand() % (900 - -900 + 1) + -900);
-		//pAsteroid->Initialise(Vector2D((float) xPos, (float) yPos), Vector2D(0, 0), pSoundFX);
-	}
-
 	gt.mark();
 	gt.mark();
 
@@ -667,7 +660,7 @@ ErrorType Game::Update()
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
-	if (!om.IsFrozen() && pInputs->NewKeyPressed(DIK_B))
+	if (!om.IsFrozen() && pInputs->KeyPressed(DIK_B))
 	{
 		om.FreezeGame(true, Type_Freeze::BUY);
 	}

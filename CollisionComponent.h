@@ -24,7 +24,7 @@ public:
 	
 	virtual IShape2D& GetShape(GameObject* pObject);
 
-	virtual void HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject); // = 0 TODO
+	virtual void HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject);
 
 	float GetWidth();
 	float GetHeight();
