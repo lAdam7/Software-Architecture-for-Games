@@ -156,11 +156,11 @@ void HUD::SetShield(float amount)
 {
 	m_currentShield = amount;
 };
-int HUD::GetMaxShield()
+float HUD::GetMaxShield()
 {
 	return m_maxShield;
 };
-int HUD::GetShield()
+float HUD::GetShield()
 {
 	return m_currentShield;
 };

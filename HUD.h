@@ -16,7 +16,7 @@ private:
 	float m_ReloadProgress;
 	
 	bool m_activeShield = false;
-	float m_maxShield;
+	float m_maxShield = 100.0f;
 	float m_currentShield;
 public:
 	HUD();
@@ -49,6 +49,6 @@ public:
 
 	void SetMaxShield(float amount);
 	void SetShield(float amount);
-	int GetMaxShield();
-	int GetShield();
+	float GetMaxShield();
+	float GetShield();
 };

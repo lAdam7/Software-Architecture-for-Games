@@ -19,6 +19,8 @@
 #include "ShieldCollisionComponent.h"
 #include "EnemyMessageComponent.h"
 #include "BossPhysicsComponent.h"
+
+#include "DropCollisionComponent.h"
 //#include "Mouse.h"
 
 void ObjectManager::DrawHitbox(IShape2D& shape)
@@ -192,22 +194,6 @@ GameObject* ObjectManager::Create(std::wstring name)
 			Type::SHIELD
 		);
 	}
-	else if (name == L"Drop")
-	{
-		//TODO CLEAN
-		RenderComponent* pExplosionRender = new RenderComponent(L"explosive.png");
-		CollisionComponent* pExplosionCollision = new CollisionComponent(circle, 30.0f);
-
-		pNewObject = new GameObject(
-			pSoundFX,
-			nullptr,
-			nullptr,
-			pExplosionRender,
-			pExplosionCollision,
-			nullptr,
-			Type::EXPLOSIVE
-		);
-	}
 	else if (name == L"Explosive")
 	{
 		RenderComponent* pExplosionRender = new RenderComponent(L"explosive.png");
@@ -254,6 +240,26 @@ GameObject* ObjectManager::Create(std::wstring name)
 			pExplosionCollision,
 			nullptr,
 			Type::EXPLOSION
+		);
+	}
+	else if (name == L"Drop")
+	{
+		// check if any current powerup is active
+		int randomNumber = 1 + (rand() % 3);
+		std::wstring imageName = (randomNumber == 1) ? L"shotgun.png" : (randomNumber == 2) ? L"bouncing_bullet.png" : L"shield_drop.png";
+		Type_Drop dropType = (randomNumber == 1) ? Type_Drop::SHOTGUN : (randomNumber == 2) ? Type_Drop::BOUNCING_BULLET : Type_Drop::FORCEFIELD;
+
+		RenderComponent* pDropRender = new RenderComponent(imageName.c_str());
+		DropCollisionComponent* pDropCollision = new DropCollisionComponent(circle, 50.0f, dropType);
+
+		pNewObject = new GameObject(
+			pSoundFX,
+			nullptr,
+			nullptr,
+			pDropRender,
+			pDropCollision,
+			nullptr,
+			Type::POWERUP
 		);
 	}
 	else

@@ -87,14 +87,22 @@ void EnemyPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTi
 	
 	Vector2D a = pEnemyObject->GetTarget()->GetPosition() - pEnemyObject->GetPosition();
 	float magnitude = a.magnitude();
-	if (magnitude <= (step*44) || magnitude == 0.0f)
+	float stepMultiplier = (pHUD->GetShield() > 0.0f) ? 56.0f : 40.0f;
+	if (magnitude <= (step*stepMultiplier) || magnitude == 0.0f)
 	{
 		// Melee? 
 		if (pAnimatedRenderComponent->GetCurrentAnimation() != attack && pEnemyObject->CanDamage())
 		{
 			pAnimatedRenderComponent->SetCurrentAnimation(attack);
 			pEnemyObject->ResetDamageTimer();
-			pHUD->SetHealth(pHUD->GetCurrentHealth() - pEnemyObject->GetDamage());
+			if (pHUD->GetShield() > 0.0f)
+			{
+				pHUD->SetShield(pHUD->GetShield() - pEnemyObject->GetDamage());
+			}
+			else
+			{
+				pHUD->SetHealth(pHUD->GetCurrentHealth() - pEnemyObject->GetDamage());
+			}
 		}
 	}
 	else

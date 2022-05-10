@@ -48,8 +48,8 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 {
 	if (pObject->getType() == Type::SHIELD && pCollidedObject->getType() == Type::ENEMY)
 	{
-		ShieldCollisionComponent* pTest = dynamic_cast<ShieldCollisionComponent*>(pObject->GetCollisionComponent());
-		pTest->Damage(1);
+		//ShieldCollisionComponent* pTest = dynamic_cast<ShieldCollisionComponent*>(pObject->GetCollisionComponent());
+		//pTest->Damage(1);
 	}
 	if (pObject->getType() == Type::ENEMY && pCollidedObject->getType() == Type::EXPLOSION)
 	{
