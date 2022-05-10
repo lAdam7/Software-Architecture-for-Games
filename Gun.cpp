@@ -10,12 +10,16 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 {
 	if (CanShoot() && GetBulletDelayCounter() < 0)
 	{
-		BulletFired();
+		if (!m_activeSpeedBoost)
+		{
+			BulletFired();
+		}
+		
 		ResetBulletDelay();
 
 		GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
 		Vector2D velocity;
-		velocity.setBearing(rotation, 1200.0f);
+		velocity.setBearing(rotation, (m_activeSpeedBoost) ? 1400.0f : 950.0f);
 
 		Vector2D startingAngle;
 		startingAngle.setBearing(rotation + 0.55f, 50.0f);
@@ -24,6 +28,25 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 		
 		BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
 		pBulletCreated->velocity = velocity;
+
+		if (m_activeShotgunBoost)
+		{
+			GameObject* pBullet = Game::instance.GetObjectManager().Create(L"Bullet");
+			Vector2D velocity2;
+			velocity2.setBearing(rotation + 0.05f, (m_activeSpeedBoost) ? 1400.0f : 950.0f);
+			pBullet->SetPosition(pos + startingAngle);
+
+			BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
+			pBulletCreated->velocity = velocity2;
+
+			GameObject* pBullet3 = Game::instance.GetObjectManager().Create(L"Bullet");
+			Vector2D velocity3;
+			velocity3.setBearing(rotation - 0.05f, (m_activeSpeedBoost) ? 1400.0f : 950.0f);
+			pBullet3->SetPosition(pos + startingAngle);
+
+			BulletPhysicsComponent* pBulletCreated3 = dynamic_cast<BulletPhysicsComponent*>(pBullet3->GetPhysicsComponent());
+			pBulletCreated3->velocity = velocity3;
+		}
 
 		if (!CanShoot()) // start reload animation
 		{
@@ -64,6 +87,23 @@ bool Gun::Update(HUD* pHUD, float frameTime)
 		DecreaseReloadTime(frameTime);
 	}
 	
+	if (m_activeSpeedBoost)
+	{
+		m_speedBoostTimer += frameTime;
+		if (m_speedBoostTimer > SPEEDBOOSTLENGTH)
+		{
+			m_activeSpeedBoost = false;
+		}
+	}
+	if (m_activeShotgunBoost)
+	{
+		m_shotgunBoostTimer += frameTime;
+		if (m_shotgunBoostTimer > SHOTGUNBOOSTLENGTH)
+		{
+			m_activeShotgunBoost = false;
+		}
+	}
+
 	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
 	Vector2D topRightPosition = mDE->GetViewport().GetTopRight();
 	Vector2D ammoPosition = Vector2D(topRightPosition.XValue - 100, topRightPosition.YValue - 300);
@@ -173,4 +213,16 @@ float Gun::GetReloadTimeCounter()
 bool Gun::CanShoot() const
 {
 	return (m_clipSizeCounter > 0);
+}
+
+void Gun::StartSpeedBoost()
+{
+	m_activeSpeedBoost = true;
+	m_speedBoostTimer = 0.0f;
+}
+
+void Gun::StartShotgunBoost()
+{
+	m_activeShotgunBoost = true;
+	m_shotgunBoostTimer = 0.0f;
 }

@@ -37,7 +37,7 @@ void EnemyGameObject::Damage(float damage)
 		//EnemyGameObject* pTest = dynamic_cast<EnemyGameObject*>(pB);
 		
 		//pTest->SetTarget(m_pTarget);
-		if (1 + (rand() % 100) < 30)
+		if (1 + (rand() % 100) < 90)
 		{
 			GameObject* pDrop = Game::instance.GetObjectManager().Create(L"Drop");
 			pDrop->SetPosition(GetPosition());

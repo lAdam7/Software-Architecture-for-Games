@@ -121,7 +121,7 @@ void CollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObj
 		if (normal * pTest->velocity < 0)
 		{
 			pTest->velocity = pTest->velocity - 2 * (pTest->velocity * normal) * normal;
-			pTest->velocity = 0.5f * pTest->velocity;
+			pTest->velocity = 0.5f * -pTest->velocity;
 		}*/
 	}
 

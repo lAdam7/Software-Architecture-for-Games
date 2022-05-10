@@ -714,6 +714,9 @@ ErrorType Game::EndOfGame()
 
 	delete pHUD;
 	pHUD = nullptr;
+
+	delete um;
+	um = nullptr;
 	
 	return SUCCESS;
 }

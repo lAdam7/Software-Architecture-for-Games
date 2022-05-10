@@ -15,6 +15,14 @@ private:
 	float m_reloadTime;
 	float m_reloadTimeCounter;
 	bool m_reloading = false;
+
+	float const SPEEDBOOSTLENGTH = 8.0f;
+	bool m_activeSpeedBoost;
+	float m_speedBoostTimer;
+
+	float const SHOTGUNBOOSTLENGTH = 8.0f;
+	bool m_activeShotgunBoost;
+	float m_shotgunBoostTimer;
 public:
 	void SetBulletDelay(float delay);
 	void ResetBulletDelay();
@@ -43,4 +51,7 @@ public:
 	bool Update(HUD* pHUD, float frameTime);
 
 	virtual bool Fire(Vector2D position, float angle, GameObject* pObject, int reload);
+
+	void StartSpeedBoost();
+	void StartShotgunBoost();
 };

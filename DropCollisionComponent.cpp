@@ -32,12 +32,14 @@ void DropCollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, Gam
 		{
 			PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pCollidedObject->GetInputComponent());
 			PlayerMainInputComponent* pMainInput = dynamic_cast<PlayerMainInputComponent*>(pLegsInput->mainCharacter->GetInputComponent());
-			pMainInput->gun.SetClipSize(50);
+			pMainInput->gun.StartSpeedBoost();
 			
 		}
 		else if (m_dropType == Type_Drop::SHOTGUN)
 		{
-
+			PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pCollidedObject->GetInputComponent());
+			PlayerMainInputComponent* pMainInput = dynamic_cast<PlayerMainInputComponent*>(pLegsInput->mainCharacter->GetInputComponent());
+			pMainInput->gun.StartShotgunBoost();
 		}
 		pObject->DeleteObject();
 	}
