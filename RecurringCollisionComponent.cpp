@@ -8,7 +8,7 @@ RecurringCollisionComponent::RecurringCollisionComponent(Rectangle2D rectangle, 
 
 void RecurringCollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, GameObject* pCollidedObject)
 {
-	if (/*pCollidedObject->GetType() == Type::PLAYER ||*/ pCollidedObject->GetType() == Type::ENEMY || pCollidedObject->GetType() == Type::ENEMY_BOSS)
+	if (pCollidedObject->GetType() == Type::PLAYER || pCollidedObject->GetType() == Type::ENEMY || pCollidedObject->GetType() == Type::ENEMY_BOSS)
 	{
 		const float COLLIDEDWIDTH = pObject->GetCollisionComponent()->GetWidth();
 		const float COLLIDEDHEIGHT = pObject->GetCollisionComponent()->GetHeight();

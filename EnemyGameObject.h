@@ -20,6 +20,15 @@ private:
 	float m_damage = 20.0f;
 	float m_damageCooldown = 0.01f;
 	float m_damageTimer = 0.0f;
+
+	bool m_dodgedBullet = false;
+	Vector2D m_moveToPos;
+	GameObject* m_bulletAvoid;
+	float m_bulletAvoidTimer;
+	float m_magnitude;
+	bool m_rushing = false;
+	float m_rushingCountdown = 200.0f;
+	
 public:
 	using GameObject::GameObject;
 
@@ -40,7 +49,7 @@ public:
 	// Heal the enemy a specific amount
 	void Heal(float amount);
 	// Enemy taken damage
-	bool IsHurt() const;
+	bool IsHurt(EnemyGameObject* pEnemyObject);
 	
 	// Damage the enemy
 	void Damage(float damage);
@@ -59,4 +68,22 @@ public:
 	void AddDamageTimer(float amount);
 	// Enough time passed to damage again
 	bool CanDamage() const;
+
+	void DodgeBullet(GameObject* pObject, GameObject* pBullet);
+	void RushPlayer(GameObject* pObject);
+
+	void SetDodgedBullet(bool dodge);
+	bool GetDodgedBullet() const;
+	void SetMoveToPos(Vector2D position);
+	Vector2D GetMoveToPos();
+	void SetBulletAvoid(GameObject* bullet);
+	GameObject* GetBulletAvoid();
+	void SetBulletAvoidTimer(float timer);
+	float GetBulletAvoidTimer();
+	void SetMagnitude(float magnitude);
+	float GetMagnitude();
+	void SetRushing(bool rush);
+	bool GetRushing() const;
+	void SetRushingCountdown(float countdown);
+	float GetRushingCountdown();
 };

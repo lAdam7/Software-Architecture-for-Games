@@ -81,7 +81,7 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 			}
 		}
 	}
-	Vector2D startingPos = background.GetTopLeft() + Vector2D(30, -50 + (-200 * m_selectedOption));
+	Vector2D startingPos = background.GetTopLeft() + Vector2D(30.0f, -50.0f + (-200.0f * (float)m_selectedOption));
 	Rectangle2D selectedBar;
 	selectedBar.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(15, -160));
 	mDE->FillRect(selectedBar, MyDrawEngine::WHITE);
@@ -115,13 +115,13 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 		else if (m_selectedOption == 1 && m_currentHealthLevel != (HEALTHUPGRADES - 1)) // UPGRADE HEALTH
 		{
 			m_currentHealthLevel++;
-			pHUD->SetMaxHealth(m_healthUpgradesHealth[m_currentHealthLevel]);
+			pHUD->SetMaxHealth((float)m_healthUpgradesHealth[m_currentHealthLevel]);
 			pHUD->Heal();
 		}
 		else if (m_selectedOption == 2 && m_currentShieldLevel != (SHIELDUPGRADES - 1)) // UPGRADE SHIELD
 		{
 			m_currentShieldLevel++;
-			pHUD->SetMaxShield(m_shieldUpgradesShield[m_currentShieldLevel]);
+			pHUD->SetMaxShield((float)m_shieldUpgradesShield[m_currentShieldLevel]);
 		}
 	}
 

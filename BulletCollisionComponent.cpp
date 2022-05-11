@@ -13,7 +13,7 @@ void BulletCollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, G
 	if (pCollidedObject->GetType() == Type::ENEMY || pCollidedObject->GetType() == Type::ENEMY_BOSS)
 	{
 		EnemyGameObject* pEnemyGameObject = dynamic_cast<EnemyGameObject*>(pCollidedObject);
-		pEnemyGameObject->Damage(100);
+		pEnemyGameObject->Damage(30);
 
 		pHUD->GivePoints(50);
 

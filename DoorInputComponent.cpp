@@ -71,8 +71,8 @@ void DoorInputComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 	}
 };
 
-void DoorInputComponent::DeleteObject()
-{
-	delete m_pPlayer;
-	m_pPlayer = nullptr;
-};
+//void DoorInputComponent::DeleteObject()
+//{
+	//delete m_pPlayer;
+	//m_pPlayer = nullptr;
+//};

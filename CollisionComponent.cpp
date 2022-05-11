@@ -67,3 +67,8 @@ float CollisionComponent::GetRadius()
 {
 	return m_radius;
 };
+
+// If object requires additional pointers to be removed for deletion of object
+void CollisionComponent::DeleteObject()
+{
+};

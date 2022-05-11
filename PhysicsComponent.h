@@ -20,4 +20,7 @@ public:
 
 	// Update physics in child class
 	virtual void Update(HUD* pHUD, GameObject* obj, float frameTime) = 0;
+
+	// If object requires additional pointers to be removed for deletion of object
+	virtual void DeleteObject();
 };

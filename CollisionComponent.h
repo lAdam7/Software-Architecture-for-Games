@@ -29,4 +29,7 @@ public:
 	float GetWidth();
 	float GetHeight();
 	float GetRadius();
+
+	// If object requires additional pointers to be removed for deletion of object
+	virtual void DeleteObject();
 };

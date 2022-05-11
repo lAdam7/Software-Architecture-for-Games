@@ -32,4 +32,7 @@ public:
 
 	// Render the image onto screen
 	virtual void Update(GameObject* pObject);
+
+	// If object requires additional pointers to be removed for deletion of object
+	virtual void DeleteObject();
 };

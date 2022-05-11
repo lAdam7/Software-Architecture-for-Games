@@ -32,3 +32,8 @@ void RenderComponent::Update(GameObject* pObject)
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
 	pDE->DrawAt(pObject->GetPosition(), image, 1.0f, pObject->GetAngle(), pObject->GetOpacity());
 };
+
+// If object requires additional pointers to be removed for deletion of object
+void RenderComponent::DeleteObject()
+{
+};

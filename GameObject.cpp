@@ -2,6 +2,7 @@
 #include "AnimatedRenderComponent.h"
 #include "DoorInputComponent.h"
 #include "ObjectManager.h"
+#include "PlayerMainInputComponent.h"
 
 // Constructor, create the object assign sent components, sound and type of object. Components can be nullptr
 GameObject::GameObject(SoundFX* pSound, InputComponent* pInput, PhysicsComponent* pPhysics, RenderComponent* pRender, CollisionComponent* pCollision, MessageComponent* pMessage, Type type)
@@ -79,15 +80,28 @@ void GameObject::DeleteObject()
 	// Components that require additional deletion, to prevent memory leaks
 	if (typeid(pRenderComponent) == typeid(AnimatedRenderComponent))
 	{
-		AnimatedRenderComponent* animatedRender = dynamic_cast<AnimatedRenderComponent*>(pRenderComponent);
-		animatedRender->DeleteObject();
+		//AnimatedRenderComponent* pRender = dynamic_cast<AnimatedRenderComponent*>(pRenderComponent);
+		//pRender->DeleteObject();
 	}
 	if (typeid(pInputComponent) == typeid(DoorInputComponent))
 	{
-		DoorInputComponent* input = dynamic_cast<DoorInputComponent*>(pInputComponent);
-		input->DeleteObject();
+		//DoorInputComponent* pDoorInput = dynamic_cast<DoorInputComponent*>(pInputComponent);
+		//pDoorInput->DeleteObject();
 	}
 
+	PlayerMainInputComponent* pMainInput = dynamic_cast<PlayerMainInputComponent*>(pInputComponent);
+	//if (pMainInput)
+		//pMainInput->DeleteObject();
+	
+	if (pInputComponent)
+		pInputComponent->DeleteObject();
+	if (pPhysicsComponent)
+		pPhysicsComponent->DeleteObject();
+	if (pRenderComponent)
+		pRenderComponent->DeleteObject();
+	if (pCollisionComponent)
+		pCollisionComponent->DeleteObject();
+	
 	// Clear all general components
 	delete pInputComponent;
 	pInputComponent = nullptr;

@@ -1,4 +1,5 @@
 #include "EnemyMessageComponent.h"
+#include "EnemyGameObject.h"
 #include "EnemyPhysicsComponent.h"
 #include "BulletPhysicsComponent.h"
 
@@ -14,6 +15,7 @@ void EnemyMessageComponent::HandleMessage(GameObject* pObject, Message& message)
 {
 	if (message.type == EventType::BULLET_FIRED) // The player has fired a bullet
 	{
+		EnemyGameObject* pEnemyGameObject = dynamic_cast<EnemyGameObject*>(pObject);
 		EnemyPhysicsComponent* pEnemyPhysics = dynamic_cast<EnemyPhysicsComponent*>(pObject->GetPhysicsComponent());
 		BulletPhysicsComponent* pBulletPhysics = dynamic_cast<BulletPhysicsComponent*>(message.pSource->GetPhysicsComponent());
 
@@ -30,13 +32,13 @@ void EnemyMessageComponent::HandleMessage(GameObject* pObject, Message& message)
 			// Line intersects the enemy, (the bullet will hit the player)
 			if (pObject->GetCollisionComponent()->GetShape(pObject).Intersects(intersectLine))
 			{
-				pEnemyPhysics->DodgeBullet(pObject, message.pSource); // Tell enemy to avoid, if they can (haven't done it before)
+				pEnemyGameObject->DodgeBullet(pObject, message.pSource); // Tell enemy to avoid, if they can (haven't done it before)
 			}
 		}
 	}
 	else if (message.type == EventType::CHARACTER_IS_RELOADING) // The player is reloading
 	{
-		EnemyPhysicsComponent* pEnemyPhysics = dynamic_cast<EnemyPhysicsComponent*>(pObject->GetPhysicsComponent());
-		pEnemyPhysics->RushPlayer(); // Enemy will run faster to the player, if they haven't already used the ability
+		EnemyGameObject* pEnemyGameObject = dynamic_cast<EnemyGameObject*>(pObject);
+		pEnemyGameObject->RushPlayer(pObject); // Enemy will run faster to the player, if they haven't already used the ability
 	}
 };

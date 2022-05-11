@@ -114,3 +114,9 @@ AnimatedRenderComponent* PlayerMainInputComponent::GetAnimatedRenderComponent()
 {
 	return m_pAnimatedRenderComponent;
 };
+
+void PlayerMainInputComponent::DeleteObject()
+{
+	delete m_gun;
+	m_gun = nullptr;
+};

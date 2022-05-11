@@ -34,4 +34,6 @@ public:
 	
 	// the different animations availablef or the main player
 	int rifle, reload;
+
+	void DeleteObject() override;
 };

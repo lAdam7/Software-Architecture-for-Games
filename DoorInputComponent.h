@@ -33,5 +33,5 @@ public:
 	// Detecting when player is close to door and displaying messages
 	void Update(HUD* pHUD, GameObject* pObject, float frameTime) override;
 
-	void DeleteObject();
+	//void DeleteObject() override;
 };

@@ -14,3 +14,8 @@
 PhysicsComponent::~PhysicsComponent()
 {
 };
+
+// If object requires additional pointers to be removed for deletion of object
+void PhysicsComponent::DeleteObject()
+{
+};

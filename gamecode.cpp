@@ -15,10 +15,7 @@
 #include "DoorInputComponent.h"
 #include "KeyInputComponent.h"
 #include "KeyCollisionComponent.h"
-//#include "spaceship.h"
-//#include "Asteroid.h"
-
-//#include "Wall.h"
+#include "RecurringCollisionComponent.h"
 
 Game::Game()
 {
@@ -191,7 +188,7 @@ ErrorType Game::DeadMenu()
 		Rectangle2D buttonBar;
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * i), options[i], MyDrawEngine::WHITE, newFont);
 		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
 		{
 			Rectangle2D selectedBar;
@@ -266,7 +263,7 @@ ErrorType Game::PauseMenu()
 		Rectangle2D buttonBar;
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * i), options[i], MyDrawEngine::WHITE, newFont);
 		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
@@ -336,7 +333,7 @@ ErrorType Game::MainMenu()
 		Rectangle2D buttonBar;
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
-		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * (float)i), options[i], MyDrawEngine::WHITE, newFont);
+		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * i), options[i], MyDrawEngine::WHITE, newFont);
 		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
 		{
 			Rectangle2D selectedBar;
@@ -414,40 +411,40 @@ ErrorType Game::StartOfGame()
 	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(128, 764));
 
 	om.CreateMultiple(L"floor_0.png", 2, 1, 128.0f, false, Type::WALL, Vector2D(-384, 1788));
-	om.CreateMultiple(L"floor_0.png", 4, 10, 128.0f, false, Type::WALL, Vector2D(-384, 1788+448+256));
-	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-384 - 320, 1788 + 448+256));
-	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-384 + 320, 1788 + 448+256));
-	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640, 1788 + 448 + 256 + 704 - 128));
-	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 + 320 + 640, 1788 + 448 + 256 + 704 - 128));
-	om.CreateMultiple(L"floor_0.png", 24, 15, 128.0f, false, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 1600));
+	om.CreateMultiple(L"floor_0.png", 4, 10, 128.0f, false, Type::WALL, Vector2D(-384, 2492));
+	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-704, 2492));
+	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-64, 2492));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-1344, 3068));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(576, 3068));
+	om.CreateMultiple(L"floor_0.png", 24, 15, 128.0f, false, Type::WALL, Vector2D(-384, 4092));
 
-	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 896, 1788 + 448 + 256 + 704 + 1792));
-	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-384 + 896, 1788 + 448 + 256 + 704 + 1792));
-	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-384 - 1600, 1788 + 448 + 256 + 1536));
-	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-384 + 1600, 1788 + 448 + 256 + 1536));
-	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 1024));
-	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-384 - 576, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448));
-	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-384 + 576, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448));
+	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-1280, 4988));
+	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(512, 4988));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-1984, 4028));
+	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(1216, 4028));
+	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-384, 6012));
+	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-960, 5564));
+	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(192, 5564));
 
-	om.CreateMultiple(L"floor_0.png", 8, 7, 128.0f, false, Type::WALL, Vector2D(-384, 1788 + 448 + 256 + 704 + 1792 + 1024 - 448-64));
+	om.CreateMultiple(L"floor_0.png", 8, 7, 128.0f, false, Type::WALL, Vector2D(-384, 5500));
 
 
-	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256, 1788 + 448 + 256 + 704 + 256));
-	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 - 512, 1788 + 448 + 256 + 704 + 256 + 640));
-	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640, 1788 + 448 + 256 + 704 + 256 + 640 - 128));
-	om.CreateMultiple(L"wall_0.png", 12, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 + 128, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640));
-	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 704, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 + 192 - 64));
-	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640));
-	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384));
-	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256 - 192, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 256));
-	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256 + 192, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 256));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-1088, 3452));
+	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-1600, 4092));
+	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-448, 3964));
+	om.CreateMultiple(L"wall_0.png", 12, 1, 128.0f, true, Type::WALL, Vector2D(128, 4604));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-704, 4732));
+	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-1280, 4604));
+	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-1024, 4220));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-1216, 3964));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-832, 3964));
 	
 	
-	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768));
-	om.CreateMultiple(L"wall_0.png", 1, 7, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64 + 640, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 384));
+	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(192, 3452));
+	om.CreateMultiple(L"wall_0.png", 1, 7, 128.0f, true, Type::WALL, Vector2D(832, 3836));
 
-	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 64, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 768));
-	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-384 - 320 - 640 + 256 + 1216 + 320, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 768 + 768 - 256));
+	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(192, 4220));
+	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(448, 3964));
 
 	GameObject* explosion = om.Create(L"Explosive");
 	explosion->SetPosition(Vector2D(-986, -290));
@@ -470,7 +467,7 @@ ErrorType Game::StartOfGame()
 	pRecurringWallRender->SetImageSize(128.0f);
 
 	Rectangle2D rectangle;
-	CollisionComponent* pRecurringWallCollision = new CollisionComponent(rectangle, 128.0f * 2, 128.0f * 1);
+	CollisionComponent* pRecurringWallCollision = new RecurringCollisionComponent(rectangle, 128.0f * 2, 128.0f * 1);
 	
 	DoorInputComponent* pInputWall = new DoorInputComponent(1);
 	pInputWall->SetPlayer(pFeet);
@@ -512,7 +509,7 @@ ErrorType Game::StartOfGame()
 	pRecurringWallRender_B->SetRepeatY(1);
 	pRecurringWallRender_B->SetImageSize(128.0f);
 
-	CollisionComponent* pRecurringWallCollision_B = new CollisionComponent(rectangle, 128.0f * 4, 128.0f * 1);
+	CollisionComponent* pRecurringWallCollision_B = new RecurringCollisionComponent(rectangle, 128.0f * 4, 128.0f * 1);
 
 	DoorInputComponent* pInputWall_B = new DoorInputComponent(2);
 	pInputWall_B->SetPlayer(pFeet);
@@ -526,7 +523,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		Type::WALL
 	);
-	pNewObject_B->SetPosition(Vector2D(-384, 1788 + 448 + 256 + 704 + 1792));
+	pNewObject_B->SetPosition(Vector2D(-384, 4988));
 	om.AddObject(pNewObject_B);
 
 	////////////////
@@ -535,7 +532,7 @@ ErrorType Game::StartOfGame()
 
 	KeyInputComponent* pInputKey_B = new KeyInputComponent(pNewObject_B);
 	RenderComponent* pRenderKey_B = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey_B = new CollisionComponent(circle, 50.0f);
+	CollisionComponent* pCollisionKey_B = new KeyCollisionComponent(circle, 50.0f);
 
 	GameObject* pNewKey_B = new GameObject(
 		pSoundFX,
@@ -546,12 +543,12 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		Type::KEY
 	);
-	pNewKey_B->SetPosition(Vector2D(-384 - 320 - 640 + 256 + 640 + 448 - 1280 + 256, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
+	pNewKey_B->SetPosition(Vector2D(-1024, 4092));
 	om.AddObject(pNewKey_B);
 
 	KeyInputComponent* pInputKey_C = new KeyInputComponent(pNewObject_B);
 	RenderComponent* pRenderKey_C = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey_C = new CollisionComponent(circle, 50.0f);
+	CollisionComponent* pCollisionKey_C = new KeyCollisionComponent(circle, 50.0f);
 
 	GameObject* pNewKey_C = new GameObject(
 		pSoundFX,
@@ -562,7 +559,7 @@ ErrorType Game::StartOfGame()
 		nullptr,
 		Type::KEY
 	);
-	pNewKey_C->SetPosition(Vector2D(255, 1788 + 448 + 256 + 704 + 256 + 640 - 128 + 640 - 384 - 128));
+	pNewKey_C->SetPosition(Vector2D(255, 4092));
 	om.AddObject(pNewKey_C);
 
 
