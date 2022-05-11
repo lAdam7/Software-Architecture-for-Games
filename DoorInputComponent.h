@@ -19,7 +19,9 @@ private:
 	GameObject* m_pPlayer;
 public:
 	// Constructor set the amount of keys required to open the door
-	DoorInputComponent(int keysRequired);
+	DoorInputComponent();
+	// Set the amount of keys needed to open the door
+	void SetKeysRequired(int keysRequired);
 	// Got enough keys to open the door
 	bool GotKeys() const;
 	// Picked up a key for the door
@@ -32,6 +34,4 @@ public:
 
 	// Detecting when player is close to door and displaying messages
 	void Update(HUD* pHUD, GameObject* pObject, float frameTime) override;
-
-	//void DeleteObject() override;
 };

@@ -33,7 +33,9 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 
 		BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
 		pBullet->SetPosition(pos + startingAngle); // Set position to the bullet
-		pBulletCreated->velocity = velocity; // Set the velocity to the bullet
+		pBulletCreated->SetVelocity(velocity); // Set the velocity to the bullet
+
+		Game::instance.GetObjectManager().GetSoundFX()->PlayShot();
 
 		if (m_activeShotgunBoost) // Shotgun active, repeat above for 2 more bullets 2 be fired in slightly different angles
 		{
@@ -43,7 +45,7 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 			pBullet->SetPosition(pos + startingAngle);
 
 			BulletPhysicsComponent* pBulletCreated = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
-			pBulletCreated->velocity = velocity2;
+			pBulletCreated->SetVelocity(velocity2);
 
 			GameObject* pBullet3 = Game::instance.GetObjectManager().Create(L"Bullet");
 			Vector2D velocity3;
@@ -51,7 +53,7 @@ bool Gun::Fire(Vector2D pos, float rotation, GameObject* pObject, int reload)
 			pBullet3->SetPosition(pos + startingAngle);
 
 			BulletPhysicsComponent* pBulletCreated3 = dynamic_cast<BulletPhysicsComponent*>(pBullet3->GetPhysicsComponent());
-			pBulletCreated3->velocity = velocity3;
+			pBulletCreated3->SetVelocity(velocity3);
 		}
 
 		if (!CanShoot()) // Can't shoot

@@ -1,26 +1,24 @@
 #include "ObjectManager.h"
-
-#include "PlayerLegs.h"
 #include "PlayerLegsInputComponent.h"
 #include "AnimatedRenderComponent.h"
 #include "CollisionComponent.h"
 #include "PlayerMainInputComponent.h"
 #include "BulletPhysicsComponent.h"
-
 #include "EnemyGameObject.h"
 #include "EnemyPhysicsComponent.h"
-
 #include "RecurringRenderComponent.h"
 #include "ExplosionCollisionComponent.h"
 #include "ShieldCollisionComponent.h"
 #include "EnemyMessageComponent.h"
 #include "BossPhysicsComponent.h"
-
 #include "DropCollisionComponent.h"
 #include "ExplosiveCollisionComponent.h"
 #include "EnemyCollisionComponent.h"
 #include "BulletCollisionComponent.h"
 #include "RecurringCollisionComponent.h"
+#include "DoorInputComponent.h"
+#include "KeyInputComponent.h"
+#include "KeyCollisionComponent.h"
 
 /*
 * Managing all objects in the game, storing all
@@ -263,22 +261,50 @@ void ObjectManager::CreateBoss(GameObject* pTarget)
 	pEnemyObject->SetDamage(60.0f);
 };
 
+// Create a key, sending a pointer to the door it unlocks
+GameObject* ObjectManager::CreateKey(GameObject* pDoor)
+{
+	Circle2D circle;
+
+	KeyInputComponent* pInputKey = new KeyInputComponent(pDoor);
+	RenderComponent* pRenderKey = new RenderComponent(L"key.png");
+	CollisionComponent* pCollisionKey = new KeyCollisionComponent(circle, 50.0f);
+
+	GameObject* pNewKey = new GameObject(
+		pSoundFX,
+		pInputKey,
+		nullptr,
+		pRenderKey,
+		pCollisionKey,
+		nullptr,
+		Type::KEY
+	);
+
+	AddObject(pNewKey); 
+
+	return pNewKey;
+};
+
 // Repeating the same texture in a grid-type system, used for walls and floors
-void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
+GameObject* ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position)
 {
 	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(filename);
 	pRecurringWallRender->SetRepeatX(repeatX); // X grid size
 	pRecurringWallRender->SetRepeatY(repeatY); // Y grid size
 	pRecurringWallRender->SetImageSize(imageSize); // image size
-
+	
 	CollisionComponent* pRecurringWallCollision = nullptr;
 	Rectangle2D rectangle;
 	if (collision) // Create the total collision size, if the object should have collision
 		pRecurringWallCollision = new RecurringCollisionComponent(rectangle, imageSize * repeatX, imageSize * repeatY);
 
+	InputComponent* pInput = nullptr;
+	if (type == Type::DOOR)
+		pInput = new DoorInputComponent();
+
 	GameObject* pNewObject = new GameObject(
 		pSoundFX,
-		nullptr,
+		pInput,
 		nullptr,
 		pRecurringWallRender, // Render on screen
 		pRecurringWallCollision, // Wall collision
@@ -288,6 +314,14 @@ void ObjectManager::CreateMultiple(const wchar_t* filename, int repeatX, int rep
 
 	pNewObject->SetPosition(position); // Set to given position
 	AddObject(pNewObject); // Add to object list
+
+	return pNewObject;
+};
+
+// Get the SoundFX
+SoundFX* ObjectManager::GetSoundFX()
+{
+	return pSoundFX;
 };
 
 // Used in start of gamecode, when sound is created store in the

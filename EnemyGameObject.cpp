@@ -2,6 +2,7 @@
 #include "gamecode.h"
 #include "BulletPhysicsComponent.h"
 #include "EnemyPhysicsComponent.h"
+#include "AnimatedRenderComponent.h"
 
 /*
 * Inherits from the GameObject to create
@@ -67,6 +68,11 @@ void EnemyGameObject::Damage(float damage)
 		{
 			GameObject* pDrop = Game::instance.GetObjectManager().Create(L"Drop");
 			pDrop->SetPosition(GetPosition());
+		}
+
+		if (GetType() == Type::ENEMY_BOSS) // BOSS killed display completed UI
+		{
+			Game::instance.GetObjectManager().FreezeGame(true, Type_Freeze::WON); // Freeze the game with won message
 		}
 
 		DeleteObject(); // Remove object, enemy has died
@@ -135,7 +141,7 @@ void EnemyGameObject::DodgeBullet(GameObject* pObject, GameObject* pBullet)
 		BulletPhysicsComponent* pBulletPhysics = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
 
 		Vector2D angle1;
-		angle1.setBearing(pBulletPhysics->velocity.angle() + 1.5708f, 100.0f);
+		angle1.setBearing(pBulletPhysics->GetVelocity().angle() + 1.5708f, 100.0f);
 
 		m_moveToPos = pObject->GetPosition() + angle1;
 
@@ -144,7 +150,7 @@ void EnemyGameObject::DodgeBullet(GameObject* pObject, GameObject* pBullet)
 		if (!Game::instance.GetObjectManager().EnemyDirectSight(circle)) // use opposite angle
 		{
 			Vector2D angle2;
-			angle2.setBearing(pBulletPhysics->velocity.angle() - 1.5708f, 100.0f);
+			angle2.setBearing(pBulletPhysics->GetVelocity().angle() - 1.5708f, 100.0f);
 			m_moveToPos = pObject->GetPosition() + angle2;
 		}
 	}
@@ -153,7 +159,9 @@ void EnemyGameObject::DodgeBullet(GameObject* pObject, GameObject* pBullet)
 void EnemyGameObject::RushPlayer(GameObject* pObject)
 {
 	EnemyPhysicsComponent* pEnemyPhysics = dynamic_cast<EnemyPhysicsComponent*>(pObject->GetPhysicsComponent());
-	if (!m_rushing && pEnemyPhysics->pAnimatedRenderComponent->GetCurrentAnimation() != pEnemyPhysics->idle)
+	AnimatedRenderComponent* pEnemyRender = dynamic_cast<AnimatedRenderComponent*>(pObject->GetRenderComponent());
+
+	if (!m_rushing && pEnemyRender->GetCurrentAnimation() != pEnemyPhysics->idle)
 	{
 		m_rushing = true;
 	}

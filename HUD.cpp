@@ -17,6 +17,7 @@ HUD::HUD()
 	m_currentHealth = 100;
 
 	m_maxShield = 100.0f;
+	m_currentShield = 0.0f;
 
 	m_points = 0;
 	SetActive(true); // display the HUD

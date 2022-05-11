@@ -2,6 +2,7 @@
 #include "EnemyGameObject.h"
 #include "EnemyPhysicsComponent.h"
 #include "BulletPhysicsComponent.h"
+#include "AnimatedRenderComponent.h"
 
 /*
 * Inherits from the MessageComponent for
@@ -18,13 +19,14 @@ void EnemyMessageComponent::HandleMessage(GameObject* pObject, Message& message)
 		EnemyGameObject* pEnemyGameObject = dynamic_cast<EnemyGameObject*>(pObject);
 		EnemyPhysicsComponent* pEnemyPhysics = dynamic_cast<EnemyPhysicsComponent*>(pObject->GetPhysicsComponent());
 		BulletPhysicsComponent* pBulletPhysics = dynamic_cast<BulletPhysicsComponent*>(message.pSource->GetPhysicsComponent());
+		AnimatedRenderComponent* pEnemyRender = dynamic_cast<AnimatedRenderComponent*>(pObject->GetRenderComponent());
 
-		if (pEnemyPhysics->pAnimatedRenderComponent->GetCurrentAnimation() != pEnemyPhysics->idle) // Player isn't idle, so currently targetting the player
+		if (pEnemyRender->GetCurrentAnimation() != pEnemyPhysics->idle) // Player isn't idle, so currently targetting the player
 		{
 			float magnitude = (pObject->GetPosition() - message.pSource->GetPosition()).magnitude() * 2; // Distance between the created bullet and the enemy *2 for safety
 
 			Vector2D angle;
-			angle.setBearing(pBulletPhysics->velocity.angle(), magnitude); // Same angle of the bullet, add the magnitude
+			angle.setBearing(pBulletPhysics->GetVelocity().angle(), magnitude); // Same angle of the bullet, add the magnitude
 
 			Segment2D intersectLine;
 			intersectLine.PlaceAt(message.pSource->GetPosition(), message.pSource->GetPosition() + angle); // Place in a line, to check for intersection

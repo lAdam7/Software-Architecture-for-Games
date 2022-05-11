@@ -8,7 +8,6 @@ class BossPhysicsComponent : public PhysicsComponent
 {
 public:
 	int idle, run, attack;
-	AnimatedRenderComponent* pAnimatedRenderComponent;
 
 	BossPhysicsComponent(RenderComponent* pRender);
 	void Update(HUD* pHUD, GameObject* pObject, float frameTime);

@@ -10,9 +10,14 @@
 */
 
 // Constuctor set obtained key to 0 and the keys required as the parameter sent
-DoorInputComponent::DoorInputComponent(int keysRequired)
+DoorInputComponent::DoorInputComponent()
 {
 	m_keysGot = 0;
+};
+
+// Set the amount of keys needed to open the door
+void DoorInputComponent::SetKeysRequired(int keysRequired)
+{
 	m_keysRequired = keysRequired;
 };
 

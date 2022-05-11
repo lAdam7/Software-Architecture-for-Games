@@ -4,8 +4,11 @@
 
 class BulletPhysicsComponent : public PhysicsComponent
 {
+private:
+	Vector2D m_velocity;
 public:
-	Vector2D velocity;
-	double m_timer = 2;
 	void Update(HUD* pHUD, GameObject* pObject, float frameTime);
+
+	void SetVelocity(Vector2D velocity);
+	Vector2D GetVelocity();
 };

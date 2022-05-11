@@ -38,6 +38,8 @@ public:
 
 	// Set the SoundFX to the object manager to keep it abstract
 	void SetSoundFX(SoundFX* pSound);
+	// Get the SoundFX
+	SoundFX* GetSoundFX();
 
 	// Send a message to all objects that have a pointer to a MessagingComponent
 	void TransmitMessage(Message msg);
@@ -58,12 +60,14 @@ public:
 	// Create a texture that needs to be repeated, worked on a grid based system so is used for creating
 	// the floors and walls, reduced iterations required in the object list and means only one collision
 	// component is required for the entire object
-	void CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position);
+	GameObject* CreateMultiple(const wchar_t* filename, int repeatX, int repeatY, float imageSize, bool collision, Type type, Vector2D position);
 	// Simplify creation of enemies, allowing data for position, target and angle to be created within one
 	// line, rather than using Create and setting values within the gamecode would increase code required
 	void CreateEnemy(Vector2D pos, GameObject* pTarget, float angle);
 	// Create the boss in the final room
 	void CreateBoss(GameObject* pTarget);
+	// Create a key, sending a pointer to the door it unlocks
+	GameObject* CreateKey(GameObject* pDoor);
 
 	// Freeze the game, but continue rendering needs boolean to freeze and unfreeze
 	// additionally the reason for the freeze can be passed through

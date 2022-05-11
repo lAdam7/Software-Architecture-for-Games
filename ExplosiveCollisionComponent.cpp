@@ -22,6 +22,8 @@ void ExplosiveCollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject
 	{
 		GameObject* pExplosion = Game::instance.GetObjectManager().Create(L"Explosion"); // Create explosion
 		pExplosion->SetPosition(pObject->GetPosition());
+		
+		Game::instance.GetObjectManager().GetSoundFX()->PlayExplosion(); // Play explosion sound
 
 		pObject->DeleteObject();
 	}

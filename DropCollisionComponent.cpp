@@ -23,13 +23,15 @@ void DropCollisionComponent::HandleCollision(HUD* pHUD, GameObject* pObject, Gam
 		if (m_dropType == Type_Drop::FORCEFIELD) // Create forcefield
 		{
 			PlayerLegsInputComponent* pPlayerInput = dynamic_cast<PlayerLegsInputComponent*>(pCollidedObject->GetInputComponent());
-			if (pPlayerInput->GetShield() == nullptr || !pPlayerInput->GetShield()->IsActive())
+			if (pPlayerInput->GetShield() != nullptr)
 			{
-				GameObject* pShieldObject = Game::instance.GetObjectManager().Create(L"Shield"); // Create shield
-				pPlayerInput->SetShield(pShieldObject); // Let player know of the shield, to keep position always directly on-top of the player
-				pShieldObject->SetPosition(pCollidedObject->GetPosition());
-				pHUD->SetShield(true); // Show UI
+				pPlayerInput->GetShield()->DeleteObject();
 			}
+			GameObject* pShieldObject = Game::instance.GetObjectManager().Create(L"Shield"); // Create shield
+			pPlayerInput->SetShield(pShieldObject); // Let player know of the shield, to keep position always directly on-top of the player
+			pShieldObject->SetPosition(pCollidedObject->GetPosition());
+			pHUD->SetShield(true); // Show UI
+
 		}
 		else if (m_dropType == Type_Drop::BOUNCING_BULLET) // Create speed boost / infinite ammo
 		{

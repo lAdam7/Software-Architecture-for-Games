@@ -8,7 +8,6 @@ class EnemyPhysicsComponent : public PhysicsComponent
 {
 public:
 	int idle, run, attack;
-	AnimatedRenderComponent* pAnimatedRenderComponent;
 
 	EnemyPhysicsComponent(RenderComponent* pRender);
 	void Update(HUD* pHUD, GameObject* pObject, float frameTime);

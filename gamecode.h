@@ -32,7 +32,7 @@
 class Game
 {
 private:
-	enum GameState{MENU, PAUSED, RUNNING, GAMEOVER};
+	enum GameState{MENU, RUNNING, GAMEOVER};
 	GameState m_currentState;      // Current state of the game 
                                   // Menu = start menu
                                   // Paused = paused
@@ -41,9 +41,9 @@ private:
                                   //            after tidying up
 	void ChangeState(GameState newState);  // Use to change the state of the game to one of the states above
 
-	ObjectManager om;
-	SoundFX* pSoundFX;
-	HUD* pHUD;
+	ObjectManager om; // The object manager
+	SoundFX* pSoundFX; // Pointer to the SoundFX
+	HUD* pHUD; // HUD Pointer
 
 	//BuildMenu bm;
 	UpgradeMenu* um;
@@ -72,7 +72,8 @@ public:
    // game state
 	ErrorType Main();
 
-	ErrorType DeadMenu();
+	// 
+	ErrorType WonDefeatMenu(bool died);
 
    // Called each frame when in the pause state. Manages the pause menu
    // which is currently a basic placeholder
@@ -98,6 +99,7 @@ public:
    // This will be used by the gameplay programmer to clean up
 	ErrorType EndOfGame();
 
+	// Get the Object manager as it's a singleton
 	ObjectManager& GetObjectManager();
 };
 

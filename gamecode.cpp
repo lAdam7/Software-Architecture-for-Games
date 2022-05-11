@@ -34,11 +34,11 @@ Game::~Game()
 
 Game Game::instance;    // Singleton instance
 
-
+// Get the object manager singleton
 ObjectManager& Game::GetObjectManager()
 {
 	return om;
-}
+};
 
 // This is repeated, called every frame.
 // It will run either Update( ), MainMenu() or PauseMenu() depending on the
@@ -58,17 +58,18 @@ ErrorType Game::Main()
 
 		err = MainMenu();     // Menu at start of game
 		break;
-	case PAUSED:
-		err = PauseMenu();   // Player has paused the game
-		break;
 	case RUNNING:           // Playing the actual game
 		err = Update();
-		if (om.IsFrozen())
+		if (om.IsFrozen()) // Freeze game, but still runs Render tos how background stuff
 		{
-			if (om.GetFreezeScreen() == Type_Freeze::BUY)
+			if (om.GetFreezeScreen() == Type_Freeze::BUY) // Buy / upgrade shop
 				um->Update((float)gt.mdFrameTime, pHUD);
-			if (om.GetFreezeScreen() == Type_Freeze::DEFEAT)
-				DeadMenu();
+			else if (om.GetFreezeScreen() == Type_Freeze::DEFEAT) // Player died
+				WonDefeatMenu(true);
+			else if (om.GetFreezeScreen() == Type_Freeze::WON) // Player killed boss
+				WonDefeatMenu(false);
+			else if (om.GetFreezeScreen() == Type_Freeze::PAUSE) // Player pressed ESC to pause
+				PauseMenu();
 		}
 		break;
 	case GAMEOVER:
@@ -91,9 +92,6 @@ void Game::ChangeState(GameState newState)
 	case MENU:
       // Not needed
 		break;
-	case PAUSED:
-      // Not needed
-		break;
 	case RUNNING:
       // Not needed
 		break;
@@ -107,9 +105,6 @@ void Game::ChangeState(GameState newState)
 	switch(m_currentState)
 	{
 	case MENU:
-      // Not needed
-		break;
-	case PAUSED:
       // Not needed
 		break;
 	case RUNNING:
@@ -142,8 +137,6 @@ ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 	return (SUCCESS);
 }
 
-
-
 // Terminates the game engines - Draw Engine, Sound Engine, Input Engine
 // This is called just before the program exits
 void Game::Shutdown()
@@ -151,45 +144,37 @@ void Game::Shutdown()
 {
    // Any clean up code here 
 
-
-
-
-
 	// (engines must be terminated last)
 	MyDrawEngine::Terminate();
 	MySoundEngine::Terminate();
 	MyInputs::Terminate();
 }
 
-
-
-
 // **********************************************************************************************
 // Placeholder menus  ***************************************************************************
 // **********************************************************************************************
 
-// Called each frame when in the pause state. Manages the pause menu
-// which is currently a basic placeholder
-ErrorType Game::DeadMenu()
+// When player has either died or won render UI on screen
+ErrorType Game::WonDefeatMenu(bool died)
 {
 	// Code for a basic pause menu
 	MyDrawEngine* mDE = MyDrawEngine::GetInstance();
-	mDE->WriteText(450, 220, L"YOU DIED", MyDrawEngine::RED, newFont);
+	mDE->WriteText(450, 220, (died) ? L"YOU DIED" : L"YOU WON", (died) ? MyDrawEngine::RED : MyDrawEngine::GREEN, newFont); // depending if died or killed the boss
 
 	const int NUMOPTIONS = 3;
-	wchar_t options[NUMOPTIONS][11] = { L"RESTART", L"MAIN MENU", L"EXIT"};
+	wchar_t options[NUMOPTIONS][11] = { L"RESTART", L"MAIN MENU", L"EXIT"}; 
 
 	// Display menu options
 	for (int i = 0; i < NUMOPTIONS; i++)
 	{
 		Rectangle2D currentView;
-		currentView = mDE->GetViewport();
+		currentView = mDE->GetViewport(); // Cam pos
 
 		Rectangle2D buttonBar;
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
 		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * i), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
+		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
 			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
@@ -300,16 +285,14 @@ ErrorType Game::PauseMenu()
 	{
 		if(m_menuOption ==0)      // Resume
 		{
-			ChangeState(RUNNING);  // Go back to running the game
+			om.FreezeGame(false);
 		}
 		if(m_menuOption ==1)      // main menu
 		{
 			EndOfGame();           // Clear up the game
 			ChangeState(MENU);     // Go back to the menu
 		}
-
 	}
-
 	return SUCCESS;
 }
 
@@ -334,7 +317,7 @@ ErrorType Game::MainMenu()
 		buttonBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 1600, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
 		mDE->FillRect(buttonBar, MyDrawEngine::GREY);
 		MyDrawEngine::GetInstance()->WriteText(550, 350 + (140 * i), options[i], MyDrawEngine::WHITE, newFont);
-		if (i == m_menuOption)//+ (-200 * (float)i) + (-10 * (float)i) - 70 + 108
+		if (i == m_menuOption)
 		{
 			Rectangle2D selectedBar;
 			selectedBar.PlaceAt(Vector2D(currentView.GetTopLeft().XValue + 900, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) + 70 - (110 * (float)i)), Vector2D(currentView.GetTopLeft().XValue + 925, currentView.GetTopLeft().YValue - 690 - (140 * (float)i) - 70 - (110 * (float)i)));
@@ -394,9 +377,10 @@ ErrorType Game::StartOfGame()
 {
    // Code to set up your game *********************************************
    // **********************************************************************
-	um = new UpgradeMenu();
-	om.FreezeGame(false);
+	um = new UpgradeMenu(); //Initialize the upgrade menu UI ready
+	om.FreezeGame(false); // Default game not frozen
 
+	// Create the map walls and floors, adding collision if its a wall
 	om.CreateMultiple(L"floor_0.png", 16, 16, 128.0f, false, Type::WALL, Vector2D(0, 700));
 	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(-832, 1788));
 	om.CreateMultiple(L"wall_0.png", 11, 1, 128.0f, true, Type::WALL, Vector2D(448, 1788));
@@ -409,7 +393,6 @@ ErrorType Game::StartOfGame()
 	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-64, 1276));
 	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-128, 380));
 	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(128, 764));
-
 	om.CreateMultiple(L"floor_0.png", 2, 1, 128.0f, false, Type::WALL, Vector2D(-384, 1788));
 	om.CreateMultiple(L"floor_0.png", 4, 10, 128.0f, false, Type::WALL, Vector2D(-384, 2492));
 	om.CreateMultiple(L"wall_0.png", 1, 10, 128.0f, true, Type::WALL, Vector2D(-704, 2492));
@@ -417,7 +400,6 @@ ErrorType Game::StartOfGame()
 	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-1344, 3068));
 	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(576, 3068));
 	om.CreateMultiple(L"floor_0.png", 24, 15, 128.0f, false, Type::WALL, Vector2D(-384, 4092));
-
 	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(-1280, 4988));
 	om.CreateMultiple(L"wall_0.png", 10, 1, 128.0f, true, Type::WALL, Vector2D(512, 4988));
 	om.CreateMultiple(L"wall_0.png", 1, 16, 128.0f, true, Type::WALL, Vector2D(-1984, 4028));
@@ -425,10 +407,7 @@ ErrorType Game::StartOfGame()
 	om.CreateMultiple(L"wall_0.png", 8, 1, 128.0f, true, Type::WALL, Vector2D(-384, 6012));
 	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(-960, 5564));
 	om.CreateMultiple(L"wall_0.png", 1, 8, 128.0f, true, Type::WALL, Vector2D(192, 5564));
-
 	om.CreateMultiple(L"floor_0.png", 8, 7, 128.0f, false, Type::WALL, Vector2D(-384, 5500));
-
-
 	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(-1088, 3452));
 	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-1600, 4092));
 	om.CreateMultiple(L"wall_0.png", 1, 9, 128.0f, true, Type::WALL, Vector2D(-448, 3964));
@@ -438,140 +417,58 @@ ErrorType Game::StartOfGame()
 	om.CreateMultiple(L"wall_0.png", 4, 1, 128.0f, true, Type::WALL, Vector2D(-1024, 4220));
 	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-1216, 3964));
 	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(-832, 3964));
-	
-	
 	om.CreateMultiple(L"wall_0.png", 9, 1, 128.0f, true, Type::WALL, Vector2D(192, 3452));
 	om.CreateMultiple(L"wall_0.png", 1, 7, 128.0f, true, Type::WALL, Vector2D(832, 3836));
-
 	om.CreateMultiple(L"wall_0.png", 5, 1, 128.0f, true, Type::WALL, Vector2D(192, 4220));
 	om.CreateMultiple(L"wall_0.png", 1, 3, 128.0f, true, Type::WALL, Vector2D(448, 3964));
 
+	// Create explosive
 	GameObject* explosion = om.Create(L"Explosive");
+	// Set explosive position
 	explosion->SetPosition(Vector2D(-986, -290));
 
+	// Init soundFX and set in object manager
 	pSoundFX = new SoundFX();
 	pSoundFX->LoadSounds();
 	om.SetSoundFX(pSoundFX);
 
+	// Init the HUD for the health, points, shield and ammo tracking
 	pHUD = new HUD();
 	
+	// Create the player legs sprite
 	GameObject* pFeet = om.Create(L"PlayerLegs");
+	// Default spawn location
 	pFeet->SetPosition(Vector2D(-896, 1536));
+	// Link the main character (torso), to the Legs for position sync
 	PlayerLegsInputComponent* pLegsInput = dynamic_cast<PlayerLegsInputComponent*>(pFeet->GetInputComponent());
+	// Create the player main/torso, and set to the Playerlegs
 	pLegsInput->SetMainCharacter(Game::instance.GetObjectManager().Create(L"PlayerMain"));
 
+	// Create first door
+	GameObject* pDoor1 = om.CreateMultiple(L"door_0.png", 2, 1, 128.0f, true, Type::DOOR, Vector2D(-384, 1788));
+	DoorInputComponent* pDoorInput1 = dynamic_cast<DoorInputComponent*>(pDoor1->GetInputComponent());
+	pDoorInput1->SetKeysRequired(1); // Keys required to open the door
+	pDoorInput1->SetPlayer(pFeet); // Magnitude location check
 
-	RecurringRenderComponent* pRecurringWallRender = new RecurringRenderComponent(L"door_0.png");
-	pRecurringWallRender->SetRepeatX(2);
-	pRecurringWallRender->SetRepeatY(1);
-	pRecurringWallRender->SetImageSize(128.0f);
+	GameObject* pKey1 = om.CreateKey(pDoor1);
+	pKey1->SetPosition(Vector2D(-496, 174));
 
-	Rectangle2D rectangle;
-	CollisionComponent* pRecurringWallCollision = new RecurringCollisionComponent(rectangle, 128.0f * 2, 128.0f * 1);
+	// Create second big door
+	GameObject* pDoor2 = om.CreateMultiple(L"door_0.png", 4, 1, 128.0f, true, Type::DOOR, Vector2D(-384, 4988));
+	DoorInputComponent* pDoorInput2 = dynamic_cast<DoorInputComponent*>(pDoor2->GetInputComponent());
+	pDoorInput2->SetKeysRequired(2); // Keys required to open door
+	pDoorInput2->SetPlayer(pFeet);
+
+	GameObject* pKey2 = om.CreateKey(pDoor2);
+	pKey2->SetPosition(Vector2D(-1024, 4092));
+
+	GameObject* pKey3 = om.CreateKey(pDoor2);
+	pKey3->SetPosition(Vector2D(255, 4092));
 	
-	DoorInputComponent* pInputWall = new DoorInputComponent(1);
-	pInputWall->SetPlayer(pFeet);
-
-	GameObject* pNewObject = new GameObject(
-		pSoundFX,
-		pInputWall,
-		nullptr,
-		pRecurringWallRender,
-		pRecurringWallCollision,
-		nullptr,
-		Type::WALL
-	);
-	pNewObject->SetPosition(Vector2D(-384, 1788));
-	om.AddObject(pNewObject);
-
-	Circle2D circle;
-	KeyInputComponent* pInputKey = new KeyInputComponent(pNewObject);
-	RenderComponent* pRenderKey = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey = new KeyCollisionComponent(circle, 50.0f);
-
-
-	GameObject* pNewKey = new GameObject(
-		pSoundFX,
-		pInputKey,
-		nullptr,
-		pRenderKey,
-		pCollisionKey,
-		nullptr,
-		Type::KEY
-	);
-	pNewKey->SetPosition(Vector2D(-496, 174));
-	om.AddObject(pNewKey);
-
-
-	/////////////
-	RecurringRenderComponent* pRecurringWallRender_B = new RecurringRenderComponent(L"door_0.png");
-	pRecurringWallRender_B->SetRepeatX(4);
-	pRecurringWallRender_B->SetRepeatY(1);
-	pRecurringWallRender_B->SetImageSize(128.0f);
-
-	CollisionComponent* pRecurringWallCollision_B = new RecurringCollisionComponent(rectangle, 128.0f * 4, 128.0f * 1);
-
-	DoorInputComponent* pInputWall_B = new DoorInputComponent(2);
-	pInputWall_B->SetPlayer(pFeet);
-
-	GameObject* pNewObject_B = new GameObject(
-		pSoundFX,
-		pInputWall_B,
-		nullptr,
-		pRecurringWallRender_B,
-		pRecurringWallCollision_B,
-		nullptr,
-		Type::WALL
-	);
-	pNewObject_B->SetPosition(Vector2D(-384, 4988));
-	om.AddObject(pNewObject_B);
-
-	////////////////
-
-
-
-	KeyInputComponent* pInputKey_B = new KeyInputComponent(pNewObject_B);
-	RenderComponent* pRenderKey_B = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey_B = new KeyCollisionComponent(circle, 50.0f);
-
-	GameObject* pNewKey_B = new GameObject(
-		pSoundFX,
-		pInputKey_B,
-		nullptr,
-		pRenderKey_B,
-		pCollisionKey_B,
-		nullptr,
-		Type::KEY
-	);
-	pNewKey_B->SetPosition(Vector2D(-1024, 4092));
-	om.AddObject(pNewKey_B);
-
-	KeyInputComponent* pInputKey_C = new KeyInputComponent(pNewObject_B);
-	RenderComponent* pRenderKey_C = new RenderComponent(L"key.png");
-	CollisionComponent* pCollisionKey_C = new KeyCollisionComponent(circle, 50.0f);
-
-	GameObject* pNewKey_C = new GameObject(
-		pSoundFX,
-		pInputKey_C,
-		nullptr,
-		pRenderKey_C,
-		pCollisionKey_C,
-		nullptr,
-		Type::KEY
-	);
-	pNewKey_C->SetPosition(Vector2D(255, 4092));
-	om.AddObject(pNewKey_C);
-
-
-	
-	//om.CreateEnemy(Vector2D(0, 0), pFeet); 1.5708
-	//Below spawn
-	
+	// Create enemies in the game
 	om.CreateEnemy(Vector2D(-896, 325), pFeet, 1.5708f);
 	om.CreateEnemy(Vector2D(-896, 225), pFeet, 1.5708f);
 	om.CreateEnemy(Vector2D(-896, 125), pFeet, 1.5708f);
-	
-	//bottom
 	om.CreateEnemy(Vector2D(-505, -135), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(-505, -259), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(-405, -135), pFeet, 0.0f);
@@ -580,26 +477,22 @@ ErrorType Game::StartOfGame()
 	om.CreateEnemy(Vector2D(-305, -259), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(-205, -135), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(-205, -259), pFeet, 0.0f);
-
-	//far right
 	om.CreateEnemy(Vector2D(874, 16), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(874, 216), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(874, 416), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(874, 616), pFeet, -1.5708f);
-	
-	om.CreateEnemy(Vector2D(378, 1509), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(278, 1509), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(178, 1509), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(406, 1005), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(30, 1005), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(-520, 1005), pFeet, 1.5708f * 2);
+	om.CreateEnemy(Vector2D(378, 1509), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(278, 1509), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(178, 1509), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(406, 1005), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(30, 1005), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(-520, 1005), pFeet, 3.1416);
 	om.CreateEnemy(Vector2D(-520, 577), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(30, 577), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(406, 577), pFeet, 0.0f);
-	om.CreateEnemy(Vector2D(187, 187), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(87, 187), pFeet, 1.5708f * 2);
-	om.CreateEnemy(Vector2D(-13, 187), pFeet, 1.5708f * 2);
-	
+	om.CreateEnemy(Vector2D(187, 187), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(87, 187), pFeet, 3.1416);
+	om.CreateEnemy(Vector2D(-13, 187), pFeet, 3.1416);
 	om.CreateEnemy(Vector2D(-520, 2110), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(-268, 2110), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(-372, 2866), pFeet, -1.5708f);
@@ -611,7 +504,6 @@ ErrorType Game::StartOfGame()
 	om.CreateEnemy(Vector2D(-1020, 3924), pFeet, -1.5708f);
 	om.CreateEnemy(Vector2D(-1404, 3924), pFeet, 1.5708f);
 	om.CreateEnemy(Vector2D(-632, 3924), pFeet, 1.5708f);
-	
 	om.CreateEnemy(Vector2D(240, 3248), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(1023, 3248), pFeet, 0.0f);
 	om.CreateEnemy(Vector2D(1023, 3691), pFeet, -1.5708f);
@@ -623,12 +515,11 @@ ErrorType Game::StartOfGame()
 	om.CreateEnemy(Vector2D(482, 4798), pFeet, 1.5708f*2);
 	om.CreateEnemy(Vector2D(121, 4798), pFeet, 1.5708f*2);
 	om.CreateEnemy(Vector2D(-243, 4798), pFeet, 1.5708f*2);
-
+	// Create the boss
 	om.CreateBoss(pFeet);
 
 	gt.mark();
 	gt.mark();
-
 
 	return SUCCESS;
 }
@@ -642,10 +533,10 @@ ErrorType Game::Update()
 {
 	// Check for entry to pause menu
 	static bool escapepressed = true;
-	if(KEYPRESSED(VK_ESCAPE) && !om.IsFrozen())
+	if(KEYPRESSED(VK_ESCAPE) && !om.IsFrozen()) // Pause menu, freeze game
 	{
-		if(!escapepressed)
-			ChangeState(PAUSED);
+		if (!escapepressed)
+			om.FreezeGame(true, Type_Freeze::PAUSE);
 		escapepressed=true;
 	}
 	else
@@ -657,25 +548,18 @@ ErrorType Game::Update()
 
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
-	if (!om.IsFrozen() && pInputs->KeyPressed(DIK_B))
+	if (!om.IsFrozen() && pInputs->KeyPressed(DIK_B)) // Open shop to upgrade
 	{
 		om.FreezeGame(true, Type_Freeze::BUY);
 	}
 
 	gt.mark();
 
+	om.UpdateAll((float)gt.mdFrameTime, pHUD); // Update all objects
 
-	//MyInputs* pInputs = MyInputs::GetInstance();
-	//pInputs->SampleMouse();
-	
-	//om.CheckAllCollisions();
-	//om.DeleteAllMarked();
+	pHUD->Update(); // Update HUD after render of objects
 
-	om.UpdateAll((float)gt.mdFrameTime, pHUD);
-
-	pHUD->Update();
-
-	if (timer > 1000)
+	if (timer > 1000) // Delete all marked on a timer
 	{
 		timer = 0;
 		om.DeleteAllMarked();

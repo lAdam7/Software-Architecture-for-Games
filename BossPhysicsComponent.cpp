@@ -7,7 +7,7 @@
 
 BossPhysicsComponent::BossPhysicsComponent(RenderComponent* pRender)
 {
-	pAnimatedRenderComponent = dynamic_cast<AnimatedRenderComponent*>(pRender);
+	AnimatedRenderComponent* pAnimatedRenderComponent = dynamic_cast<AnimatedRenderComponent*>(pRender);
 
 	run = pAnimatedRenderComponent->NewAnimation();
 	pAnimatedRenderComponent->AddImage(run, L"boss_walk_0.png");
@@ -45,6 +45,7 @@ BossPhysicsComponent::BossPhysicsComponent(RenderComponent* pRender)
 void BossPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTime)
 {
 	EnemyGameObject* pEnemyObject = dynamic_cast<EnemyGameObject*>(pObject);
+	AnimatedRenderComponent* pAnimatedRenderComponent = dynamic_cast<AnimatedRenderComponent*>(pObject->GetRenderComponent());
 
 	float step = (pEnemyObject->GetRushing() && pEnemyObject->GetRushingCountdown() > 0.0f)
 		? 320.0f * frameTime
@@ -53,71 +54,53 @@ void BossPhysicsComponent::Update(HUD* pHUD, GameObject* pObject, float frameTim
 	Vector2D a = pEnemyObject->GetTarget()->GetPosition() - pEnemyObject->GetPosition();
 	float magnitude = a.magnitude();
 	float stepMultiplier = (pHUD->GetShield() > 0.0f) ? 56.0f : 40.0f;
-	if (magnitude <= (step * stepMultiplier) || magnitude == 0.0f)
+
+	if (pAnimatedRenderComponent->GetCurrentAnimation() == idle)
 	{
-		// Melee? 
-		if (pAnimatedRenderComponent->GetCurrentAnimation() != attack && pEnemyObject->CanDamage())
+		Segment2D line;
+		line.PlaceAt(pEnemyObject->GetPosition(), pEnemyObject->GetTarget()->GetPosition());
+		bool sight = Game::instance.GetObjectManager().EnemyDirectSight(line);
+		if (sight)
 		{
-			pAnimatedRenderComponent->SetCurrentAnimation(attack);
-			pEnemyObject->ResetDamageTimer();
-			if (pHUD->GetShield() > 0.0f)
-			{
-				pHUD->SetShield(pHUD->GetShield() - pEnemyObject->GetDamage());
-			}
-			else
-			{
-				pHUD->SetHealth(pHUD->GetCurrentHealth() - pEnemyObject->GetDamage());
-			}
+			pAnimatedRenderComponent->SetCurrentAnimation(run);
 		}
+
 	}
 	else
 	{
-		if (pAnimatedRenderComponent->GetCurrentAnimation() == idle)
+		if (pEnemyObject->GetMoveToPos() != Vector2D(0, 0))
 		{
-			Segment2D line;
-			line.PlaceAt(pEnemyObject->GetPosition(), pEnemyObject->GetTarget()->GetPosition());
-			bool sight = Game::instance.GetObjectManager().EnemyDirectSight(line);
-			if (sight)
+			step = 350.0f * frameTime;
+			a = pEnemyObject->GetMoveToPos() - pEnemyObject->GetPosition();
+			magnitude = a.magnitude();
+			Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetMoveToPos();
+			pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
+			pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+			if (pEnemyObject->GetBulletAvoid() == nullptr)
 			{
-				pAnimatedRenderComponent->SetCurrentAnimation(run);
-			}
-
-		}
-		else
-		{
-			if (pEnemyObject->GetMoveToPos() != Vector2D(0, 0))
-			{
-				step = 350.0f * frameTime;
-				a = pEnemyObject->GetMoveToPos() - pEnemyObject->GetPosition();
-				magnitude = a.magnitude();
-				Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetMoveToPos();
-				pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
-				pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
-				if (pEnemyObject->GetBulletAvoid() == nullptr)
-				{
-					pEnemyObject->SetMoveToPos(Vector2D(0, 0));
-				}
-				else
-				{
-					if ((pEnemyObject->GetPosition() - pEnemyObject->GetBulletAvoid()->GetPosition()).magnitude() < 125.0f || pEnemyObject->GetBulletAvoidTimer() > pEnemyObject->GetMagnitude() * .09)
-					{
-						pEnemyObject->SetMoveToPos(Vector2D(0, 0));
-					}
-					pEnemyObject->SetBulletAvoidTimer(pEnemyObject->GetBulletAvoidTimer() + 140.0f * frameTime);
-				}
+				pEnemyObject->SetMoveToPos(Vector2D(0, 0));
 			}
 			else
 			{
-				Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetTarget()->GetPosition();
-				pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
-				pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
+				if ((pEnemyObject->GetPosition() - pEnemyObject->GetBulletAvoid()->GetPosition()).magnitude() < 125.0f || pEnemyObject->GetBulletAvoidTimer() > pEnemyObject->GetMagnitude() * .09)
+				{
+					pEnemyObject->SetMoveToPos(Vector2D(0, 0));
+				}
+				pEnemyObject->SetBulletAvoidTimer(pEnemyObject->GetBulletAvoidTimer() + 140.0f * frameTime);
 			}
 		}
-		if (pEnemyObject->GetRushing())
+		else
 		{
-			pEnemyObject->SetRushingCountdown(pEnemyObject->GetRushingCountdown() - 140.0f * frameTime);
+			Vector2D normal = pEnemyObject->GetPosition() - pEnemyObject->GetTarget()->GetPosition();
+			pEnemyObject->SetAngle(atan2(-normal.YValue, normal.XValue));
+			pEnemyObject->SetPosition(pEnemyObject->GetPosition() + a / magnitude * step);
 		}
 	}
+	if (pEnemyObject->GetRushing())
+	{
+		pEnemyObject->SetRushingCountdown(pEnemyObject->GetRushingCountdown() - 140.0f * frameTime);
+	}
+	
 
 	pEnemyObject->IsHurt(pEnemyObject);
 

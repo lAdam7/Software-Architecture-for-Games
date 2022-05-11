@@ -43,7 +43,6 @@
     <ClInclude Include="KeyInputComponent.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MessageComponent.h" />
-    <ClInclude Include="Mouse.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="gamecode.h" />
     <ClInclude Include="GameObject.h" />
@@ -86,7 +85,6 @@
     <ClCompile Include="KeyCollisionComponent.cpp" />
     <ClCompile Include="KeyInputComponent.cpp" />
     <ClCompile Include="MessageComponent.cpp" />
-    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="GameObject.cpp" />

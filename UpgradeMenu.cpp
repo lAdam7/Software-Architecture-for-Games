@@ -112,13 +112,13 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 		{
 			Game::instance.GetObjectManager().FreezeGame(false);
 		}
-		else if (m_selectedOption == 1 && m_currentHealthLevel != (HEALTHUPGRADES - 1)) // UPGRADE HEALTH
+		else if (m_selectedOption == 1 && m_currentHealthLevel != (HEALTHUPGRADES - 1) && pHUD->SpendPoints(m_healthUpgradesPoints[m_currentHealthLevel+1])) // UPGRADE HEALTH
 		{
 			m_currentHealthLevel++;
 			pHUD->SetMaxHealth((float)m_healthUpgradesHealth[m_currentHealthLevel]);
 			pHUD->Heal();
 		}
-		else if (m_selectedOption == 2 && m_currentShieldLevel != (SHIELDUPGRADES - 1)) // UPGRADE SHIELD
+		else if (m_selectedOption == 2 && m_currentShieldLevel != (SHIELDUPGRADES - 1) && pHUD->SpendPoints(m_shieldUpgradesPoints[m_currentShieldLevel+1])) // UPGRADE SHIELD
 		{
 			m_currentShieldLevel++;
 			pHUD->SetMaxShield((float)m_shieldUpgradesShield[m_currentShieldLevel]);
