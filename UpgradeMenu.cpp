@@ -33,55 +33,51 @@ void UpgradeMenu::Update(float frameTime, HUD* pHUD)
 	const int NUMOPTIONS = 3;
 	wchar_t options[NUMOPTIONS][11] = { L"RESUME", L"HEALTH", L"SHIELD" };
 
-	// Display menu options
-	for (int i = 0; i < NUMOPTIONS; i++)
+	// RESUME GAME
+	Vector2D startingPos = background.GetTopLeft() + Vector2D(30, -50 + (-200 * 0));
+	Rectangle2D resumeBox;
+	resumeBox.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
+	mDE->FillRect(resumeBox, MyDrawEngine::GREY);
+	mDE->WriteText(resumeBox.GetCentre() + Vector2D(-175, 15), L"RESUME", MyDrawEngine::WHITE);
+		
+	// HEALTH UPGRADE	
+	startingPos = background.GetTopLeft() + Vector2D(30, -50 + (-200 * 1));
+	std::wstring strHealthLevel = L"Health Level: " + std::to_wstring(m_currentHealthLevel + 1);
+	mDE->WriteText(startingPos + Vector2D(0, 0), strHealthLevel.c_str(), MyDrawEngine::WHITE);
+	Rectangle2D healthUprade;
+	healthUprade.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
+	mDE->FillRect(healthUprade, MyDrawEngine::GREY);
+	if (m_currentHealthLevel == HEALTHUPGRADES - 1) // MAXXED OUT
 	{
-		Vector2D startingPos = background.GetTopLeft() + Vector2D(30, -50 + (-200 * (float)i));
-		if (i == 0)
-		{
-			Rectangle2D healthUprade;
-			healthUprade.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
-			mDE->FillRect(healthUprade, MyDrawEngine::GREY);
-			mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 15), L"RESUME", MyDrawEngine::WHITE);
-		}
-		else if (i == 1) // HEALTH
-		{
-			std::wstring strHealthLevel = L"Health Level: " + std::to_wstring(m_currentHealthLevel + 1);
-			mDE->WriteText(startingPos + Vector2D(0, 0), strHealthLevel.c_str(), MyDrawEngine::WHITE);
-			Rectangle2D healthUprade;
-			healthUprade.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
-			mDE->FillRect(healthUprade, MyDrawEngine::GREY);
-			if (m_currentHealthLevel == HEALTHUPGRADES - 1) // MAXXED OUT
-			{
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 15), L"MAX LEVEL", MyDrawEngine::WHITE);
-			}
-			else
-			{
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 50), L"UPGRADE HEALTH", MyDrawEngine::WHITE);
-				std::wstring strPoints = std::to_wstring(m_healthUpgradesPoints[m_currentHealthLevel+1]) + L" points";
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 0), strPoints.c_str(), MyDrawEngine::WHITE);
-			}
-		}
-		else if (i == 2) // HEALTH
-		{
-			std::wstring strHealthLevel = L"Shield Level: " + std::to_wstring(m_currentShieldLevel + 1);
-			mDE->WriteText(startingPos + Vector2D(0, 0), strHealthLevel.c_str(), MyDrawEngine::WHITE);
-			Rectangle2D healthUprade;
-			healthUprade.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
-			mDE->FillRect(healthUprade, MyDrawEngine::GREY);
-			if (m_currentShieldLevel == SHIELDUPGRADES - 1) // MAXXED OUT
-			{
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 15), L"MAX LEVEL", MyDrawEngine::WHITE);
-			}
-			else
-			{
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 50), L"UPGRADE SHIELD", MyDrawEngine::WHITE);
-				std::wstring strPoints = std::to_wstring(m_shieldUpgradesPoints[m_currentShieldLevel + 1]) + L" points";
-				mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 0), strPoints.c_str(), MyDrawEngine::WHITE);
-			}
-		}
+		mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 15), L"MAX LEVEL", MyDrawEngine::WHITE);
 	}
-	Vector2D startingPos = background.GetTopLeft() + Vector2D(30.0f, -50.0f + (-200.0f * (float)m_selectedOption));
+	else
+	{
+		mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 50), L"UPGRADE HEALTH", MyDrawEngine::WHITE);
+		std::wstring strPoints = std::to_wstring(m_healthUpgradesPoints[m_currentHealthLevel+1]) + L" points";
+		mDE->WriteText(healthUprade.GetCentre() + Vector2D(-175, 0), strPoints.c_str(), MyDrawEngine::WHITE);
+	}
+	
+	// SHIELD UPGRADE
+	startingPos = background.GetTopLeft() + Vector2D(30, -50 + (-200 * 2));
+	std::wstring strShieldLevel = L"Shield Level: " + std::to_wstring(m_currentShieldLevel + 1);
+	mDE->WriteText(startingPos + Vector2D(0, 0), strShieldLevel.c_str(), MyDrawEngine::WHITE);
+	Rectangle2D shieldUprade;
+	shieldUprade.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(440, -160));
+	mDE->FillRect(shieldUprade, MyDrawEngine::GREY);
+	if (m_currentShieldLevel == SHIELDUPGRADES - 1) // MAXXED OUT
+	{
+		mDE->WriteText(shieldUprade.GetCentre() + Vector2D(-175, 15), L"MAX LEVEL", MyDrawEngine::WHITE);
+	}
+	else
+	{
+		mDE->WriteText(shieldUprade.GetCentre() + Vector2D(-175, 50), L"UPGRADE SHIELD", MyDrawEngine::WHITE);
+		std::wstring strPointsShield = std::to_wstring(m_shieldUpgradesPoints[m_currentShieldLevel + 1]) + L" points";
+		mDE->WriteText(shieldUprade.GetCentre() + Vector2D(-175, 0), strPointsShield.c_str(), MyDrawEngine::WHITE);
+	}
+		
+	// White strip on selected option
+	startingPos = background.GetTopLeft() + Vector2D(30.0f, -50.0f + (-200.0f * (float)m_selectedOption));
 	Rectangle2D selectedBar;
 	selectedBar.PlaceAt(startingPos + Vector2D(0, -50), startingPos + Vector2D(15, -160));
 	mDE->FillRect(selectedBar, MyDrawEngine::WHITE);

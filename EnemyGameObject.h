@@ -69,21 +69,37 @@ public:
 	// Enough time passed to damage again
 	bool CanDamage() const;
 
+	// Try dodge a bullet
 	void DodgeBullet(GameObject* pObject, GameObject* pBullet);
+	// Start running towards the player
 	void RushPlayer(GameObject* pObject);
 
+	// Set if enemy has dodged a bullet or in progress
 	void SetDodgedBullet(bool dodge);
+	// Get if enemy has dodged a bullet or in progress
 	bool GetDodgedBullet() const;
+	// Set the position the enemy needs to move to, to avoid the bullet
 	void SetMoveToPos(Vector2D position);
+	// Get the position the enemy needs to move to, to avoid the bullet
 	Vector2D GetMoveToPos();
+	// Set the bullet that the enemy is trying to avoid
 	void SetBulletAvoid(GameObject* bullet);
+	// Get the bullet that the enemy is trying to avoid
 	GameObject* GetBulletAvoid();
+	// Set timer for how long the bullet can be avoided for
 	void SetBulletAvoidTimer(float timer);
+	// Get timer for how long the bullet can be avoided for
 	float GetBulletAvoidTimer();
+	// Set the magnitude between the player and enemy
 	void SetMagnitude(float magnitude);
+	// Get the magnitude between the player and enemy
 	float GetMagnitude();
+	// Set if enemy has ran at player or in progress
 	void SetRushing(bool rush);
+	// Get if enemy has ran at player or in progress
 	bool GetRushing() const;
+	// Set timer for long the enemy has been rushing the player for
 	void SetRushingCountdown(float countdown);
+	// Get timer for long the enemy has been rushing the player for
 	float GetRushingCountdown();
 };

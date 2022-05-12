@@ -129,14 +129,15 @@ bool EnemyGameObject::CanDamage() const
 	return m_damageTimer > m_damageCooldown;
 };
 
+// Try dodge a bullet
 void EnemyGameObject::DodgeBullet(GameObject* pObject, GameObject* pBullet)
 {
-	if (!m_dodgedBullet)
+	if (!m_dodgedBullet) // Not already dodged a bullet
 	{
 		m_dodgedBullet = true;
 		m_bulletAvoid = pBullet;
 		m_bulletAvoidTimer = 0.0f;
-		m_magnitude = (pObject->GetPosition() - pBullet->GetPosition()).magnitude();
+		m_magnitude = (pObject->GetPosition() - pBullet->GetPosition()).magnitude(); // distance
 
 		BulletPhysicsComponent* pBulletPhysics = dynamic_cast<BulletPhysicsComponent*>(pBullet->GetPhysicsComponent());
 
@@ -156,6 +157,7 @@ void EnemyGameObject::DodgeBullet(GameObject* pObject, GameObject* pBullet)
 	}
 };
 
+// Start running towards the player
 void EnemyGameObject::RushPlayer(GameObject* pObject)
 {
 	EnemyPhysicsComponent* pEnemyPhysics = dynamic_cast<EnemyPhysicsComponent*>(pObject->GetPhysicsComponent());
@@ -167,64 +169,78 @@ void EnemyGameObject::RushPlayer(GameObject* pObject)
 	}
 };
 
+// Set if enemy has dodged a bullet or in progress
 void EnemyGameObject::SetDodgedBullet(bool dodge)
 {
 	m_dodgedBullet = dodge;
 };
+// Get if enemy has dodged a bullet or in progress
 bool EnemyGameObject::GetDodgedBullet() const
 {
 	return m_dodgedBullet;
 };
 
+// Set the position the enemy needs to move to, to avoid the bullet
 void EnemyGameObject::SetMoveToPos(Vector2D position)
 {
 	m_moveToPos = position;
 };
+// Get the position the enemy needs to move to, to avoid the bullet
 Vector2D EnemyGameObject::GetMoveToPos()
 {
 	return m_moveToPos;
 };
 
+// Set the bullet that the enemy is trying to avoid
 void EnemyGameObject::SetBulletAvoid(GameObject* bullet)
 {
 	m_bulletAvoid = bullet;
 };
+// Get the bullet that the enemy is trying to avoid
 GameObject* EnemyGameObject::GetBulletAvoid()
 {
 	return m_bulletAvoid;
 };
 
+// Set timer for how long the bullet can be avoided for
 void EnemyGameObject::SetBulletAvoidTimer(float timer)
 {
 	m_bulletAvoidTimer = timer;
 };
+// Get timer for how long the bullet can be avoided for
 float EnemyGameObject::GetBulletAvoidTimer()
 {
 	return m_bulletAvoidTimer;
 };
 
+// Set the magnitude between the player and enemy
 void EnemyGameObject::SetMagnitude(float magnitude)
 {
 	m_magnitude = magnitude;
 };
+// Get the magnitude between the player and enemy
 float EnemyGameObject::GetMagnitude()
 {
 	return m_magnitude;
 };
 
+// Set if enemy has ran at player or in progress
 void EnemyGameObject::SetRushing(bool rushing)
 {
 	m_rushing = rushing;
 };
+// Get if enemy has ran at player or in progress
 bool EnemyGameObject::GetRushing() const
 {
 	return m_rushing;
 };
 
+// Set timer for long the enemy has been rushing the player for
 void EnemyGameObject::SetRushingCountdown(float countdown)
 {
 	m_rushingCountdown = countdown;
 };
+// Get timer for long the enemy has been rushing the player for
 float EnemyGameObject::GetRushingCountdown()
 {
 	return m_rushingCountdown;
